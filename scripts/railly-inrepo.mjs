@@ -140,44 +140,37 @@ function scaffold(projectRoot) {
 function conventionsTemplate(repoName) {
 	return `# ${repoName} review conventions
 
-Project overlay for the review-gate skill. Seeded by \`railly-inrepo.mjs\` with
-the defaults that hold everywhere; everything repo-specific below is a stub for
-whoever knows this repository.
+Project overlay for the review-gate skill, and the repository half of the
+\`implementation-routing\` skill. That skill is global and installed, not a file
+in this repository, so it is named here rather than linked.
 
-**Every entry added from here on names the case or review round that produced
-it.** An entry without provenance carries no authority.
+**Routing and precedence that hold everywhere live in \`implementation-routing\`,
+not here.** Add a row below only to *override* it for this repository, or to
+record something that is true of this repository alone. A global rule copied
+into this file goes stale the day the global one changes, and nothing will say
+so.
 
-## Implementation-pass skills
+**Every entry names the case or review round that produced it.** An entry
+without provenance carries no authority.
 
-\`software-factory\` discovers stage tooling per repository and never assumes it.
-This table is what its implementation pass reads.
+## Implementation-pass overrides
 
-| Change surface | Skills the implementation pass loads |
-|---|---|
-| Anything a person sees or operates | \`frontend-stack\`, which owns the index and load order for the frontend skills |
-| Postgres schema, RLS, migrations, queries | \`supabase-postgres-best-practices\` |
-| _(add this repository's own surfaces)_ | |
+_Empty means: this repository routes exactly as \`implementation-routing\` says._
 
-\`frontend-stack\` routes; it never substitutes for the skills it indexes. Do not
-load \`ui-design-language\`, \`vercel:shadcn\` or \`transitions-dev\` directly from this
-table.
-
-A skill loaded by the implementation pass is not a gate and never satisfies one.
-
-### Duplicate resolution
-
-Where two installed skills claim the same surface, resolve it by removing one,
-not by declaring a winner a reader must honour. \`shadcn\`,
-\`next-cache-components\`, \`ai-sdk\` and \`vercel-cli\` once shipped twice; the
-Vercel plugin copy proved substantially more complete in every case, so the
-agents-directory copies were removed. Check for reappearance after any install.
-
-Provenance: seeded default, measured 2026-09-03.
+| Surface | This repository uses instead | Basis |
+|---|---|---|
 
 ## Surface map
 
 _A behavior change is not done until every surface that advertises it agrees.
-List the source-to-surface pairs this repository has, as they are discovered._
+List the source-to-surface pairs as they are discovered._
+
+Provenance: empty until a review round fills it.
+
+## Oracles
+
+_What an implementation is checked against when the answer is not in this
+repository: a specification, a reference implementation, a real producer._
 
 Provenance: empty until a review round fills it.
 
