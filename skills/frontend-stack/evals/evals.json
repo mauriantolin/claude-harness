@@ -1,0 +1,68 @@
+{
+  "skill_name": "frontend-stack",
+  "evals": [
+    {
+      "id": 1,
+      "name": "loads-only-the-named-surfaces",
+      "prompt": "The accepted contract is: the settings page's save button must show a pending state while the form submits, and must not shift layout when it does. Implement it.",
+      "expected_output": "The pass names the surfaces the contract actually touches, loads only the skills that own them, and records the rest as not applicable rather than loading the whole index.",
+      "assertions": [
+        "Names the surfaces before naming any skill",
+        "Loads ui-design-language for the pending state's visual treatment and transitions-dev for the motion",
+        "Does NOT load next-best-practices, ai-elements, or migrate-radix-to-base for a contract that touches none of them",
+        "Records skills not loaded as not applicable rather than silently omitting them"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "project-system-outranks-the-index",
+      "prompt": "This repository already has a design system: a tokens file, a themed component library, and a CLAUDE.md describing its visual language. Implement a new empty state for the reports list.",
+      "expected_output": "The project's own system supplies the answer; the indexed design skill fills only what the project left undefined.",
+      "assertions": [
+        "Reads the repository's tokens, theme and component conventions before loading any indexed skill",
+        "Does NOT overwrite an existing visual identity with the indexed design language",
+        "Records that precedence level 2 supplied the answer",
+        "Uses the indexed skill only for gaps the project does not define"
+      ],
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "charts-load-dataviz-first",
+      "prompt": "Add a panel to the dashboard showing weekly active users over the last quarter, with a comparison against the previous quarter.",
+      "expected_output": "dataviz is loaded before any chart code exists, ahead of the frontend index, and the visual system skill themes the result rather than choosing the chart form.",
+      "assertions": [
+        "Loads dataviz before writing the first line of chart code",
+        "Does NOT let ui-design-language or shadcn decide the chart form",
+        "Still loads the visual system for the panel's surrounding surface"
+      ],
+      "files": []
+    },
+    {
+      "id": 4,
+      "name": "absent-skill-is-owed-not-substituted",
+      "prompt": "Implement a redesigned pricing page. The transitions-dev skill is not installed in this environment.",
+      "expected_output": "The missing skill is recorded as unavailable with its coverage owed, and the pass proceeds on the surfaces it can cover.",
+      "assertions": [
+        "Records transitions-dev as unavailable with a reason",
+        "Does NOT improvise motion guidance in place of the missing skill",
+        "Does NOT block the surfaces it can still cover",
+        "Names the owed coverage in the stage receipt so a later gate can see it"
+      ],
+      "files": []
+    },
+    {
+      "id": 5,
+      "name": "does-not-restate-what-it-indexes",
+      "prompt": "What spacing scale and corner radius should this card use?",
+      "expected_output": "The answer comes from the indexed design skill, not from this one; this skill routes and stops.",
+      "assertions": [
+        "Routes the question to ui-design-language rather than answering it",
+        "Does NOT state spacing, radius, color or motion values of its own",
+        "Contains no design guidance that would go stale when the indexed skill updates"
+      ],
+      "files": []
+    }
+  ]
+}

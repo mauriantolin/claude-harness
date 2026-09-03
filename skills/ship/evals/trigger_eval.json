@@ -1,0 +1,19 @@
+[
+  {"query": "Aprobado: abrí el PR", "should_trigger": true},
+  {"query": "I reviewed it. Push the branch and open the pull request with the evidence ledger.", "should_trigger": true},
+  {"query": "Recreate #1701 on a fresh branch with credit to the original author, then open the PR", "should_trigger": true},
+  {"query": "Commit this and push it to the feature branch", "should_trigger": true},
+  {"query": "Update the existing PR body with the round 2 review notes", "should_trigger": true},
+  {"query": "The gates passed. Take it to PR-ready and stop there.", "should_trigger": true},
+  {"query": "Absorb the useful parts of that stale contributor PR and open ours, preserving co-authorship", "should_trigger": true},
+
+  {"query": "Merge PR #1736 into main", "should_trigger": false},
+  {"query": "Cut the v0.16.0 release and publish it to npm", "should_trigger": false},
+  {"query": "Review this diff and tell me whether it is correct", "should_trigger": false},
+  {"query": "Should we open a PR now or wait until the other branch lands?", "should_trigger": false},
+  {"query": "Check whether the acceptance criteria are actually met", "should_trigger": false},
+  {"query": "Watch CI and tell me if the deployment is green", "should_trigger": false},
+  {"query": "Rebase this branch onto main and force-push", "should_trigger": false},
+  {"query": "Which issue should I pick up next?", "should_trigger": false},
+  {"query": "Write the implementation for the select normalization fix", "should_trigger": false}
+]
