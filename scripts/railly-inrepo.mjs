@@ -96,6 +96,32 @@ function scaffold(projectRoot) {
 		);
 	}
 
+	// Las skills de Railly resuelven su raíz canónica desde RAILLY_SKILLS_REPO
+	// ANTES que desde cualquier default, y validan que la raíz tenga los tres
+	// marcadores que acabamos de crear. Apuntarla acá hace innecesario tocar sus
+	// archivos: su repo queda intacto y los updates entran solos.
+	//
+	// Los valores de `env` en settings.json son literales, sin sustitución, así
+	// que la ruta va absoluta. Por eso vive en settings.local.json, que es por
+	// máquina y no se versiona.
+	const settingsPath = join(root, ".claude", "settings.local.json");
+	let settings = {};
+	if (existsSync(settingsPath)) {
+		try {
+			settings = JSON.parse(readFileSync(settingsPath, "utf8"));
+		} catch {
+			console.error(
+				`settings.local.json existe pero no es JSON válido; no se tocó: ${settingsPath}`,
+			);
+			settings = null;
+		}
+	}
+	if (settings) {
+		settings.env = { ...(settings.env || {}), RAILLY_SKILLS_REPO: base };
+		writeFileSync(settingsPath, `${JSON.stringify(settings, null, 2)}\n`);
+		console.log(`RAILLY_SKILLS_REPO => ${base}`);
+	}
+
 	// Sin conventions, la pasada de implementación de software-factory no tiene
 	// tabla que leer y improvisa. Sembramos los defaults globales; los overrides
 	// del repo los escribe quien conoce el repo.

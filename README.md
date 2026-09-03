@@ -33,19 +33,32 @@ One skill is ours outright:
 
 ### `scripts/railly-inrepo.mjs`
 
-Redirects the Railly skills' canonical source root at the project being worked
-on, so contracts, cases and gate runs version with the code instead of living in
-a global checkout.
+Points the Railly skills' canonical source root at the project being worked on,
+so contracts, cases and gate runs version with the code instead of living in a
+global checkout.
 
 ```sh
 node scripts/railly-inrepo.mjs scaffold [project]   # once per repository
-node scripts/railly-inrepo.mjs patch                # after every plugin update
 ```
 
-`patch` rewrites every on-disk copy of `resolve-source-root.mjs` — 24 of them,
-because the whole repository is vendored once per installed plugin plus the
-marketplace clone. It is idempotent, and it detects a half-applied state rather
-than reporting it as done.
+`scaffold` creates `.claude/knowledge/` with the three markers
+`resolve-source-root.mjs` validates, seeds a `conventions.md` carrying the
+defaults, and writes `RAILLY_SKILLS_REPO` into the project's
+`.claude/settings.local.json`.
+
+**Railly's repository is not modified.** His script reads `RAILLY_SKILLS_REPO`
+before any default and validates the markers, so pointing the variable at the
+scaffolded directory is enough — verified against his unpatched original. That
+keeps `source: github` viable and lets upstream updates land untouched.
+
+Settings `env` values are literal strings with no substitution, so the path must
+be absolute. That is why it lives in `settings.local.json`, which is per-machine
+and gitignored, rather than the shared `settings.json`.
+
+`scripts/railly-inrepo.mjs patch` remains as an escape hatch. It rewrites every
+on-disk copy of `resolve-source-root.mjs` to walk up from the working directory
+instead of reading the variable, for a context where the variable cannot be set.
+It is not needed for the normal path, and a plugin update discards it harmlessly.
 
 ## Install
 
