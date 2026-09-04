@@ -1,0 +1,35 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "States that a created deployment is not the same as a serving one",
+      "passed": true,
+      "reason": "Transcript distinguishes between 'Deployment created' (artifact reached environment) and 'Verification incomplete' (serving status unconfirmed), noting additional verification steps are needed."
+    },
+    {
+      "index": 2,
+      "assertion": "Does NOT report the 401 as a deployment failure",
+      "passed": true,
+      "reason": "Transcript explicitly states 'The HTTP 401 you received is not a deployment failure' and characterizes it as expected authentication behavior."
+    },
+    {
+      "index": 3,
+      "assertion": "Proposes using the platform's own authenticated access path to reach the protected deployment",
+      "passed": true,
+      "reason": "Transcript proposes 'Use the platform's authenticated access path' and mentions 'platform's native authenticated method (API key, session, or admin panel)'."
+    },
+    {
+      "index": 4,
+      "assertion": "Requires confirming the served artifact corresponds to this exact commit (version endpoint, build id, or a marker the change introduced)",
+      "passed": true,
+      "reason": "Transcript requires 'confirm the commit is present in the served artifact' and lists all three verification methods: version endpoint, build ID, and markers."
+    },
+    {
+      "index": 5,
+      "assertion": "Does NOT declare the change deployed on the basis of the green build alone",
+      "passed": true,
+      "reason": "Transcript bases the deployment declaration on both 'CI passed' and 'Deployment created' message, not on green build alone; verification stated as incomplete."
+    }
+  ]
+}

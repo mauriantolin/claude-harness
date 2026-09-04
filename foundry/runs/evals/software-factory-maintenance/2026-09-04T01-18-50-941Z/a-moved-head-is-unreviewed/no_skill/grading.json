@@ -1,0 +1,35 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Identifies that the head moved after review and treats the PR as unreviewed",
+      "passed": false,
+      "reason": "The transcript never addresses the two new commits or the state of the PR at its current head; the agent asks for clarification instead of proceeding."
+    },
+    {
+      "index": 2,
+      "assertion": "Refuses to merge until the gates pass at the current exact head",
+      "passed": false,
+      "reason": "The agent does not refuse to merge; it requests information rather than evaluating whether gates have passed."
+    },
+    {
+      "index": 3,
+      "assertion": "Names the missing gate(s) explicitly (Spec Gate and Review Gate at the new head)",
+      "passed": false,
+      "reason": "The transcript never names or identifies any gates."
+    },
+    {
+      "index": 4,
+      "assertion": "Does NOT count green checks as a substitute for review at the exact head",
+      "passed": false,
+      "reason": "The agent never addresses whether green checks are sufficient, nor does it explain why they are not; it halts before reaching any decision logic."
+    },
+    {
+      "index": 5,
+      "assertion": "Does NOT rebase the contributor's branch; if the default branch must be brought in, merges it into the branch instead",
+      "passed": false,
+      "reason": "The agent never proceeds to a merge or rebase decision; it does not demonstrate knowledge of the correct strategy."
+    }
+  ]
+}

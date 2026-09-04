@@ -1,0 +1,35 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "R3 appears in the report with an explicit superseded status",
+      "passed": false,
+      "reason": "No report was produced; the agent requested additional information instead of writing the Spec Gate report."
+    },
+    {
+      "index": 2,
+      "assertion": "Names the authority that superseded R3 (the maintainer's decision in review round 2)",
+      "passed": false,
+      "reason": "No report was produced; the transcript contains only information requests, not authority attribution."
+    },
+    {
+      "index": 3,
+      "assertion": "Does NOT mark R3 as pass",
+      "passed": false,
+      "reason": "Absence of evidence—no report exists to verify the agent avoided marking R3 as pass."
+    },
+    {
+      "index": 4,
+      "assertion": "Does NOT omit R3 from the report",
+      "passed": false,
+      "reason": "R3 was effectively omitted because no report was produced."
+    },
+    {
+      "index": 5,
+      "assertion": "R1, R2 and R4 each receive their own verdict",
+      "passed": false,
+      "reason": "No report was produced; the transcript contains no verdicts for any requirement."
+    }
+  ]
+}

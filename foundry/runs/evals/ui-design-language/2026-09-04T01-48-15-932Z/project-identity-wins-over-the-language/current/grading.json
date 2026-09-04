@@ -1,0 +1,29 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Reads and follows the repository's tokens, corner treatment and typography instead of applying the ink/squircle/500-weight system",
+      "passed": false,
+      "reason": "The transcript shows no evidence the agent read tokens.css, CLAUDE.md, or the components library; it abandoned the task citing permission issues without attempting any analysis."
+    },
+    {
+      "index": 2,
+      "assertion": "Does NOT replace the project's serif headings, hard corners or bold weights with the design language's rules",
+      "passed": false,
+      "reason": "The agent produced no component implementation, so this guidance was never applied or evaluated."
+    },
+    {
+      "index": 3,
+      "assertion": "Uses the design language only for gaps the project does not define, and says which",
+      "passed": false,
+      "reason": "The agent did not identify any gaps, create any component, or explain where the project's design system was insufficient."
+    },
+    {
+      "index": 4,
+      "assertion": "States that the project's own design system takes precedence",
+      "passed": false,
+      "reason": "The agent never made this statement or demonstrated understanding that the project's design system should be prioritized."
+    }
+  ]
+}

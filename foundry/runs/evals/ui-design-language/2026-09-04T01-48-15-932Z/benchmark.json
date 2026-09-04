@@ -1,0 +1,62 @@
+{
+  "skill_name": "ui-design-language",
+  "iteration": "2026-09-04T01-48-15-932Z",
+  "variants": {
+    "no_skill": {
+      "passed": 2,
+      "total": 13,
+      "pass_rate": 0.15384615384615385,
+      "runs": 3,
+      "invoked": 0,
+      "evals": {
+        "chrome-never-waits-and-data-arrives-by-blur": {
+          "passed": 2,
+          "total": 4,
+          "pass_rate": 0.5,
+          "skill_invoked": false
+        },
+        "one-ink-squircles-and-a-named-spring": {
+          "passed": 0,
+          "total": 5,
+          "pass_rate": 0,
+          "skill_invoked": false
+        },
+        "project-identity-wins-over-the-language": {
+          "passed": 0,
+          "total": 4,
+          "pass_rate": 0,
+          "skill_invoked": false
+        }
+      }
+    },
+    "current": {
+      "passed": 3,
+      "total": 13,
+      "pass_rate": 0.23076923076923078,
+      "runs": 3,
+      "invoked": 3,
+      "evals": {
+        "chrome-never-waits-and-data-arrives-by-blur": {
+          "passed": 3,
+          "total": 4,
+          "pass_rate": 0.75,
+          "skill_invoked": true
+        },
+        "one-ink-squircles-and-a-named-spring": {
+          "passed": 0,
+          "total": 5,
+          "pass_rate": 0,
+          "skill_invoked": true
+        },
+        "project-identity-wins-over-the-language": {
+          "passed": 0,
+          "total": 4,
+          "pass_rate": 0,
+          "skill_invoked": true
+        }
+      }
+    }
+  },
+  "candidate_delta_vs_current": null,
+  "current_delta_vs_no_skill": 0.07692307692307693
+}

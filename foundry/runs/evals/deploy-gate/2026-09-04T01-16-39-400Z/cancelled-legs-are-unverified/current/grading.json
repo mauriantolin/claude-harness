@@ -1,0 +1,35 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Lists each check with its own conclusion rather than a summary count alone",
+      "passed": false,
+      "reason": "Transcript lists 3 succeeded jobs only as a count with '(names needed)' rather than naming and concluding on each individual job separately."
+    },
+    {
+      "index": 2,
+      "assertion": "Treats the cancelled e2e job as unverified, neither pass nor fail",
+      "passed": true,
+      "reason": "Transcript explicitly states 'cancelled jobs are neither pass nor fail; they are unverified' and marks e2e as 'unverified, cancelled due to fail-fast.'"
+    },
+    {
+      "index": 3,
+      "assertion": "Asks for or cites the failing lint job's log excerpt that names the cause, not the summary line",
+      "passed": true,
+      "reason": "Transcript asks for 'The lint error log excerpt (the cause, not the summary)' and requests diagnosis of the cause, not just the summary failure."
+    },
+    {
+      "index": 4,
+      "assertion": "Does NOT declare the run green or the deployment safe",
+      "passed": true,
+      "reason": "Transcript explicitly marks status as 🔴 INCOMPLETE, states no deployment is available, and never declares the run safe."
+    },
+    {
+      "index": 5,
+      "assertion": "States that the e2e leg still needs to be observed to a terminal state after lint is fixed",
+      "passed": true,
+      "reason": "Transcript states 'fix it, push, and re-run the full matrix to completion' which includes e2e running to terminal state after lint is resolved."
+    }
+  ]
+}

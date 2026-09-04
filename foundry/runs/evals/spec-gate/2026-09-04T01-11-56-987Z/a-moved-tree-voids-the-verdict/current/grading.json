@@ -1,0 +1,29 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "States that the earlier verdict is void (not merely stale) because the tree moved",
+      "passed": true,
+      "reason": "The transcript explicitly states 'the verdict is void, not stale' and ties it to tree movement."
+    },
+    {
+      "index": 2,
+      "assertion": "Requires a new Spec Gate run on the current head",
+      "passed": true,
+      "reason": "Opens with 'you need to run it again' and closes with 'If the head changed, run it again.'"
+    },
+    {
+      "index": 3,
+      "assertion": "Does NOT carry the verdict forward on the grounds that the last change was only a comment",
+      "passed": true,
+      "reason": "Explicitly states 'The fact that the fix is cosmetic doesn't matter' and does not carry it forward."
+    },
+    {
+      "index": 4,
+      "assertion": "Names the exact heads involved (the old head and the fact that the new one differs)",
+      "passed": false,
+      "reason": "Transcript does not reference the specific SHAs (a1b2c3d for old head or any new head SHA), only generic language about tree movement."
+    }
+  ]
+}

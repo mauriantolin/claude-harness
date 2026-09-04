@@ -1,0 +1,45 @@
+{
+  "skill_name": "ui-design-language",
+  "evals": [
+    {
+      "id": 1,
+      "name": "one-ink-squircles-and-a-named-spring",
+      "prompt": "Build a card for a SaaS dashboard that shows an account's plan, with a dropdown to switch plans and a 'Change plan' button. React + Tailwind, shadcn is installed. The project has no design system of its own. Describe the surface, the tokens, and the motion you would use, then write the component.",
+      "expected_output": "The card is a squircle surface on a grey stage, neutrals derived from a single ink at fixed alphas, the button is a pill, the dropdown opens on the PANEL spring, weights stop at 500, and copy is sentence case. Stock shadcn rounded-rectangle defaults are re-skinned through the shared token contract, not shipped as-is.",
+      "assertions": [
+        "Derives the neutrals (borders, hover washes, inputs) from a single ink color at fixed alphas rather than introducing multiple greys",
+        "Gives the card continuous-curvature (squircle) corners and makes the button a pill",
+        "Names a spring from the seven-spring vocabulary (PANEL for the dropdown) instead of an ad-hoc duration or a new spring",
+        "Keeps font weights at 500 or below and uses sentence-case copy on the button",
+        "Does NOT ship a stock shadcn rounded-lg rectangle unchanged for the card surface"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "project-identity-wins-over-the-language",
+      "prompt": "This repository has tokens.css with a warm beige palette, a components/ library with sharp 4px corners, and a CLAUDE.md that says 'our look is editorial: serif headings, hard corners, bold weights'. Add an empty state to the reports list.",
+      "expected_output": "The project's own system wins. The empty state uses its beige palette, 4px corners, serif headings and bold weights; the design language fills only what the project left undefined (for instance the copy voice or the reduced-motion handling), and never overwrites the identity.",
+      "assertions": [
+        "Reads and follows the repository's tokens, corner treatment and typography instead of applying the ink/squircle/500-weight system",
+        "Does NOT replace the project's serif headings, hard corners or bold weights with the design language's rules",
+        "Uses the design language only for gaps the project does not define, and says which",
+        "States that the project's own design system takes precedence"
+      ],
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "chrome-never-waits-and-data-arrives-by-blur",
+      "prompt": "The usage page loads a table of the last 30 days of API calls from a slow endpoint (about 2 seconds). Design the loading behavior for that page.",
+      "expected_output": "Layout, title and chrome render instantly; only the table body swaps from a pixel-matched skeleton that matches the final rows, and the data arrives by a short blur-in rather than a pop. A spinner or a blank page is not the answer; role=status and prefers-reduced-motion are respected.",
+      "assertions": [
+        "Renders the page chrome (layout, title, controls) immediately rather than waiting on the data",
+        "Uses a pixel-matched skeleton for the table rows, not a generic spinner or a blank area",
+        "Transitions the loaded data in by blur (a short fade/blur arrival) instead of an abrupt pop",
+        "Respects prefers-reduced-motion and announces the loading state accessibly (role=status or equivalent)"
+      ],
+      "files": []
+    }
+  ]
+}

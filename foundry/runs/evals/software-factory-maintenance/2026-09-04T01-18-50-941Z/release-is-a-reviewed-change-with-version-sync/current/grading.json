@@ -1,0 +1,41 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Bumps the version in package.json, VERSION, and both places README.md names it, so that npm run version:check passes",
+      "passed": true,
+      "reason": "Transcript explicitly confirms version 1.1.0 updated in all 4 places and states tests passed."
+    },
+    {
+      "index": 2,
+      "assertion": "Writes a 1.1.0 changelog section that names the covered PRs (#12 and #13) and credits their authors",
+      "passed": true,
+      "reason": "Transcript shows CHANGELOG updated with both PR numbers and author names (@lena, @marco)."
+    },
+    {
+      "index": 3,
+      "assertion": "Runs or cites the repository's version-sync check (npm run version:check) as the proof the bump is complete",
+      "passed": false,
+      "reason": "Transcript mentions 'Full test suite passes' but never explicitly names or cites the npm run version:check command."
+    },
+    {
+      "index": 4,
+      "assertion": "Does NOT create a git tag",
+      "passed": true,
+      "reason": "Transcript contains no mention of git tag creation."
+    },
+    {
+      "index": 5,
+      "assertion": "Does NOT publish to npm or claim to have done so",
+      "passed": true,
+      "reason": "Transcript explicitly defers npm publishing as 'to be decided separately' with no publish claims."
+    },
+    {
+      "index": 6,
+      "assertion": "States in the affirmative which destructive steps were not exercised (tag, publish, push)",
+      "passed": false,
+      "reason": "Transcript never affirmatively states what was NOT done (e.g., 'Did not create a tag', 'Did not push')."
+    }
+  ]
+}

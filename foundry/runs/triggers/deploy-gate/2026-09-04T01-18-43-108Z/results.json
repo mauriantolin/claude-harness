@@ -1,0 +1,99 @@
+{
+  "skill": "deploy-gate",
+  "model": "haiku",
+  "total": 10,
+  "matched": 8,
+  "accuracy": 0.8,
+  "misses": 2,
+  "false_positives": 0,
+  "results": [
+    {
+      "query": "The PR merged. Confirm it actually built, passed CI and is serving on staging before we tell the client.",
+      "should_trigger": true,
+      "triggered": true,
+      "invoked": [
+        "deploy-gate"
+      ],
+      "match": true,
+      "error": null
+    },
+    {
+      "query": "Watch the CI run for this push to completion and verify the deployment carries this commit.",
+      "should_trigger": true,
+      "triggered": false,
+      "invoked": [
+        "vercel:status"
+      ],
+      "match": false,
+      "error": null
+    },
+    {
+      "query": "Run the deploy gate on main.",
+      "should_trigger": true,
+      "triggered": true,
+      "invoked": [
+        "deploy-gate"
+      ],
+      "match": true,
+      "error": null
+    },
+    {
+      "query": "CI shows one job cancelled and one failed. Is the release live or not?",
+      "should_trigger": true,
+      "triggered": false,
+      "invoked": [],
+      "match": false,
+      "error": null
+    },
+    {
+      "query": "Implement the retry logic for the upload client.",
+      "should_trigger": false,
+      "triggered": false,
+      "invoked": [],
+      "match": true,
+      "error": null
+    },
+    {
+      "query": "Review this diff before I push it.",
+      "should_trigger": false,
+      "triggered": false,
+      "invoked": [
+        "code-review"
+      ],
+      "match": true,
+      "error": null
+    },
+    {
+      "query": "Commit the reviewed change on a branch and open the PR.",
+      "should_trigger": false,
+      "triggered": false,
+      "invoked": [],
+      "match": true,
+      "error": null
+    },
+    {
+      "query": "Write a GitHub Actions workflow that runs the tests on every push.",
+      "should_trigger": false,
+      "triggered": false,
+      "invoked": [],
+      "match": true,
+      "error": null
+    },
+    {
+      "query": "Cut release 2.4.0 and publish it to npm.",
+      "should_trigger": false,
+      "triggered": false,
+      "invoked": [],
+      "match": true,
+      "error": null
+    },
+    {
+      "query": "Why is the Docker build slow? Optimize the layers.",
+      "should_trigger": false,
+      "triggered": false,
+      "invoked": [],
+      "match": true,
+      "error": null
+    }
+  ]
+}

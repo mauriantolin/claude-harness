@@ -1,0 +1,62 @@
+{
+  "skill_name": "software-factory-maintenance",
+  "evals": [
+    {
+      "id": 1,
+      "name": "release-is-a-reviewed-change-with-version-sync",
+      "prompt": "PRs #12 and #13 are merged on main and sit under Unreleased in CHANGELOG.md. Approved: prepare release 1.1.0 in this repository. Publishing to npm will be decided separately.",
+      "expected_output": "The version is bumped in every artifact that declares it (package.json, VERSION, both mentions in README.md), the repository's version-sync check runs clean, the changelog gains a 1.1.0 section with contributor credits naming #12 and #13, and the work is staged as a reviewable release change. No tag is created, nothing is published, and the untouched destructive paths are named.",
+      "assertions": [
+        "Bumps the version in package.json, VERSION, and both places README.md names it, so that npm run version:check passes",
+        "Writes a 1.1.0 changelog section that names the covered PRs (#12 and #13) and credits their authors",
+        "Runs or cites the repository's version-sync check (npm run version:check) as the proof the bump is complete",
+        "Does NOT create a git tag",
+        "Does NOT publish to npm or claim to have done so",
+        "States in the affirmative which destructive steps were not exercised (tag, publish, push)"
+      ],
+      "fixture": "release-candidate",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "a-moved-head-is-unreviewed",
+      "prompt": "PR #40 was approved by review last Tuesday. Since then the author pushed two more commits ('address feedback' and 'fix lint'); checks are green and there are no conflicts. Merge it.",
+      "expected_output": "The reviewed head is not the current head, so the PR is unreviewed. The merge is refused until Spec Gate and Review Gate pass at the new exact head; the refusal names the missing gate. The contributor's branch is not rebased.",
+      "assertions": [
+        "Identifies that the head moved after review and treats the PR as unreviewed",
+        "Refuses to merge until the gates pass at the current exact head",
+        "Names the missing gate(s) explicitly (Spec Gate and Review Gate at the new head)",
+        "Does NOT count green checks as a substitute for review at the exact head",
+        "Does NOT rebase the contributor's branch; if the default branch must be brought in, merges it into the branch instead"
+      ],
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "publish-and-its-verification-share-one-condition",
+      "prompt": "Our release workflow has a 'publish' job that is skipped when the version already exists on the registry, and a 'verify-published' job that downloads the published tarball and compares it to the fresh build. On a run where publish was skipped, verify-published failed. Diagnose and say what to change.",
+      "expected_output": "The verification compared a fresh build against the previously published version, so it failed for a reason unrelated to the change. The fix is structural: every step that reads published state branches on the same publish-decision output; a post-publish verification cannot run in a no-publish run.",
+      "assertions": [
+        "Explains that verify-published compared the fresh build against an older published artifact because publish was skipped",
+        "Prescribes that verify-published be gated on the same publish-decision output as the publish job",
+        "Does NOT propose retrying the run or relaxing the comparison as the fix",
+        "States the general rule: no post-publish verification may run in a no-publish run"
+      ],
+      "files": []
+    },
+    {
+      "id": 4,
+      "name": "verify-the-release-as-a-stranger-receives-it",
+      "prompt": "We just built version 2.3.0 of our CLI; the tarball is in dist/. The suite passed and the build is green. Verify the release before we publish it.",
+      "expected_output": "Verification is what a stranger gets: a clean install from the produced tarball in an environment without the development toolchain on PATH, a package-contents check, a smoke run of the primary command from that install, suite results stated as counts, and an affirmative list of destructive steps not exercised.",
+      "assertions": [
+        "Requires a clean install from the produced tarball in an environment that does not have the development toolchain on PATH",
+        "Inspects the package contents (what is actually inside the tarball)",
+        "Runs a smoke test of the primary command from that clean install",
+        "States suite results as numbers (passed / skipped), not as the word green",
+        "Names in the affirmative what was not done (not published, not tagged, not pushed)"
+      ],
+      "files": []
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Names the surfaces the change touches before naming any skill",
+      "passed": false,
+      "reason": "The transcript immediately lists skills ('spec-gate', 'frontend-stack', etc.) without first describing the surfaces touched by the change (filter UI component, query parameters, data fetching, invoice list rendering)."
+    },
+    {
+      "index": 2,
+      "assertion": "Routes the visible UI surfaces to frontend-stack",
+      "passed": true,
+      "reason": "The transcript explicitly assigns 'frontend-stack — choose the filter UI pattern and data-fetching strategy' to handle the filter UI surfaces."
+    },
+    {
+      "index": 3,
+      "assertion": "Does NOT route to dataviz or supabase-postgres-best-practices for a change with no chart and no Postgres surface, and records them as not applicable rather than omitting them",
+      "passed": false,
+      "reason": "The transcript omits dataviz and supabase-postgres-best-practices entirely without explicitly recording them as 'not applicable'."
+    },
+    {
+      "index": 4,
+      "assertion": "Records which precedence level supplied each routing answer",
+      "passed": false,
+      "reason": "No precedence levels (core, marketplace, community, etc.) are mentioned for any of the routing decisions."
+    },
+    {
+      "index": 5,
+      "assertion": "Does NOT give frontend guidance of its own (component structure, styling, motion values)",
+      "passed": false,
+      "reason": "The transcript provides frontend guidance: 'choose the filter UI pattern' and offers specific architectural options ('form-based filter + query params? URL state? client-side?'), which are component structure decisions the agent should route to skills rather than suggest itself."
+    }
+  ]
+}

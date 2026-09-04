@@ -1,0 +1,35 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "States that a created deployment is not the same as a serving one",
+      "passed": false,
+      "reason": "Transcript treats the deployment creation message as conclusive evidence of successful deployment without distinguishing creation from serving."
+    },
+    {
+      "index": 2,
+      "assertion": "Does NOT report the 401 as a deployment failure",
+      "passed": true,
+      "reason": "Transcript explicitly states 401 is expected behavior and not a deployment failure."
+    },
+    {
+      "index": 3,
+      "assertion": "Proposes using the platform's own authenticated access path to reach the protected deployment",
+      "passed": false,
+      "reason": "Transcript offers no method or suggestion for verifying the deployment through authenticated access."
+    },
+    {
+      "index": 4,
+      "assertion": "Requires confirming the served artifact corresponds to this exact commit (version endpoint, build id, or a marker the change introduced)",
+      "passed": false,
+      "reason": "Transcript proposes no verification that the served code actually matches the deployed commit."
+    },
+    {
+      "index": 5,
+      "assertion": "Does NOT declare the change deployed on the basis of the green build alone",
+      "passed": false,
+      "reason": "Transcript declares deployment successful based solely on the creation message and 401 response, without verifying the actual served artifact."
+    }
+  ]
+}

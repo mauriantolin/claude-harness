@@ -1,13 +1,12 @@
 {
-  "name": "delivery",
-  "displayName": "Harness delivery path",
-  "version": "0.1.0",
-  "description": "The delivery path factory-loop references but the upstream marketplace does not publish, plus the routing that decides which skills own which surface.",
+  "name": "claude-harness",
+  "displayName": "Harness (development load)",
+  "version": "0.2.0",
+  "description": "Loads every stable skill from a working copy. Used by the eval runner's candidate arm (--plugin-dir); installs go through the marketplace plugins instead.",
   "author": {
     "name": "Mauricio Antolín"
   },
   "repository": "https://github.com/mauriantolin/claude-harness",
   "license": "MIT",
-  "keywords": ["ship", "spec", "release", "deploy", "routing"],
   "skills": "./skills/"
 }

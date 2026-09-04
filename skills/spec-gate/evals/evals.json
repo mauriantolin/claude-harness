@@ -1,0 +1,62 @@
+{
+  "skill_name": "spec-gate",
+  "evals": [
+    {
+      "id": 1,
+      "name": "green-suite-does-not-imply-spec-pass",
+      "prompt": "The working tree carries the fix for the whitespace issue and the suite is green (node tests/select.test.js prints ok). Run Spec Gate against CONTRACT.md and give the verdict.",
+      "expected_output": "One row per acceptance ID and one line per must-not-change behavior, judged by reading the code: A1 and A2 pass, A3 fails because an ambiguous normalized match is resolved instead of returning null, M1 fails because matching became case-insensitive. Status fail, with the tree pinned.",
+      "assertions": [
+        "Produces one verdict per acceptance ID, covering A1, A2 and A3, with none merged or skipped",
+        "Marks A3 as Fail, citing that the code resolves an ambiguous normalized match instead of returning null",
+        "Marks M1 as failed, citing the case-folding (toLowerCase) the change introduced",
+        "Does NOT report a passing spec verdict on the grounds that the test suite is green",
+        "Overall status is fail",
+        "Pins the exact state judged (the base commit and the uncommitted working tree), rather than an unnamed 'current code'"
+      ],
+      "fixture": "contract-select-fix",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "not-provided-is-not-a-soft-pass",
+      "prompt": "Contract for PR #88: A1 (Must-have) export a CSV of the report, A2 (Must-have) respect the active filters in the export, A3 (Must-have) stream rows instead of buffering, A4 (Must-have) log an audit event per export. The PR implements A1–A3 with tests, and its description says A4 'will come in a follow-up PR'. All checks are green. Give the Spec Gate verdict for this head.",
+      "expected_output": "A4 is recorded as not_provided, which on a Must-have makes the run fail. The verdict does not treat the follow-up promise as delivery, and does not quietly drop A4 or mark it pass.",
+      "assertions": [
+        "Records A4 as not_provided (or an equivalent explicit non-delivery verdict), not as pass",
+        "Concludes the run fails because a Must-have was not provided",
+        "Does NOT drop A4 from the report or fold it into another ID",
+        "States that a promised follow-up is not delivery at this head",
+        "Notes that A4 could only be removed from the contract by an explicit superseding authority, and none is cited"
+      ],
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "superseded-is-recorded-not-deleted",
+      "prompt": "During review round 2 the maintainer decided that requirement R3 ('retry the upload three times') is wrong and must not be implemented; the decision is in the review thread. R1, R2 and R4 are implemented and verified. Write the Spec Gate report for this head.",
+      "expected_output": "R3 appears in the report as superseded, naming the maintainer's round-2 decision as the authority and what replaced it, rather than being marked pass or silently omitted. The other requirements get their own verdicts.",
+      "assertions": [
+        "R3 appears in the report with an explicit superseded status",
+        "Names the authority that superseded R3 (the maintainer's decision in review round 2)",
+        "Does NOT mark R3 as pass",
+        "Does NOT omit R3 from the report",
+        "R1, R2 and R4 each receive their own verdict"
+      ],
+      "files": []
+    },
+    {
+      "id": 4,
+      "name": "a-moved-tree-voids-the-verdict",
+      "prompt": "Yesterday Spec Gate passed at head a1b2c3d. Since then the branch was rebased onto main and one more commit fixed a typo in a comment. Can we reuse yesterday's spec verdict for today's head, or do we need to run it again?",
+      "expected_output": "The verdict belongs to one exact tree; a rebase or any new commit voids it. Spec Gate runs again on the new head, regardless of how small the last commit looks.",
+      "assertions": [
+        "States that the earlier verdict is void (not merely stale) because the tree moved",
+        "Requires a new Spec Gate run on the current head",
+        "Does NOT carry the verdict forward on the grounds that the last change was only a comment",
+        "Names the exact heads involved (the old head and the fact that the new one differs)"
+      ],
+      "files": []
+    }
+  ]
+}

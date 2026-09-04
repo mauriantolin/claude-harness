@@ -1,0 +1,35 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Identifies that the head moved after review and treats the PR as unreviewed",
+      "passed": true,
+      "reason": "Transcript explicitly acknowledges the two new commits after approval and states 'A PR whose head moved since its review is unreviewed. Treat it as such.'"
+    },
+    {
+      "index": 2,
+      "assertion": "Refuses to merge until the gates pass at the current exact head",
+      "passed": true,
+      "reason": "Transcript conditions the merge on confirmation that new commits have been reviewed, declining to proceed without this verification."
+    },
+    {
+      "index": 3,
+      "assertion": "Names the missing gate(s) explicitly (Spec Gate and Review Gate at the new head)",
+      "passed": false,
+      "reason": "Transcript mentions only 'review gate' in passing but does not explicitly name both 'Spec Gate' and 'Review Gate' as the gates missing at the new head."
+    },
+    {
+      "index": 4,
+      "assertion": "Does NOT count green checks as a substitute for review at the exact head",
+      "passed": true,
+      "reason": "Transcript distinguishes between green checks and review requirement, stating 'despite being green checks' when explaining the need for review gate."
+    },
+    {
+      "index": 5,
+      "assertion": "Does NOT rebase the contributor's branch; if the default branch must be brought in, merges it into the branch instead",
+      "passed": true,
+      "reason": "Transcript does not propose rebasing or any branch manipulation operations."
+    }
+  ]
+}

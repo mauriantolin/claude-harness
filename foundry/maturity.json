@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "skills": {
+    "deploy-gate": {
+      "type": "gate",
+      "channel": "stable",
+      "maturity": "evaluated",
+      "summary": "Rewritten from the retired cicd-deploy-verifier; Railly covers no deploy surface. Round 001 (haiku): 28.6% → 81.0%, strongest on created-is-not-serving; triggers 8/10.",
+      "decision": "rounds/001-align-to-railly-foundry/decision.md"
+    },
+    "frontend-stack": {
+      "type": "routing",
+      "channel": "stable",
+      "maturity": "evaluated",
+      "summary": "Indexes and orders the installed frontend skills for software-factory's implementation stage. Round 001 (haiku): 22.2% → 16.7% and 0/10 positive triggers; description and eval design owed a look. The index itself is unmeasured.",
+      "decision": "rounds/001-align-to-railly-foundry/decision.md"
+    },
+    "implementation-routing": {
+      "type": "routing",
+      "channel": "stable",
+      "maturity": "evaluated",
+      "summary": "Global routing and precedence for the implementation stage; repository specifics defer to cases/<repo>/conventions.md. Round 001 (haiku): 9.5% → 38.1%; triggers 9/10.",
+      "decision": "rounds/001-align-to-railly-foundry/decision.md"
+    },
+    "ship": {
+      "type": "delivery",
+      "channel": "stable",
+      "maturity": "evaluated",
+      "summary": "Recreated from sunat-cli#103, agent-browser's absorption conventions and 29 pull requests. Round 001 (haiku): 17.6% → 64.7%, gain concentrated on the ledger body; triggers 8/10.",
+      "decision": "rounds/001-align-to-railly-foundry/decision.md"
+    },
+    "software-factory-maintenance": {
+      "type": "delivery",
+      "channel": "stable",
+      "maturity": "evaluated",
+      "summary": "Maintainer merge, release and publish workflow recreated from the chore(release) pull requests. Round 001 (haiku): 25.0% → 50.0%; one trigger false positive on a factory-loop prompt. Description edit is a round 002 candidate.",
+      "decision": "rounds/001-align-to-railly-foundry/decision.md"
+    },
+    "spec-gate": {
+      "type": "gate",
+      "channel": "stable",
+      "maturity": "evaluated",
+      "summary": "Recreated from the three published runs under Railly's foundry/runs/spec/. Round 001 (haiku): 65.0% → 55.0%; with the skill loaded the agent stops to ask for SHAs on a contract given by description. Round 002 candidate.",
+      "decision": "rounds/001-align-to-railly-foundry/decision.md"
+    },
+    "ui-design-language": {
+      "type": "content",
+      "channel": "stable",
+      "maturity": "evaluated",
+      "summary": "Opinionated design language frontend-stack routes to. Lived unversioned in ~/.claude/skills until 2026-09-03. Round 001 (haiku): 15.4% → 23.1%; triggers 6/10.",
+      "decision": "rounds/001-align-to-railly-foundry/decision.md"
+    }
+  }
+}

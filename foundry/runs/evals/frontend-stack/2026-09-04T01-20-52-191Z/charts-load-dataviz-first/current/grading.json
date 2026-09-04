@@ -1,0 +1,23 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Loads dataviz before writing the first line of chart code",
+      "passed": false,
+      "reason": "The agent provided recharts code directly without any evidence of consulting dataviz documentation or specifications beforehand."
+    },
+    {
+      "index": 2,
+      "assertion": "Does NOT let ui-design-language or shadcn decide the chart form",
+      "passed": true,
+      "reason": "The agent chose a LineChart form from recharts based on the task requirements, with no indication of ui-design-language or shadcn influencing the chart design decision."
+    },
+    {
+      "index": 3,
+      "assertion": "Still loads the visual system for the panel's surrounding surface",
+      "passed": false,
+      "reason": "The agent hardcoded all panel styling (colors like #f5f5f5, #2563eb) without consulting or referencing any visual system for the surrounding surface."
+    }
+  ]
+}

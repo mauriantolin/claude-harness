@@ -1,0 +1,97 @@
+{
+  "skill": "implementation-routing",
+  "model": "haiku",
+  "total": 10,
+  "matched": 9,
+  "accuracy": 0.9,
+  "misses": 1,
+  "false_positives": 0,
+  "results": [
+    {
+      "query": "The contract is accepted and we are about to implement. Which skills own the surfaces this change touches?",
+      "should_trigger": true,
+      "triggered": true,
+      "invoked": [
+        "implementation-routing"
+      ],
+      "match": true,
+      "error": null
+    },
+    {
+      "query": "Software factory stage 1: name the stage tooling for this change before any code is written.",
+      "should_trigger": true,
+      "triggered": false,
+      "invoked": [],
+      "match": false,
+      "error": null
+    },
+    {
+      "query": "This change touches a settings page and a Postgres migration. Decide who owns what before implementation.",
+      "should_trigger": true,
+      "triggered": true,
+      "invoked": [
+        "implementation-routing"
+      ],
+      "match": true,
+      "error": null
+    },
+    {
+      "query": "Two skills claim the same surface. Resolve the routing for the implementation pass.",
+      "should_trigger": true,
+      "triggered": true,
+      "invoked": [
+        "implementation-routing"
+      ],
+      "match": true,
+      "error": null
+    },
+    {
+      "query": "Review this finished diff for correctness.",
+      "should_trigger": false,
+      "triggered": false,
+      "invoked": [],
+      "match": true,
+      "error": null
+    },
+    {
+      "query": "Choose between the two proposed fix shapes for the race condition.",
+      "should_trigger": false,
+      "triggered": false,
+      "invoked": [],
+      "match": true,
+      "error": null
+    },
+    {
+      "query": "What spacing scale and corner radius should this card use?",
+      "should_trigger": false,
+      "triggered": false,
+      "invoked": [],
+      "match": true,
+      "error": null
+    },
+    {
+      "query": "Add an index to the invoices table; the tenant queries are slow.",
+      "should_trigger": false,
+      "triggered": false,
+      "invoked": [],
+      "match": true,
+      "error": null
+    },
+    {
+      "query": "Commit this on a branch and open the PR.",
+      "should_trigger": false,
+      "triggered": false,
+      "invoked": [],
+      "match": true,
+      "error": null
+    },
+    {
+      "query": "Which issue should I work on next?",
+      "should_trigger": false,
+      "triggered": false,
+      "invoked": [],
+      "match": true,
+      "error": null
+    }
+  ]
+}

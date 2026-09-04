@@ -1,16 +1,21 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Symlinks this repository's skills and scripts into the Claude Code user
+# Links this repository's skills and scripts into the Claude Code user
 # directory, matching how the ~/.agents/skills entries are already wired.
 # Re-runnable: an existing correct link is left alone, a wrong one is replaced,
 # and a real directory is refused rather than silently destroyed.
+#
+# Both catalogs are linked: skills/<name> (stable) and
+# skills/.experimental/<name> (candidates under evaluation). Development
+# installs are links to the working copy, so an edit is live in the next
+# session and an eval always measures what is in git.
 
 readonly REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 readonly CLAUDE_DIR="${CLAUDE_CONFIG_DIR:-$HOME/.claude}"
 
 # Windows refuses symlinks without Developer Mode or elevation, but allows
-# directory junctions and file hardlinks to any user. Detect once.
+# directory junctions to any user. Detect once.
 readonly IS_WINDOWS=$([[ "$(uname -s)" == MINGW* || "$(uname -s)" == MSYS* ]] && echo 1 || echo 0)
 
 # Identifies a launcher this script generated, so a regenerated one is replaced
@@ -56,13 +61,11 @@ LAUNCHER
 # already-installed entry from a stray copy. Compare identity instead.
 already_linked() {
   local src="$1" dest="$2"
-  # A junction resolves to the target's contents, so identity is the test.
   [[ -d "$src" && -d "$dest" ]] && [[ "$dest" -ef "$src" ]] && return 0
   [[ -L "$dest" ]] && [[ "$(readlink "$dest")" == "$src" ]] && return 0
   return 1
 }
 
-# Ours to replace: a launcher this script wrote, whatever version.
 is_our_launcher() {
   [[ -f "$1" ]] && grep -q "$LAUNCHER_MARKER" "$1" 2>/dev/null
 }
@@ -79,7 +82,7 @@ link_one() {
   if [[ -L "$dest" ]] || is_our_launcher "$dest"; then
     rm -f "$dest"
   elif [[ -e "$dest" ]]; then
-    # A real file or directory here is either the pre-repo copy or someone
+    # A real file or directory here is either a pre-repo copy or someone
     # else's work. Refuse rather than guess which.
     printf '  REFUSED  %s (exists and is not a link; move it aside first)\n' \
       "$name" >&2
@@ -106,15 +109,15 @@ main() {
 
   printf 'skills -> %s/skills\n' "$CLAUDE_DIR"
   mkdir -p "$CLAUDE_DIR/skills"
-  for skill in "$REPO_ROOT"/skills/*/; do
-    [[ -d "$skill" ]] || continue
+  for skill in "$REPO_ROOT"/skills/*/ "$REPO_ROOT"/skills/.experimental/*/; do
+    [[ -d "$skill" && -f "$skill/SKILL.md" ]] || continue
     skill="${skill%/}"
     link_one "$skill" "$CLAUDE_DIR/skills/$(basename "$skill")" || failed=1
   done
 
   printf 'scripts -> %s/scripts\n' "$CLAUDE_DIR"
   mkdir -p "$CLAUDE_DIR/scripts"
-  for script in "$REPO_ROOT"/scripts/*; do
+  for script in "$REPO_ROOT"/scripts/*.mjs; do
     [[ -f "$script" ]] || continue
     link_one "$script" "$CLAUDE_DIR/scripts/$(basename "$script")" || failed=1
   done
@@ -123,7 +126,7 @@ main() {
     printf '\nSome links were refused. Nothing was destroyed.\n' >&2
     return 1
   fi
-  printf '\nDone.\n'
+  printf '\nDone. Next: npm run doctor\n'
 }
 
 main "$@"

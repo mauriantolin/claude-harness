@@ -1,0 +1,29 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Resolves the overlap by removing (uninstalling or retiring) one skill rather than by declaring a winner in prose",
+      "passed": false,
+      "reason": "Transcript provides a prioritization framework to declare a winner, not a recommendation to uninstall or retire one skill."
+    },
+    {
+      "index": 2,
+      "assertion": "Explains that a declared precedence holds only while every reader honours it, while a removal always holds",
+      "passed": false,
+      "reason": "Transcript never discusses the difference between declared precedence (fragile, requires continued consensus) versus removal (permanent)."
+    },
+    {
+      "index": 3,
+      "assertion": "Does NOT load both skills for the same surface",
+      "passed": true,
+      "reason": "Transcript explicitly recommends loading only the winning skill, not both."
+    },
+    {
+      "index": 4,
+      "assertion": "Ends with exactly one owner for the component-structure surface",
+      "passed": false,
+      "reason": "Transcript provides decision criteria but never explicitly states which skill is designated as the final owner of component-structure."
+    }
+  ]
+}

@@ -1,2 +1,11 @@
 node_modules/
-skills/*/evals/runs/
+
+# Eval runs keep their gradings and benchmarks as evidence; the throwaway
+# repositories, raw outputs and transcripts they were computed from do not
+# belong in git.
+foundry/runs/evals/**/repo/
+foundry/runs/evals/**/stream.jsonl
+foundry/runs/evals/**/output.txt
+foundry/runs/evals/**/transcript.txt
+foundry/runs/evals/**/run.json
+foundry/runs/triggers/**/stream/

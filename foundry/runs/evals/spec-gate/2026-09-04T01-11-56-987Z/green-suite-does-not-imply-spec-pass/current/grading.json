@@ -1,0 +1,41 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Produces one verdict per acceptance ID, covering A1, A2 and A3, with none merged or skipped",
+      "passed": true,
+      "reason": "Transcript provides separate verdicts for A1 (pass), A2 (pass), and A3 (fail), with each assessment presented independently."
+    },
+    {
+      "index": 2,
+      "assertion": "Marks A3 as Fail, citing that the code resolves an ambiguous normalized match instead of returning null",
+      "passed": true,
+      "reason": "Transcript marks A3 as fail and explicitly states the code 'returns the first match instead of `null`' when handling ambiguous matches."
+    },
+    {
+      "index": 3,
+      "assertion": "Marks M1 as failed, citing the case-folding (toLowerCase) the change introduced",
+      "passed": true,
+      "reason": "Transcript marks M1 as failed and cites `.toLowerCase()` making matching case-insensitive, citing the concrete example of 'capital federal' resolving to 'Capital Federal'."
+    },
+    {
+      "index": 4,
+      "assertion": "Does NOT report a passing spec verdict on the grounds that the test suite is green",
+      "passed": true,
+      "reason": "Transcript reports overall FAIL despite acknowledging 'passes the test suite', explicitly stating spec contract failures override test suite success."
+    },
+    {
+      "index": 5,
+      "assertion": "Overall status is fail",
+      "passed": true,
+      "reason": "Transcript opens with 'Spec Gate Verdict: **FAIL**' and closes with final fail determination."
+    },
+    {
+      "index": 6,
+      "assertion": "Pins the exact state judged (the base commit and the uncommitted working tree), rather than an unnamed 'current code'",
+      "passed": true,
+      "reason": "Transcript specifies commit 2fc32d5 and lists uncommitted changes (M src/select.js, M tests/select.test.js), with report filename including the commit hash."
+    }
+  ]
+}

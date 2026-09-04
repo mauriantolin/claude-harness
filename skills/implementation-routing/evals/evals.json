@@ -1,0 +1,71 @@
+{
+  "skill_name": "implementation-routing",
+  "evals": [
+    {
+      "id": 1,
+      "name": "surfaces-first-then-one-owner-each",
+      "prompt": "Accepted contract: the invoices list gets a filter bar (status, date range) and the matching rows must load without a full page reload. The repository has no conventions file. We are about to implement. Which skills own this stage?",
+      "expected_output": "The surfaces are named from the contract first (a rendered filter UI, client data loading), then routed: frontend-stack owns everything a person sees and operates. No chart or Postgres surface exists, so dataviz and supabase-postgres-best-practices are recorded as not applicable. The precedence level behind each answer is recorded.",
+      "assertions": [
+        "Names the surfaces the change touches before naming any skill",
+        "Routes the visible UI surfaces to frontend-stack",
+        "Does NOT route to dataviz or supabase-postgres-best-practices for a change with no chart and no Postgres surface, and records them as not applicable rather than omitting them",
+        "Records which precedence level supplied each routing answer",
+        "Does NOT give frontend guidance of its own (component structure, styling, motion values)"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "postgres-surface-routes-to-postgres-not-to-the-frontend-index",
+      "prompt": "Accepted contract: add a tenant_id column to the invoices table, backfill it, add the index the tenant queries need, and tighten the RLS policy so a tenant only sees its own invoices. There is a small admin toggle in the settings page to enable the new policy. Route the implementation stage.",
+      "expected_output": "Two surfaces: the Postgres schema/RLS/index work goes to supabase-postgres-best-practices; the settings toggle goes to frontend-stack. Neither skill is loaded for the other's surface, and no surface resolves to two skills.",
+      "assertions": [
+        "Routes the schema, backfill, index and RLS work to supabase-postgres-best-practices",
+        "Routes the settings toggle to frontend-stack",
+        "Does NOT load frontend-stack for the database surface or the Postgres skill for the toggle",
+        "Every named surface has exactly one owner"
+      ],
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "repository-conventions-override-the-global-table",
+      "prompt": "The repository's .claude/knowledge/cases/acme-web/conventions.md contains, under Implementation-pass overrides: '| Postgres queries and migrations | the in-house `acme-db` skill | review round 3, PR #212 |'. The accepted change adds a migration and one query. Route the implementation stage.",
+      "expected_output": "The repository's override wins: the migration and query are routed to acme-db, with precedence level 2 (repository conventions) recorded as the source. The global routing row for Postgres is not applied and is not copied into the conventions file.",
+      "assertions": [
+        "Routes the migration and query to the repository's acme-db skill, not to supabase-postgres-best-practices",
+        "Records that the repository's conventions (precedence level 2) supplied the answer",
+        "Does NOT propose copying or restating the global routing rule into conventions.md",
+        "Cites the override's provenance (review round 3, PR #212) as what gives it authority"
+      ],
+      "files": []
+    },
+    {
+      "id": 4,
+      "name": "two-claimants-are-resolved-by-removal",
+      "prompt": "Two installed skills both claim to own React component structure: 'vercel-composition-patterns' and a newer 'react-architecture' skill someone added last month. They disagree on compound components. The change touches a component library. How do you resolve the routing?",
+      "expected_output": "The overlap is resolved by removing one of the two skills, not by declaring a winner that every future reader would have to honour. Loading both is named as a defect. The change proceeds with exactly one owner for the surface.",
+      "assertions": [
+        "Resolves the overlap by removing (uninstalling or retiring) one skill rather than by declaring a winner in prose",
+        "Explains that a declared precedence holds only while every reader honours it, while a removal always holds",
+        "Does NOT load both skills for the same surface",
+        "Ends with exactly one owner for the component-structure surface"
+      ],
+      "files": []
+    },
+    {
+      "id": 5,
+      "name": "uncovered-surface-is-owed-not-silent",
+      "prompt": "Accepted contract: the report page gains a weekly-active-users chart, and the numbers come from a new Postgres materialized view. The dataviz skill is not installed in this environment. Route the implementation stage and emit the stage receipt.",
+      "expected_output": "Surfaces: the chart, the surrounding page, and the materialized view. dataviz would own the chart and is recorded as unavailable with its coverage owed; frontend-stack takes the surrounding page; supabase-postgres-best-practices takes the view. The receipt separates applied from owed.",
+      "assertions": [
+        "Records dataviz as unavailable with the chart coverage explicitly owed",
+        "Does NOT let frontend-stack or a design skill decide the chart form in dataviz's absence",
+        "Routes the materialized view to supabase-postgres-best-practices and the surrounding page to frontend-stack",
+        "The stage receipt distinguishes skills applied from coverage owed and names every uncovered surface"
+      ],
+      "files": []
+    }
+  ]
+}

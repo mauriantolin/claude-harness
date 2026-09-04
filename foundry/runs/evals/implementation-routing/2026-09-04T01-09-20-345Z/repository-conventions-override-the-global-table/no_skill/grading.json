@@ -1,0 +1,29 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Routes the migration and query to the repository's acme-db skill, not to supabase-postgres-best-practices",
+      "passed": false,
+      "reason": "The agent reported inability to locate the file and did not perform any routing decision."
+    },
+    {
+      "index": 2,
+      "assertion": "Records that the repository's conventions (precedence level 2) supplied the answer",
+      "passed": false,
+      "reason": "The agent did not consult or reference any conventions document as the source of routing guidance."
+    },
+    {
+      "index": 3,
+      "assertion": "Does NOT propose copying or restating the global routing rule into conventions.md",
+      "passed": true,
+      "reason": "The agent did not suggest duplicating any global rule into the conventions file."
+    },
+    {
+      "index": 4,
+      "assertion": "Cites the override's provenance (review round 3, PR #212) as what gives it authority",
+      "passed": false,
+      "reason": "The agent did not reference PR #212 or review round 3 as the source of authority for the routing decision."
+    }
+  ]
+}

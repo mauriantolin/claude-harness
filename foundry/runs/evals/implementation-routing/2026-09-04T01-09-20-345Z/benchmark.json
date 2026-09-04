@@ -1,0 +1,86 @@
+{
+  "skill_name": "implementation-routing",
+  "iteration": "2026-09-04T01-09-20-345Z",
+  "variants": {
+    "no_skill": {
+      "passed": 2,
+      "total": 21,
+      "pass_rate": 0.09523809523809523,
+      "runs": 5,
+      "invoked": 0,
+      "evals": {
+        "postgres-surface-routes-to-postgres-not-to-the-frontend-index": {
+          "passed": 1,
+          "total": 4,
+          "pass_rate": 0.25,
+          "skill_invoked": false
+        },
+        "repository-conventions-override-the-global-table": {
+          "passed": 1,
+          "total": 4,
+          "pass_rate": 0.25,
+          "skill_invoked": false
+        },
+        "surfaces-first-then-one-owner-each": {
+          "passed": 0,
+          "total": 5,
+          "pass_rate": 0,
+          "skill_invoked": false
+        },
+        "two-claimants-are-resolved-by-removal": {
+          "passed": 0,
+          "total": 4,
+          "pass_rate": 0,
+          "skill_invoked": false
+        },
+        "uncovered-surface-is-owed-not-silent": {
+          "passed": 0,
+          "total": 4,
+          "pass_rate": 0,
+          "skill_invoked": false
+        }
+      }
+    },
+    "current": {
+      "passed": 8,
+      "total": 21,
+      "pass_rate": 0.38095238095238093,
+      "runs": 5,
+      "invoked": 5,
+      "evals": {
+        "postgres-surface-routes-to-postgres-not-to-the-frontend-index": {
+          "passed": 1,
+          "total": 4,
+          "pass_rate": 0.25,
+          "skill_invoked": true
+        },
+        "repository-conventions-override-the-global-table": {
+          "passed": 4,
+          "total": 4,
+          "pass_rate": 1,
+          "skill_invoked": true
+        },
+        "surfaces-first-then-one-owner-each": {
+          "passed": 1,
+          "total": 5,
+          "pass_rate": 0.2,
+          "skill_invoked": true
+        },
+        "two-claimants-are-resolved-by-removal": {
+          "passed": 1,
+          "total": 4,
+          "pass_rate": 0.25,
+          "skill_invoked": true
+        },
+        "uncovered-surface-is-owed-not-silent": {
+          "passed": 1,
+          "total": 4,
+          "pass_rate": 0.25,
+          "skill_invoked": true
+        }
+      }
+    }
+  },
+  "candidate_delta_vs_current": null,
+  "current_delta_vs_no_skill": 0.2857142857142857
+}

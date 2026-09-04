@@ -19,7 +19,7 @@ allowed-tools:
 ---
 # Frontend stack
 
-[Software Factory](../../plugins/marketplaces/railly-skills/skills/.experimental/software-factory/SKILL.md)
+[Software Factory](https://github.com/Railly/skills/blob/main/skills/.experimental/software-factory/SKILL.md)
 stage 1 owns the behavior change. When that change is a user interface, the
 methods live across thirteen independently versioned skills totalling roughly
 46,000 lines. Loading all of them wastes the pass; loading none of them makes

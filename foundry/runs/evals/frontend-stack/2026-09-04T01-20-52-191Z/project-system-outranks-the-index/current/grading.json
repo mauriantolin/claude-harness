@@ -1,0 +1,29 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Reads the repository's tokens, theme and component conventions before loading any indexed skill",
+      "passed": false,
+      "reason": "The agent did not explore or read the repository; instead it claimed the directory was empty and asked where the design system was located."
+    },
+    {
+      "index": 2,
+      "assertion": "Does NOT overwrite an existing visual identity with the indexed design language",
+      "passed": false,
+      "reason": "The agent showed no evidence of understanding or protecting the existing visual identity; it neither located nor acknowledged the design system described in the task."
+    },
+    {
+      "index": 3,
+      "assertion": "Records that precedence level 2 supplied the answer",
+      "passed": false,
+      "reason": "The transcript contains no mention of precedence level 2 or any recording of where the solution came from."
+    },
+    {
+      "index": 4,
+      "assertion": "Uses the indexed skill only for gaps the project does not define",
+      "passed": false,
+      "reason": "The agent did not use the indexed skill or identify any gaps; it merely asked for clarification instead of proceeding with the task."
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "name": "pingsvc",
+  "version": "0.3.1",
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "lint": "node scripts/lint.mjs",
+    "gate": "npm run lint && npm test"
+  }
+}

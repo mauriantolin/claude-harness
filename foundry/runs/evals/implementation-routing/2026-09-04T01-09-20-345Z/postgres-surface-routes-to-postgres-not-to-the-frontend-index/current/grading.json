@@ -1,0 +1,29 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Routes the schema, backfill, index and RLS work to supabase-postgres-best-practices",
+      "passed": false,
+      "reason": "The agent proposes stages for schema/backfill/index/RLS but never explicitly routes this work to the named surface 'supabase-postgres-best-practices'."
+    },
+    {
+      "index": 2,
+      "assertion": "Routes the settings toggle to frontend-stack",
+      "passed": false,
+      "reason": "The agent discusses the settings UI toggle but never explicitly routes it to the named surface 'frontend-stack'."
+    },
+    {
+      "index": 3,
+      "assertion": "Does NOT load frontend-stack for the database surface or the Postgres skill for the toggle",
+      "passed": true,
+      "reason": "The transcript avoids loading any skills; it only asks clarifying questions and proposes stages without invoking or loading either named skill."
+    },
+    {
+      "index": 4,
+      "assertion": "Every named surface has exactly one owner",
+      "passed": false,
+      "reason": "No surfaces are routed or assigned owners in the transcript; the agent never establishes ownership of the work."
+    }
+  ]
+}

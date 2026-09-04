@@ -1,0 +1,29 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Explains that verify-published compared the fresh build against an older published artifact because publish was skipped",
+      "passed": false,
+      "reason": "The transcript prescribes the fix but does not diagnose the root cause—that verify-published was comparing against a stale published version rather than the current one."
+    },
+    {
+      "index": 2,
+      "assertion": "Prescribes that verify-published be gated on the same publish-decision output as the publish job",
+      "passed": true,
+      "reason": "Explicitly shows the conditional gate `if: needs.publish.outputs.published == 'true'` and states both jobs must branch on the same gate."
+    },
+    {
+      "index": 3,
+      "assertion": "Does NOT propose retrying the run or relaxing the comparison as the fix",
+      "passed": true,
+      "reason": "The transcript proposes only the conditional gate; it does not suggest retry logic or comparison relaxation."
+    },
+    {
+      "index": 4,
+      "assertion": "States the general rule: no post-publish verification may run in a no-publish run",
+      "passed": false,
+      "reason": "The transcript states the specific case for verify-published but does not generalize to the principle that no post-publish verification should run when publish is skipped."
+    }
+  ]
+}

@@ -1,0 +1,95 @@
+{
+  "skill": "software-factory-maintenance",
+  "model": "haiku",
+  "total": 10,
+  "matched": 5,
+  "accuracy": 0.5,
+  "misses": 4,
+  "false_positives": 1,
+  "results": [
+    {
+      "query": "Three PRs are approved and green. Merge them and cut release 1.4.0.",
+      "should_trigger": true,
+      "triggered": false,
+      "invoked": [],
+      "match": false,
+      "error": null
+    },
+    {
+      "query": "Bump the version everywhere, write the release notes with credits, and prepare the release PR.",
+      "should_trigger": true,
+      "triggered": false,
+      "invoked": [],
+      "match": false,
+      "error": null
+    },
+    {
+      "query": "Clean up the PR queue: which ones are stale, superseded or ready to merge?",
+      "should_trigger": true,
+      "triggered": false,
+      "invoked": [],
+      "match": false,
+      "error": null
+    },
+    {
+      "query": "Verify the 2.1.0 tarball installs cleanly and the CLI runs before we publish to npm.",
+      "should_trigger": true,
+      "triggered": false,
+      "invoked": [],
+      "match": false,
+      "error": null
+    },
+    {
+      "query": "Implement the feature from the accepted contract and take it through the factory.",
+      "should_trigger": false,
+      "triggered": true,
+      "invoked": [
+        "software-factory-maintenance"
+      ],
+      "match": false,
+      "error": null
+    },
+    {
+      "query": "Commit this reviewed change on a branch and take it to PR-ready.",
+      "should_trigger": false,
+      "triggered": false,
+      "invoked": [],
+      "match": true,
+      "error": null
+    },
+    {
+      "query": "Review this diff for correctness and security.",
+      "should_trigger": false,
+      "triggered": false,
+      "invoked": [
+        "code-review"
+      ],
+      "match": true,
+      "error": null
+    },
+    {
+      "query": "Watch CI for this push and confirm the deployment is serving.",
+      "should_trigger": false,
+      "triggered": false,
+      "invoked": [],
+      "match": true,
+      "error": null
+    },
+    {
+      "query": "Which open issue should I pick up next?",
+      "should_trigger": false,
+      "triggered": false,
+      "invoked": [],
+      "match": true,
+      "error": null
+    },
+    {
+      "query": "Write a changelog entry for the bug I just fixed.",
+      "should_trigger": false,
+      "triggered": false,
+      "invoked": [],
+      "match": true,
+      "error": null
+    }
+  ]
+}

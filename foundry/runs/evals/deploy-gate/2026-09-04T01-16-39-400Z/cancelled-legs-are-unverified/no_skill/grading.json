@@ -1,0 +1,35 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Lists each check with its own conclusion rather than a summary count alone",
+      "passed": false,
+      "reason": "The transcript asks for more information instead of listing the five jobs with individual conclusions."
+    },
+    {
+      "index": 2,
+      "assertion": "Treats the cancelled e2e job as unverified, neither pass nor fail",
+      "passed": false,
+      "reason": "The transcript does not address the e2e job's status at all; it only asks for CI system details."
+    },
+    {
+      "index": 3,
+      "assertion": "Asks for or cites the failing lint job's log excerpt that names the cause, not the summary line",
+      "passed": true,
+      "reason": "The transcript explicitly asks for the lint failure details: 'Paste the relevant error message from the failed lint job' and 'CI log file/output showing the lint failure.'"
+    },
+    {
+      "index": 4,
+      "assertion": "Does NOT declare the run green or the deployment safe",
+      "passed": true,
+      "reason": "The transcript avoids declaring the run safe; it instead requests information needed to generate the report."
+    },
+    {
+      "index": 5,
+      "assertion": "States that the e2e leg still needs to be observed to a terminal state after lint is fixed",
+      "passed": false,
+      "reason": "The transcript does not state this condition; it only asks for missing context before proceeding."
+    }
+  ]
+}

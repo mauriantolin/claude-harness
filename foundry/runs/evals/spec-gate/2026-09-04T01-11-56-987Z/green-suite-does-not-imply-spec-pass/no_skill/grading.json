@@ -1,0 +1,41 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Produces one verdict per acceptance ID, covering A1, A2 and A3, with none merged or skipped",
+      "passed": true,
+      "reason": "The transcript provides separate verdicts for A1 (Pass), A2 (Pass), and A3 (Fail) in a structured table without merging or skipping any."
+    },
+    {
+      "index": 2,
+      "assertion": "Marks A3 as Fail, citing that the code resolves an ambiguous normalized match instead of returning null",
+      "passed": true,
+      "reason": "A3 is marked Fail with the exact citation: 'returns the first normalized match without detecting if multiple options normalize to the same value.'"
+    },
+    {
+      "index": 3,
+      "assertion": "Marks M1 as failed, citing the case-folding (toLowerCase) the change introduced",
+      "passed": true,
+      "reason": "M1 is marked FAIL and explicitly cites '.toLowerCase()' in the normalize function as the violation of case-sensitivity."
+    },
+    {
+      "index": 4,
+      "assertion": "Does NOT report a passing spec verdict on the grounds that the test suite is green",
+      "passed": true,
+      "reason": "The overall verdict is Fail; while the agent acknowledges tests are green, it correctly rejects this as justification for a passing verdict."
+    },
+    {
+      "index": 5,
+      "assertion": "Overall status is fail",
+      "passed": true,
+      "reason": "The final verdict explicitly states 'Verdict: FAIL' with two cited reasons."
+    },
+    {
+      "index": 6,
+      "assertion": "Pins the exact state judged (the base commit and the uncommitted working tree), rather than an unnamed 'current code'",
+      "passed": false,
+      "reason": "The agent references code locations generically ('src/select.js:5-15') without explicitly stating the commit hash or acknowledging these are uncommitted changes in a specific working tree state."
+    }
+  ]
+}

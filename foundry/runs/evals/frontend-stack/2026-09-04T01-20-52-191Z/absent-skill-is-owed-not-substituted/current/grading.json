@@ -1,0 +1,29 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Records transitions-dev as unavailable with a reason",
+      "passed": false,
+      "reason": "The transcript never mentions transitions-dev or acknowledges its unavailability."
+    },
+    {
+      "index": 2,
+      "assertion": "Does NOT improvise motion guidance in place of the missing skill",
+      "passed": false,
+      "reason": "The transcript describes 'smooth CSS transitions and hover effects' and 'modern animations using CSS transitions' without the skill."
+    },
+    {
+      "index": 3,
+      "assertion": "Does NOT block the surfaces it can still cover",
+      "passed": true,
+      "reason": "The agent proceeds with pricing page surfaces (tiers, feature matrix, components) that don't depend on transitions-dev."
+    },
+    {
+      "index": 4,
+      "assertion": "Names the owed coverage in the stage receipt so a later gate can see it",
+      "passed": false,
+      "reason": "The transcript does not provide a stage receipt identifying what motion/transition coverage is owed."
+    }
+  ]
+}

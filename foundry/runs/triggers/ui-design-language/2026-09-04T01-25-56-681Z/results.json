@@ -1,0 +1,93 @@
+{
+  "skill": "ui-design-language",
+  "model": "haiku",
+  "total": 10,
+  "matched": 6,
+  "accuracy": 0.6,
+  "misses": 4,
+  "false_positives": 0,
+  "results": [
+    {
+      "query": "Build the settings screen for our SaaS app: a card per section, a dropdown for the timezone, and a save button.",
+      "should_trigger": true,
+      "triggered": false,
+      "invoked": [],
+      "match": false,
+      "error": null
+    },
+    {
+      "query": "This dashboard looks like a wall of grey boxes. Give it a real visual hierarchy.",
+      "should_trigger": true,
+      "triggered": false,
+      "invoked": [],
+      "match": false,
+      "error": null
+    },
+    {
+      "query": "Design the empty state for the reports list.",
+      "should_trigger": true,
+      "triggered": false,
+      "invoked": [],
+      "match": false,
+      "error": null
+    },
+    {
+      "query": "The modal opens abruptly and the cards have harsh corners. Make the whole app feel like one product.",
+      "should_trigger": true,
+      "triggered": false,
+      "invoked": [],
+      "match": false,
+      "error": null
+    },
+    {
+      "query": "Add an index to the users table; the tenant queries time out.",
+      "should_trigger": false,
+      "triggered": false,
+      "invoked": [],
+      "match": true,
+      "error": null
+    },
+    {
+      "query": "The daemon leaks file descriptors on SIGTERM. Fix the shutdown order.",
+      "should_trigger": false,
+      "triggered": false,
+      "invoked": [],
+      "match": true,
+      "error": null
+    },
+    {
+      "query": "Write the changelog for v2.1 and list the merged pull requests.",
+      "should_trigger": false,
+      "triggered": false,
+      "invoked": [],
+      "match": true,
+      "error": null
+    },
+    {
+      "query": "Review this diff and tell me whether it is correct.",
+      "should_trigger": false,
+      "triggered": false,
+      "invoked": [
+        "code-review"
+      ],
+      "match": true,
+      "error": null
+    },
+    {
+      "query": "Parse the CSV export and compute the monthly totals.",
+      "should_trigger": false,
+      "triggered": false,
+      "invoked": [],
+      "match": true,
+      "error": null
+    },
+    {
+      "query": "Our CDP transport mis-parses lone UTF-16 surrogates in responses.",
+      "should_trigger": false,
+      "triggered": false,
+      "invoked": [],
+      "match": true,
+      "error": null
+    }
+  ]
+}

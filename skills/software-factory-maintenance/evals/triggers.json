@@ -1,0 +1,12 @@
+[
+  { "query": "Three PRs are approved and green. Merge them and cut release 1.4.0.", "should_trigger": true },
+  { "query": "Bump the version everywhere, write the release notes with credits, and prepare the release PR.", "should_trigger": true },
+  { "query": "Clean up the PR queue: which ones are stale, superseded or ready to merge?", "should_trigger": true },
+  { "query": "Verify the 2.1.0 tarball installs cleanly and the CLI runs before we publish to npm.", "should_trigger": true },
+  { "query": "Implement the feature from the accepted contract and take it through the factory.", "should_trigger": false },
+  { "query": "Commit this reviewed change on a branch and take it to PR-ready.", "should_trigger": false },
+  { "query": "Review this diff for correctness and security.", "should_trigger": false },
+  { "query": "Watch CI for this push and confirm the deployment is serving.", "should_trigger": false },
+  { "query": "Which open issue should I pick up next?", "should_trigger": false },
+  { "query": "Write a changelog entry for the bug I just fixed.", "should_trigger": false }
+]

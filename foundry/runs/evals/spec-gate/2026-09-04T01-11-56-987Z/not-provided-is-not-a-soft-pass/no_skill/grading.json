@@ -1,0 +1,35 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Records A4 as not_provided (or an equivalent explicit non-delivery verdict), not as pass",
+      "passed": true,
+      "reason": "Transcript explicitly states 'A4 is missing — audit logging was deferred to a follow-up PR' and assigns FAIL verdict."
+    },
+    {
+      "index": 2,
+      "assertion": "Concludes the run fails because a Must-have was not provided",
+      "passed": true,
+      "reason": "Transcript opens with 'Spec Gate Verdict: FAIL' and explains 'A must-have deferred is still a must-have unmet.'"
+    },
+    {
+      "index": 3,
+      "assertion": "Does NOT drop A4 from the report or fold it into another ID",
+      "passed": true,
+      "reason": "Transcript explicitly counts 'four must-have requirements (A1–A4)' and treats A4 as a separate, unmet requirement throughout."
+    },
+    {
+      "index": 4,
+      "assertion": "States that a promised follow-up is not delivery at this head",
+      "passed": true,
+      "reason": "Transcript directly states 'A must-have deferred is still a must-have unmet. This PR does not satisfy the gate as written.'"
+    },
+    {
+      "index": 5,
+      "assertion": "Notes that A4 could only be removed from the contract by an explicit superseding authority, and none is cited",
+      "passed": true,
+      "reason": "Transcript specifies 'Without an explicit contract amendment or A4 implementation, the gate should hold,' establishing that amendment requires explicit authority and noting its absence."
+    }
+  ]
+}

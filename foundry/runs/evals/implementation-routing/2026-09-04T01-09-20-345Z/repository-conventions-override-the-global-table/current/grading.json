@@ -1,0 +1,29 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Routes the migration and query to the repository's acme-db skill, not to supabase-postgres-best-practices",
+      "passed": true,
+      "reason": "The transcript explicitly states the changes route to 'the in-house acme-db skill' and designates it as the path for Postgres queries and migrations, never mentioning supabase-postgres-best-practices."
+    },
+    {
+      "index": 2,
+      "assertion": "Records that the repository's conventions (precedence level 2) supplied the answer",
+      "passed": true,
+      "reason": "The transcript cites 'per the Implementation-pass override in conventions.md' as the source of the routing decision."
+    },
+    {
+      "index": 3,
+      "assertion": "Does NOT propose copying or restating the global routing rule into conventions.md",
+      "passed": true,
+      "reason": "The transcript does not propose any changes to conventions.md or suggest copying global rules into it."
+    },
+    {
+      "index": 4,
+      "assertion": "Cites the override's provenance (review round 3, PR #212) as what gives it authority",
+      "passed": true,
+      "reason": "The transcript lists 'Review round 3, PR #212 (accepted)' as the status, citing the provenance and indicating its accepted authority."
+    }
+  ]
+}

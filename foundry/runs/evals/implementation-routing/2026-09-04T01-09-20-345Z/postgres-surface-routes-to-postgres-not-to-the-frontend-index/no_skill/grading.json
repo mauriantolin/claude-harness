@@ -1,0 +1,29 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Routes the schema, backfill, index and RLS work to supabase-postgres-best-practices",
+      "passed": false,
+      "reason": "The agent describes the database work (schema, backfill, index, RLS) but does not explicitly route it to supabase-postgres-best-practices; it provides a strategy rather than routing assignments."
+    },
+    {
+      "index": 2,
+      "assertion": "Routes the settings toggle to frontend-stack",
+      "passed": false,
+      "reason": "The agent describes a settings flag/toggle but does not explicitly route this work to the frontend-stack skill."
+    },
+    {
+      "index": 3,
+      "assertion": "Does NOT load frontend-stack for the database surface or the Postgres skill for the toggle",
+      "passed": true,
+      "reason": "The agent correctly avoids mentioning frontend-stack in the context of database work and does not assign the toggle to a Postgres skill; the toggle remains in application logic scope."
+    },
+    {
+      "index": 4,
+      "assertion": "Every named surface has exactly one owner",
+      "passed": false,
+      "reason": "The agent did not complete the routing step, so it is impossible to verify that each surface (schema work, backfill, index, RLS policy, settings toggle) has been assigned to exactly one owner."
+    }
+  ]
+}

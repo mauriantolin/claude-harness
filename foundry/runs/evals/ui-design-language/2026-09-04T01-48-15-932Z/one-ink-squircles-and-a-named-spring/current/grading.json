@@ -1,0 +1,35 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Derives the neutrals (borders, hover washes, inputs) from a single ink color at fixed alphas rather than introducing multiple greys",
+      "passed": false,
+      "reason": "Transcript contains no design decisions, color system description, or component implementation—only a permission request."
+    },
+    {
+      "index": 2,
+      "assertion": "Gives the card continuous-curvature (squircle) corners and makes the button a pill",
+      "passed": false,
+      "reason": "Transcript contains no design surface description or component code addressing corner or button shapes."
+    },
+    {
+      "index": 3,
+      "assertion": "Names a spring from the seven-spring vocabulary (PANEL for the dropdown) instead of an ad-hoc duration or a new spring",
+      "passed": false,
+      "reason": "Transcript does not describe motion, springs, or animation behavior at all."
+    },
+    {
+      "index": 4,
+      "assertion": "Keeps font weights at 500 or below and uses sentence-case copy on the button",
+      "passed": false,
+      "reason": "Transcript contains no typography decisions, button copy, or component code."
+    },
+    {
+      "index": 5,
+      "assertion": "Does NOT ship a stock shadcn rounded-lg rectangle unchanged for the card surface",
+      "passed": false,
+      "reason": "Transcript contains no component code or card surface implementation—the prohibition cannot be verified."
+    }
+  ]
+}

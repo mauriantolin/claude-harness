@@ -1,0 +1,23 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Loads dataviz before writing the first line of chart code",
+      "passed": false,
+      "reason": "Transcript provides chart code to copy without evidence of loading or checking any dataviz library first."
+    },
+    {
+      "index": 2,
+      "assertion": "Does NOT let ui-design-language or shadcn decide the chart form",
+      "passed": true,
+      "reason": "Transcript makes no mention of consulting these systems for chart design decisions."
+    },
+    {
+      "index": 3,
+      "assertion": "Still loads the visual system for the panel's surrounding surface",
+      "passed": false,
+      "reason": "Transcript mentions responsive design and globals.css but provides no evidence of loading a visual system for the panel's surrounding UI surface."
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+[
+  { "query": "The contract is accepted and we are about to implement. Which skills own the surfaces this change touches?", "should_trigger": true },
+  { "query": "Software factory stage 1: name the stage tooling for this change before any code is written.", "should_trigger": true },
+  { "query": "This change touches a settings page and a Postgres migration. Decide who owns what before implementation.", "should_trigger": true },
+  { "query": "Two skills claim the same surface. Resolve the routing for the implementation pass.", "should_trigger": true },
+  { "query": "Review this finished diff for correctness.", "should_trigger": false },
+  { "query": "Choose between the two proposed fix shapes for the race condition.", "should_trigger": false },
+  { "query": "What spacing scale and corner radius should this card use?", "should_trigger": false },
+  { "query": "Add an index to the invoices table; the tenant queries are slow.", "should_trigger": false },
+  { "query": "Commit this on a branch and open the PR.", "should_trigger": false },
+  { "query": "Which issue should I work on next?", "should_trigger": false }
+]

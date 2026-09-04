@@ -1,49 +1,33 @@
 {
   "$schema": "https://code.claude.com/schema/marketplace.json",
   "name": "mauri-harness",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "owner": {
     "name": "Mauricio Antolín",
     "url": "https://github.com/mauriantolin"
   },
-  "description": "An engineering harness: Railly Skills as the method layer, plus the delivery path and routing authored here.",
+  "description": "The authored half of an engineering harness built on Railly Skills: the delivery path factory-loop references, the routing that decides which skills own which surface, and the design language they route to.",
   "plugins": [
     {
-      "name": "method",
-      "displayName": "Railly Skills (method layer)",
-      "source": {
-        "source": "github",
-        "repo": "Railly/skills"
-      },
-      "description": "Evidence-driven engineering protocols: intake, solution gate, staged execution, review gate, case capture. Served from upstream so it keeps updating and never enters this repository.",
-      "author": {
-        "name": "Railly Hugo",
-        "url": "https://github.com/Railly"
-      },
-      "repository": "https://github.com/Railly/skills",
-      "license": "MIT",
-      "category": "engineering",
-      "keywords": ["evidence", "review", "gates", "factory"]
-    },
-    {
-      "name": "delivery",
-      "displayName": "Harness delivery path",
+      "name": "stable",
+      "displayName": "Harness stable skills",
+      "description": "Skills factory-loop references by name or routes to. Installed by default; maturity is tracked separately in foundry/maturity.json.",
       "source": "./",
-      "description": "The delivery path factory-loop references but the upstream marketplace does not publish, plus the routing that decides which skills own which surface.",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "author": {
         "name": "Mauricio Antolín"
       },
       "license": "MIT",
       "category": "engineering",
-      "keywords": ["ship", "spec", "release", "deploy", "routing"],
+      "keywords": ["ship", "spec", "release", "deploy", "routing", "design"],
       "skills": [
-        "./skills/ship",
-        "./skills/spec-gate",
-        "./skills/software-factory-maintenance",
         "./skills/deploy-gate",
+        "./skills/frontend-stack",
         "./skills/implementation-routing",
-        "./skills/frontend-stack"
+        "./skills/ship",
+        "./skills/software-factory-maintenance",
+        "./skills/spec-gate",
+        "./skills/ui-design-language"
       ]
     }
   ]

@@ -1,0 +1,35 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Requires a clean install from the produced tarball in an environment that does not have the development toolchain on PATH",
+      "passed": false,
+      "reason": "The agent did not attempt a clean install; it stopped at asking for clarification about the tarball location."
+    },
+    {
+      "index": 2,
+      "assertion": "Inspects the package contents (what is actually inside the tarball)",
+      "passed": false,
+      "reason": "The agent did not inspect package contents; it stated the tarball was not found and requested clarification."
+    },
+    {
+      "index": 3,
+      "assertion": "Runs a smoke test of the primary command from that clean install",
+      "passed": false,
+      "reason": "The agent did not run any smoke test; it did not proceed past asking for the tarball location."
+    },
+    {
+      "index": 4,
+      "assertion": "States suite results as numbers (passed / skipped), not as the word green",
+      "passed": false,
+      "reason": "The agent did not state any suite results in any format."
+    },
+    {
+      "index": 5,
+      "assertion": "Names in the affirmative what was not done (not published, not tagged, not pushed)",
+      "passed": false,
+      "reason": "The agent did not name any actions that were not performed; it only asked clarifying questions."
+    }
+  ]
+}

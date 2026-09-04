@@ -1,0 +1,86 @@
+{
+  "skill_name": "frontend-stack",
+  "iteration": "2026-09-04T01-20-52-191Z",
+  "variants": {
+    "no_skill": {
+      "passed": 4,
+      "total": 18,
+      "pass_rate": 0.2222222222222222,
+      "runs": 5,
+      "invoked": 0,
+      "evals": {
+        "absent-skill-is-owed-not-substituted": {
+          "passed": 1,
+          "total": 4,
+          "pass_rate": 0.25,
+          "skill_invoked": false
+        },
+        "charts-load-dataviz-first": {
+          "passed": 1,
+          "total": 3,
+          "pass_rate": 0.3333333333333333,
+          "skill_invoked": false
+        },
+        "does-not-restate-what-it-indexes": {
+          "passed": 0,
+          "total": 3,
+          "pass_rate": 0,
+          "skill_invoked": false
+        },
+        "loads-only-the-named-surfaces": {
+          "passed": 1,
+          "total": 4,
+          "pass_rate": 0.25,
+          "skill_invoked": false
+        },
+        "project-system-outranks-the-index": {
+          "passed": 1,
+          "total": 4,
+          "pass_rate": 0.25,
+          "skill_invoked": false
+        }
+      }
+    },
+    "current": {
+      "passed": 3,
+      "total": 18,
+      "pass_rate": 0.16666666666666666,
+      "runs": 5,
+      "invoked": 5,
+      "evals": {
+        "absent-skill-is-owed-not-substituted": {
+          "passed": 1,
+          "total": 4,
+          "pass_rate": 0.25,
+          "skill_invoked": true
+        },
+        "charts-load-dataviz-first": {
+          "passed": 1,
+          "total": 3,
+          "pass_rate": 0.3333333333333333,
+          "skill_invoked": true
+        },
+        "does-not-restate-what-it-indexes": {
+          "passed": 0,
+          "total": 3,
+          "pass_rate": 0,
+          "skill_invoked": true
+        },
+        "loads-only-the-named-surfaces": {
+          "passed": 1,
+          "total": 4,
+          "pass_rate": 0.25,
+          "skill_invoked": true
+        },
+        "project-system-outranks-the-index": {
+          "passed": 0,
+          "total": 4,
+          "pass_rate": 0,
+          "skill_invoked": true
+        }
+      }
+    }
+  },
+  "candidate_delta_vs_current": null,
+  "current_delta_vs_no_skill": -0.05555555555555555
+}

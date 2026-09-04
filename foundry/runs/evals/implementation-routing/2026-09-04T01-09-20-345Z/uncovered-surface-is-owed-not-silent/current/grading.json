@@ -1,0 +1,29 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Records dataviz as unavailable with the chart coverage explicitly owed",
+      "passed": false,
+      "reason": "The receipt notes 'DATAVIZ: Install required before Stage 2' but does not explicitly state dataviz is currently unavailable/not installed in this environment, nor does it explicitly record that chart coverage is owed to the dataviz skill."
+    },
+    {
+      "index": 2,
+      "assertion": "Does NOT let frontend-stack or a design skill decide the chart form in dataviz's absence",
+      "passed": true,
+      "reason": "The transcript avoids routing the chart form decision to frontend-stack or design skills; Stage 2 is vaguely stated as 'Create chart component' without assigning form decisions to prohibited skills."
+    },
+    {
+      "index": 3,
+      "assertion": "Routes the materialized view to supabase-postgres-best-practices and the surrounding page to frontend-stack",
+      "passed": false,
+      "reason": "The transcript assigns work to generic stages (Backend, Frontend) without explicitly routing the materialized view to supabase-postgres-best-practices or the page integration to frontend-stack by name."
+    },
+    {
+      "index": 4,
+      "assertion": "The stage receipt distinguishes skills applied from coverage owed and names every uncovered surface",
+      "passed": false,
+      "reason": "The receipt conflates stages with skill routing, does not distinguish which skills are applied versus which coverage is owed, and does not explicitly name uncovered surfaces (e.g., 'dataviz coverage owed: chart visualization')."
+    }
+  ]
+}

@@ -4,6 +4,7 @@ Status: observed
 Validation: self-validated
 Human review: pending
 Maintainer acceptance: not applicable (this repository)
+Upstream status checked: not-applicable
 Delivery: recorded
 Visibility: public
 Repository: mauriantolin/claude-harness

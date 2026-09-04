@@ -1,0 +1,29 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "States that the earlier verdict is void (not merely stale) because the tree moved",
+      "passed": true,
+      "reason": "Transcript explicitly states 'the verdict is no longer valid' because 'Rebasing onto main means the commit is now built on top of different base commits,' clearly marking the verdict as void, not just stale."
+    },
+    {
+      "index": 2,
+      "assertion": "Requires a new Spec Gate run on the current head",
+      "passed": true,
+      "reason": "Transcript opens with 'You'll want to **re-run Spec Gate** to be safe,' clearly requiring a new run."
+    },
+    {
+      "index": 3,
+      "assertion": "Does NOT carry the verdict forward on the grounds that the last change was only a comment",
+      "passed": true,
+      "reason": "While the transcript acknowledges the logic ('If only comments changed... *then* you can argue for reuse'), it explicitly rejects this approach with 'But honestly, for a typo fix + rebase, just re-run,' refusing to carry the verdict forward based on the comment change."
+    },
+    {
+      "index": 4,
+      "assertion": "Names the exact heads involved (the old head and the fact that the new one differs)",
+      "passed": false,
+      "reason": "Transcript names a1b2c3d in a command but refers to the new head only as 'HEAD' (a symbolic reference) without stating its exact commit hash."
+    }
+  ]
+}

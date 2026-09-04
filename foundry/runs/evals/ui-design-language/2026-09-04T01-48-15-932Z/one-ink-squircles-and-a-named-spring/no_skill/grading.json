@@ -1,0 +1,35 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Derives the neutrals (borders, hover washes, inputs) from a single ink color at fixed alphas rather than introducing multiple greys",
+      "passed": false,
+      "reason": "The transcript introduces multiple greys (gray-50, gray-200, gray-600, gray-900) plus blue-50, not deriving from a single ink color at fixed alphas."
+    },
+    {
+      "index": 2,
+      "assertion": "Gives the card continuous-curvature (squircle) corners and makes the button a pill",
+      "passed": false,
+      "reason": "The card uses stock rounded-lg (8px radius rectangle) and the button has no pill shape, only a scale transform."
+    },
+    {
+      "index": 3,
+      "assertion": "Names a spring from the seven-spring vocabulary (PANEL for the dropdown) instead of an ad-hoc duration or a new spring",
+      "passed": false,
+      "reason": "The transcript specifies '150ms ease' (ad-hoc duration) and uses generic Tailwind transition classes, never naming a spring from the seven-spring vocabulary."
+    },
+    {
+      "index": 4,
+      "assertion": "Keeps font weights at 500 or below and uses sentence-case copy on the button",
+      "passed": false,
+      "reason": "The transcript uses font-semibold (600) multiple times, exceeding the 500 limit; button text is sentence-case but font weight violations fail the expectation."
+    },
+    {
+      "index": 5,
+      "assertion": "Does NOT ship a stock shadcn rounded-lg rectangle unchanged for the card surface",
+      "passed": false,
+      "reason": "The card surface uses `rounded-lg border border-gray-200 bg-white`, which is exactly a stock shadcn rounded rectangle."
+    }
+  ]
+}

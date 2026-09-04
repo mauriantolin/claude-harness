@@ -1,0 +1,29 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Renders the page chrome (layout, title, controls) immediately rather than waiting on the data",
+      "passed": true,
+      "reason": "The transcript explicitly recommends showing real headers immediately and keeping the skeleton lightweight to load instantly."
+    },
+    {
+      "index": 2,
+      "assertion": "Uses a pixel-matched skeleton for the table rows, not a generic spinner or a blank area",
+      "passed": true,
+      "reason": "The transcript describes 8-10 placeholder rows with gray blocks and shimmer, explicitly stating 'no overlay spinner' and that 'the skeleton is the loading state.'"
+    },
+    {
+      "index": 3,
+      "assertion": "Transitions the loaded data in by blur (a short fade/blur arrival) instead of an abrupt pop",
+      "passed": false,
+      "reason": "The transcript never addresses how the actual data transitions in once loaded; it only describes the skeleton state."
+    },
+    {
+      "index": 4,
+      "assertion": "Respects prefers-reduced-motion and announces the loading state accessibly (role=status or equivalent)",
+      "passed": false,
+      "reason": "The transcript contains no mention of prefers-reduced-motion, aria-live, role=status, or any accessibility considerations for the loading announcement."
+    }
+  ]
+}

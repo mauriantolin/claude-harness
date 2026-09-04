@@ -1,0 +1,35 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Records A4 as not_provided (or an equivalent explicit non-delivery verdict), not as pass",
+      "passed": false,
+      "reason": "Transcript requests information and defers verdict; it never records A4 or issues any verdict at all."
+    },
+    {
+      "index": 2,
+      "assertion": "Concludes the run fails because a Must-have was not provided",
+      "passed": false,
+      "reason": "Transcript states a conditional ('If A4 is a Must-have...') but does not conclude that THIS run fails."
+    },
+    {
+      "index": 3,
+      "assertion": "Does NOT drop A4 from the report or fold it into another ID",
+      "passed": true,
+      "reason": "Transcript treats A4 as a distinct item and does not drop or merge it."
+    },
+    {
+      "index": 4,
+      "assertion": "States that a promised follow-up is not delivery at this head",
+      "passed": false,
+      "reason": "Transcript asks whether the follow-up deferral is authorized but does not state the verdict about delivery at this head."
+    },
+    {
+      "index": 5,
+      "assertion": "Notes that A4 could only be removed from the contract by an explicit superseding authority, and none is cited",
+      "passed": false,
+      "reason": "Transcript asks about authorization status but does not note the principle or state that no authority was cited."
+    }
+  ]
+}

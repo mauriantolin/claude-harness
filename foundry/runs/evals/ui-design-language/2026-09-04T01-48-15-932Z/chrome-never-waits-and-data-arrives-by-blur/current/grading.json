@@ -1,0 +1,29 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Renders the page chrome (layout, title, controls) immediately rather than waiting on the data",
+      "passed": true,
+      "reason": "Transcript explicitly states 'Page title, header, and table scaffolding appear immediately' and references Rule 5 'Chrome never waits'."
+    },
+    {
+      "index": 2,
+      "assertion": "Uses a pixel-matched skeleton for the table rows, not a generic spinner or a blank area",
+      "passed": true,
+      "reason": "Transcript specifies 'pixel-matched skeleton (same row count, column widths) with a shimmer' and explicitly rejects generic spinners."
+    },
+    {
+      "index": 3,
+      "assertion": "Transitions the loaded data in by blur (a short fade/blur arrival) instead of an abrupt pop",
+      "passed": true,
+      "reason": "Transcript details 'blur-in from behind it' with staggered rows and spring timing, explicitly rejecting pop-in with 'No pop, no jump'."
+    },
+    {
+      "index": 4,
+      "assertion": "Respects prefers-reduced-motion and announces the loading state accessibly (role=status or equivalent)",
+      "passed": false,
+      "reason": "Transcript contains no mention of prefers-reduced-motion, accessibility announcements, ARIA attributes, or role=status."
+    }
+  ]
+}

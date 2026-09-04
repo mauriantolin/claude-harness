@@ -1,0 +1,29 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Resolves the overlap by removing (uninstalling or retiring) one skill rather than by declaring a winner in prose",
+      "passed": false,
+      "reason": "The transcript proposes routing by scope and making explicit decisions in prompts—declaring winners based on context—rather than removing either skill."
+    },
+    {
+      "index": 2,
+      "assertion": "Explains that a declared precedence holds only while every reader honours it, while a removal always holds",
+      "passed": false,
+      "reason": "The transcript does not explain this principle; it does not contrast the fragility of declared precedence against the durability of removal."
+    },
+    {
+      "index": 3,
+      "assertion": "Does NOT load both skills for the same surface",
+      "passed": false,
+      "reason": "The transcript proposes routing between both skills for the same surface (React component structure), keeping both installed and consulted depending on context."
+    },
+    {
+      "index": 4,
+      "assertion": "Ends with exactly one owner for the component-structure surface",
+      "passed": false,
+      "reason": "The transcript ends with two owners—the Vercel skill for Vercel-specific work and the other for general React architecture—rather than resolving to a single owner."
+    }
+  ]
+}

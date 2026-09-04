@@ -1,0 +1,41 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Writes PR_BODY.md",
+      "passed": true,
+      "reason": "PR_BODY.md appears in git status as an untracked file, confirming it was created."
+    },
+    {
+      "index": 2,
+      "assertion": "States the problem, including why exact-only matching failed the reported case",
+      "passed": false,
+      "reason": "The transcript shows the file was written but never displays its contents, so the problem statement cannot be verified."
+    },
+    {
+      "index": 3,
+      "assertion": "Expresses the change as resolution rules or state, not as a list of edited files",
+      "passed": false,
+      "reason": "PR_BODY.md contents are not shown in the transcript, so expression style cannot be verified."
+    },
+    {
+      "index": 4,
+      "assertion": "States what the change explicitly rejects, such as ambiguous normalized matches or case-insensitive matching",
+      "passed": false,
+      "reason": "PR_BODY.md contents are not shown in the transcript, so rejection statements cannot be verified."
+    },
+    {
+      "index": 5,
+      "assertion": "Reports verification by naming what was run, not by asserting the word green",
+      "passed": false,
+      "reason": "The transcript contains no mention of any tests run or verification performed."
+    },
+    {
+      "index": 6,
+      "assertion": "Does NOT claim a test result it did not observe",
+      "passed": true,
+      "reason": "The transcript makes no claims about test results or uses the word green."
+    }
+  ]
+}

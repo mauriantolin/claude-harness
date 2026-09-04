@@ -1,0 +1,23 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Routes the question to ui-design-language rather than answering it",
+      "passed": false,
+      "reason": "The transcript answers the question directly with spacing and radius options instead of routing to the ui-design-language skill."
+    },
+    {
+      "index": 2,
+      "assertion": "Does NOT state spacing, radius, color or motion values of its own",
+      "passed": false,
+      "reason": "The transcript explicitly provides spacing values (8px, 4px base units) and corner radius values (8px, 12px, 16px)."
+    },
+    {
+      "index": 3,
+      "assertion": "Contains no design guidance that would go stale when the indexed skill updates",
+      "passed": false,
+      "reason": "The transcript provides design guidance (recommended spacing base units, specific radius values, modern UX principles) that could become outdated if the ui-design-language skill updates."
+    }
+  ]
+}

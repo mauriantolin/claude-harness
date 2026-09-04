@@ -1,0 +1,62 @@
+{
+  "skill_name": "ship",
+  "iteration": "2026-09-04T01-14-16-536Z",
+  "variants": {
+    "no_skill": {
+      "passed": 3,
+      "total": 17,
+      "pass_rate": 0.17647058823529413,
+      "runs": 3,
+      "invoked": 0,
+      "evals": {
+        "authority-for-one-action-is-not-authority-for-another": {
+          "passed": 0,
+          "total": 6,
+          "pass_rate": 0,
+          "skill_invoked": false
+        },
+        "body-is-a-ledger-not-a-diff-summary": {
+          "passed": 2,
+          "total": 6,
+          "pass_rate": 0.3333333333333333,
+          "skill_invoked": false
+        },
+        "tree-must-match-the-reviewed-head": {
+          "passed": 1,
+          "total": 5,
+          "pass_rate": 0.2,
+          "skill_invoked": false
+        }
+      }
+    },
+    "current": {
+      "passed": 11,
+      "total": 17,
+      "pass_rate": 0.6470588235294118,
+      "runs": 3,
+      "invoked": 3,
+      "evals": {
+        "authority-for-one-action-is-not-authority-for-another": {
+          "passed": 3,
+          "total": 6,
+          "pass_rate": 0.5,
+          "skill_invoked": true
+        },
+        "body-is-a-ledger-not-a-diff-summary": {
+          "passed": 6,
+          "total": 6,
+          "pass_rate": 1,
+          "skill_invoked": true
+        },
+        "tree-must-match-the-reviewed-head": {
+          "passed": 2,
+          "total": 5,
+          "pass_rate": 0.4,
+          "skill_invoked": true
+        }
+      }
+    }
+  },
+  "candidate_delta_vs_current": null,
+  "current_delta_vs_no_skill": 0.47058823529411764
+}

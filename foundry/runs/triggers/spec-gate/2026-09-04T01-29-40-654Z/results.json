@@ -1,0 +1,89 @@
+{
+  "skill": "spec-gate",
+  "model": "haiku",
+  "total": 9,
+  "matched": 7,
+  "accuracy": 0.7777777777777778,
+  "misses": 2,
+  "false_positives": 0,
+  "results": [
+    {
+      "query": "The factory finished and tests are green. Check the head against every acceptance ID in the contract before review.",
+      "should_trigger": true,
+      "triggered": true,
+      "invoked": [
+        "spec-gate"
+      ],
+      "match": true,
+      "error": null
+    },
+    {
+      "query": "Run the spec gate on this exact head against CONTRACT.md.",
+      "should_trigger": true,
+      "triggered": true,
+      "invoked": [
+        "spec-gate"
+      ],
+      "match": true,
+      "error": null
+    },
+    {
+      "query": "Did this change actually deliver A1 through A5 and keep the must-not-change behaviors? Judge it against the frozen contract, not the suite.",
+      "should_trigger": true,
+      "triggered": false,
+      "invoked": [],
+      "match": false,
+      "error": null
+    },
+    {
+      "query": "Requirement R3 was dropped by the maintainer mid-review. How should the acceptance report record that?",
+      "should_trigger": true,
+      "triggered": false,
+      "invoked": [],
+      "match": false,
+      "error": null
+    },
+    {
+      "query": "Review this diff for correctness, style and security.",
+      "should_trigger": false,
+      "triggered": false,
+      "invoked": [
+        "code-review"
+      ],
+      "match": true,
+      "error": null
+    },
+    {
+      "query": "Write the acceptance criteria for the export feature before we implement it.",
+      "should_trigger": false,
+      "triggered": false,
+      "invoked": [],
+      "match": true,
+      "error": null
+    },
+    {
+      "query": "The tests fail on CI but pass locally. Find out why.",
+      "should_trigger": false,
+      "triggered": false,
+      "invoked": [],
+      "match": true,
+      "error": null
+    },
+    {
+      "query": "Commit this on a branch and open the PR.",
+      "should_trigger": false,
+      "triggered": false,
+      "invoked": [],
+      "match": true,
+      "error": null
+    },
+    {
+      "query": "Make the suite stronger: mutate the fix and prove the tests go red.",
+      "should_trigger": false,
+      "triggered": false,
+      "invoked": [],
+      "match": true,
+      "error": null
+    }
+  ]
+}

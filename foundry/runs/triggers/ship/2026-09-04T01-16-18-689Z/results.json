@@ -1,0 +1,96 @@
+{
+  "skill": "ship",
+  "model": "haiku",
+  "total": 10,
+  "matched": 8,
+  "accuracy": 0.8,
+  "misses": 2,
+  "false_positives": 0,
+  "results": [
+    {
+      "query": "Spec and review both passed on this head. Approved: commit it on a branch and take it to PR-ready.",
+      "should_trigger": true,
+      "triggered": true,
+      "invoked": [
+        "ship",
+        "vercel:vercel-cli"
+      ],
+      "match": true,
+      "error": null
+    },
+    {
+      "query": "The human authorized opening the pull request for the reviewed state. Do it, with the evidence ledger as the body.",
+      "should_trigger": true,
+      "triggered": false,
+      "invoked": [],
+      "match": false,
+      "error": null
+    },
+    {
+      "query": "Absorb the useful parts of the stale PR #57 into a fresh branch, keeping the original author's credit, and open ours.",
+      "should_trigger": true,
+      "triggered": false,
+      "invoked": [],
+      "match": false,
+      "error": null
+    },
+    {
+      "query": "Merge PR #40 into main.",
+      "should_trigger": false,
+      "triggered": false,
+      "invoked": [],
+      "match": true,
+      "error": null
+    },
+    {
+      "query": "Cut release 1.2.0 and publish to npm.",
+      "should_trigger": false,
+      "triggered": false,
+      "invoked": [],
+      "match": true,
+      "error": null
+    },
+    {
+      "query": "Review this diff before I push it.",
+      "should_trigger": false,
+      "triggered": false,
+      "invoked": [
+        "code-review"
+      ],
+      "match": true,
+      "error": null
+    },
+    {
+      "query": "Implement the feature from the accepted contract.",
+      "should_trigger": false,
+      "triggered": false,
+      "invoked": [],
+      "match": true,
+      "error": null
+    },
+    {
+      "query": "Watch CI and confirm the deployment is serving.",
+      "should_trigger": false,
+      "triggered": false,
+      "invoked": [],
+      "match": true,
+      "error": null
+    },
+    {
+      "query": "Which open issue should I pick up next?",
+      "should_trigger": false,
+      "triggered": false,
+      "invoked": [],
+      "match": true,
+      "error": null
+    },
+    {
+      "query": "Write a good commit message for these changes.",
+      "should_trigger": false,
+      "triggered": false,
+      "invoked": [],
+      "match": true,
+      "error": null
+    }
+  ]
+}

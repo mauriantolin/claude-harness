@@ -1,0 +1,29 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Explains that verify-published compared the fresh build against an older published artifact because publish was skipped",
+      "passed": true,
+      "reason": "Transcript explicitly states that verify-published downloads the already-published tarball (from previous run) and compares it to the fresh build from the current run when publish is skipped."
+    },
+    {
+      "index": 2,
+      "assertion": "Prescribes that verify-published be gated on the same publish-decision output as the publish job",
+      "passed": true,
+      "reason": "Transcript provides the exact prescription: `if: needs.publish.result == 'success'` to gate verify-published on publish's result."
+    },
+    {
+      "index": 3,
+      "assertion": "Does NOT propose retrying the run or relaxing the comparison as the fix",
+      "passed": true,
+      "reason": "Transcript proposes only conditional gating or skipping the job; no retry or comparison-relaxation approaches are mentioned."
+    },
+    {
+      "index": 4,
+      "assertion": "States the general rule: no post-publish verification may run in a no-publish run",
+      "passed": true,
+      "reason": "Transcript states 'there's nothing meaningful to verify when publish didn't run' and prescribes skipping verification when publish is skipped, expressing the general principle."
+    }
+  ]
+}

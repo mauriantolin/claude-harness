@@ -1,0 +1,35 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Names the surfaces the change touches before naming any skill",
+      "passed": false,
+      "reason": "Transcript avoids naming surfaces entirely; jumps to asking for clarification on 'skills' rather than first identifying the invoice list view, filter bar, and results area as the surfaces touched."
+    },
+    {
+      "index": 2,
+      "assertion": "Routes the visible UI surfaces to frontend-stack",
+      "passed": false,
+      "reason": "Transcript never explicitly routes anything to the frontend-stack skill by name; only discusses generic Next.js component patterns."
+    },
+    {
+      "index": 3,
+      "assertion": "Does NOT route to dataviz or supabase-postgres-best-practices for a change with no chart and no Postgres surface, and records them as not applicable rather than omitting them",
+      "passed": false,
+      "reason": "Transcript omits both skills entirely without explicitly recording them as not applicable; absence of evidence of non-routing is a failure."
+    },
+    {
+      "index": 4,
+      "assertion": "Records which precedence level supplied each routing answer",
+      "passed": false,
+      "reason": "Transcript provides no precedence levels for any routing decisions or architectural guidance."
+    },
+    {
+      "index": 5,
+      "assertion": "Does NOT give frontend guidance of its own (component structure, styling, motion values)",
+      "passed": false,
+      "reason": "Transcript gives explicit component structure guidance: 'Client Component owns filter UI + state' and 'Server Component owns page layout,' which violates the prohibition."
+    }
+  ]
+}

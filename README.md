@@ -1,80 +1,100 @@
 # claude-harness
 
-The parts of the Claude Code setup that are authored here rather than installed
-from someone else's registry, kept in git so they survive a disk and reach a
-second machine.
+The authored half of a Claude Code engineering harness. Railly Skills is the
+method layer and comes from its own marketplace; this repository holds what
+that marketplace does not publish, plus the machinery that keeps every skill
+here measured. The layout mirrors Railly's so there is one structure to learn.
 
-Everything else is installed and versioned by its own source: the Railly Skills
-plugins come from the `railly-skills` marketplace, and the frontend and Vercel
-skills are symlinks into `~/.agents/skills/`, managed by the `skills` CLI. None
-of that belongs here.
+```text
+skills/<name>/                stable skills: SKILL.md + evals/{evals.json,triggers.json,fixtures/}
+skills/.experimental/<name>/  where every new skill is born
+cases/<repo>/                 evidence from real work
+foundry/maturity.json         channel + maturity per skill (the registry)
+foundry/eval-protocol.md      the three-arm protocol and the promotion bar
+foundry/rounds/NNN-*/         decisions, one directory per round
+foundry/runs/{evals,triggers} run evidence (gradings and benchmarks are versioned)
+scripts/                      validate, doctor, scaffold, eval and trigger runners; scripts/lib is tested
+```
 
-## What is here
+## Skills
 
-### `skills/`
+| Skill | Role in factory-loop | Origin |
+|---|---|---|
+| `ship` | promotion → commit, push, PR with the evidence ledger | recreated from sunat-cli#103, agent-browser conventions, 29 PRs |
+| `spec-gate` | independent Spec check between software-factory and review-gate | recreated from Railly's three published spec runs |
+| `software-factory-maintenance` | maintainer workflow after the loop: queue, merge, release, publish | recreated from the `chore(release)` PRs |
+| `deploy-gate` | after ship: watch CI, verify the deployment serves this commit | ours; Railly covers no deploy surface |
+| `implementation-routing` | software-factory stage 1: which skill owns which surface | ours |
+| `frontend-stack` | the frontend index that routing delegates to | ours |
+| `ui-design-language` | the design language frontend-stack routes to | derived from `oa-design` (MIT) |
 
-Four skills recreate the delivery path that `factory-loop` references but the
-Railly Skills marketplace does not publish. They are reconstructed from the
-observable evidence of Railly's own pull requests, **not** from his private
-originals, and nothing may assume they are equivalent:
+The recreated skills are reconstructed from Railly's observable pull requests,
+not from his private originals. Nothing may assume they are equivalent.
+Maturity is tracked in `foundry/maturity.json`; being stable means
+factory-loop needs it installed, not that it is validated.
 
-| Skill | Recreated from |
-|---|---|
-| `spec-gate` | The three published runs under `foundry/runs/spec/` |
-| `ship` | `sunat-cli#103`, the agent-browser conventions on absorption and credit, and the anatomy of 29 pull requests |
-| `software-factory-maintenance` | The `chore(release)` pull requests in sunat-cli and agent-browser |
-| `deploy-gate` | Rewritten from the retired `cicd-deploy-verifier`; Railly covers no deploy surface |
+## Daily commands
 
-One skill is ours outright:
+```sh
+npm test                      # scripts/lib unit tests (node:test, no dependencies)
+npm run validate              # repository content: frontmatter, links, evals, triggers, maturity, marketplace, cases
+npm run doctor                # the machine: binaries, plugins, links, factory-loop dependencies, clean Railly clone
+npm run check                 # test + validate + claude plugin validate
+./install.sh                  # link skills and script launchers into ~/.claude (re-runnable)
+```
 
-| Skill | What it does |
-|---|---|
-| `frontend-stack` | Indexes the thirteen frontend skills (~46,000 lines across 351 files) and orders them for `software-factory`'s implementation stage. It routes; it restates nothing, so each indexed skill keeps updating from upstream |
+## Adding a skill
 
-### `scripts/railly-inrepo.mjs`
+```sh
+npm run new-skill -- <name>   # scaffolds skills/.experimental/<name>, registers it
+# author SKILL.md, evals/evals.json, evals/triggers.json; remove every TODO
+npm run validate
+./install.sh
+npm run triggers -- <name>                       # loads when it should, and only then
+npm run eval -- <name> --model haiku --judge haiku --parallel 4    # cheap first baseline
+npm run eval -- <name>                           # no_skill vs current on the default model
+```
 
-Points the Railly skills' canonical source root at the project being worked on,
-so contracts, cases and gate runs version with the code instead of living in a
-global checkout.
+Promote by moving the directory to `skills/`, setting `channel: "stable"` in
+`foundry/maturity.json`, moving its path in `.claude-plugin/marketplace.json`,
+and recording the run in a new `foundry/rounds/` entry. The bar is in
+`foundry/eval-protocol.md`: an eval the `no_skill` arm passes is not evidence
+the skill works.
+
+## Evals
+
+`run-skill-eval.mjs` runs each eval in each arm (`no_skill`, `current`,
+`candidate`), grades every assertion with an independent judge that reads the
+answer and, for fixture runs, the repository state after the run, then
+aggregates into `benchmark.json` and `benchmark.md`. `run-trigger-eval.mjs`
+sends each query from an empty directory and reads the stream for `Skill`
+invocations. Both need the skill linked into `~/.claude/skills`, which is what
+`install.sh` does.
+
+`claude plugin eval` is early-access on this account; when it opens up, the
+suites here are close enough to its shape to port.
+
+## Working in a project
+
+Railly's skills write contracts, cases and gate runs to a canonical source
+root. To keep that inside the project instead of a global checkout:
 
 ```sh
 node scripts/railly-inrepo.mjs scaffold [project]   # once per repository
 ```
 
-`scaffold` creates `.claude/knowledge/` with the three markers
-`resolve-source-root.mjs` validates, seeds a `conventions.md` carrying the
-defaults, and writes `RAILLY_SKILLS_REPO` into the project's
-`.claude/settings.local.json`.
-
-**Railly's repository is not modified.** His script reads `RAILLY_SKILLS_REPO`
-before any default and validates the markers, so pointing the variable at the
-scaffolded directory is enough — verified against his unpatched original. That
-keeps `source: github` viable and lets upstream updates land untouched.
-
-Settings `env` values are literal strings with no substitution, so the path must
-be absolute. That is why it lives in `settings.local.json`, which is per-machine
-and gitignored, rather than the shared `settings.json`.
-
-`scripts/railly-inrepo.mjs patch` remains as an escape hatch. It rewrites every
-on-disk copy of `resolve-source-root.mjs` to walk up from the working directory
-instead of reading the variable, for a context where the variable cannot be set.
-It is not needed for the normal path, and a plugin update discards it harmlessly.
-
-## Install
-
-```sh
-./install.sh
-```
-
-Symlinks `skills/*` into `~/.claude/skills/` and `scripts/*` into
-`~/.claude/scripts/`, matching how the `~/.agents/skills` entries are already
-wired. Re-runnable.
+It creates `.claude/knowledge/` with the markers Railly's resolver validates,
+seeds `cases/<repo>/conventions.md`, and writes `RAILLY_SKILLS_REPO` into the
+project's `.claude/settings.local.json`. Railly's files are never modified;
+his resolver reads the variable before any default, and the scaffold proves
+it by running his unmodified resolver at the end.
 
 ## Where the rest lives
 
 | Layer | Location | Versioned by |
 |---|---|---|
-| Method — Railly Skills | `~/.claude/plugins/` | The `railly-skills` marketplace |
-| Method — frontend, Vercel | `~/.agents/skills/` | The `skills` CLI |
-| Method — authored here | this repository | this repository |
-| Evidence — contracts, cases, runs | `<project>/.claude/knowledge/` | The project's own repository |
+| Method: Railly Skills | `~/.claude/plugins/` | the `railly-skills` marketplace |
+| Method: frontend and Vercel skills | `~/.agents/skills/` | the `skills` CLI |
+| Method: authored here | this repository | this repository |
+| Evidence: contracts, cases, runs of a project | `<project>/.claude/knowledge/` | the project |
+| Evidence: this harness's own evals | `foundry/runs/` | this repository |

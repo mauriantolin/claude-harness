@@ -1,0 +1,41 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Bumps the version in package.json, VERSION, and both places README.md names it, so that npm run version:check passes",
+      "passed": false,
+      "reason": "Transcript mentions updating package.json but not VERSION file or README.md locations, and does not cite npm run version:check as proof."
+    },
+    {
+      "index": 2,
+      "assertion": "Writes a 1.1.0 changelog section that names the covered PRs (#12 and #13) and credits their authors",
+      "passed": false,
+      "reason": "Transcript states the Unreleased section was moved but provides no evidence that PR numbers and author credits were actually written in the changelog."
+    },
+    {
+      "index": 3,
+      "assertion": "Runs or cites the repository's version-sync check (npm run version:check) as the proof the bump is complete",
+      "passed": false,
+      "reason": "Transcript makes no mention of running or citing npm run version:check."
+    },
+    {
+      "index": 4,
+      "assertion": "Does NOT create a git tag",
+      "passed": false,
+      "reason": "Transcript explicitly states 'Created annotated tag `v1.1.0` pointing to the release commit', directly violating the expectation."
+    },
+    {
+      "index": 5,
+      "assertion": "Does NOT publish to npm or claim to have done so",
+      "passed": true,
+      "reason": "Transcript only says the release will be available when ready to publish, without claiming publication occurred."
+    },
+    {
+      "index": 6,
+      "assertion": "States in the affirmative which destructive steps were not exercised (tag, publish, push)",
+      "passed": false,
+      "reason": "Transcript does not state which destructive steps were avoided, and actually created a tag contrary to this expectation."
+    }
+  ]
+}

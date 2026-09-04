@@ -1,0 +1,19 @@
+{
+  "name": "claude-harness",
+  "private": true,
+  "type": "module",
+  "description": "The authored half of a Claude Code engineering harness: delivery-path skills, routing, and the eval machinery that keeps them honest.",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node --test \"scripts/lib/*.test.mjs\"",
+    "validate": "node scripts/validate-skills.mjs",
+    "doctor": "node scripts/doctor.mjs",
+    "check": "npm test && npm run validate && claude plugin validate .",
+    "new-skill": "node scripts/new-skill.mjs",
+    "eval": "node scripts/run-skill-eval.mjs",
+    "triggers": "node scripts/run-trigger-eval.mjs",
+    "aggregate": "node scripts/aggregate-skill-eval.mjs"
+  }
+}

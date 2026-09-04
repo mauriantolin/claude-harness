@@ -1,0 +1,23 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Routes the question to ui-design-language rather than answering it",
+      "passed": false,
+      "reason": "The transcript asks clarifying questions and provides direct design guidance instead of routing to the ui-design-language skill."
+    },
+    {
+      "index": 2,
+      "assertion": "Does NOT state spacing, radius, color or motion values of its own",
+      "passed": false,
+      "reason": "The transcript provides specific values: '16px padding', '12px or 16px gaps', and '8px to 12px' for corner radius."
+    },
+    {
+      "index": 3,
+      "assertion": "Contains no design guidance that would go stale when the indexed skill updates",
+      "passed": false,
+      "reason": "The transcript provides design patterns and recommendations (e.g., 'modern but not trendy' roundedness) that could become stale if the design system is updated."
+    }
+  ]
+}

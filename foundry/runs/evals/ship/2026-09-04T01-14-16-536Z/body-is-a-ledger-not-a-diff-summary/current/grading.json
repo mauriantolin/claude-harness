@@ -1,0 +1,41 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Writes PR_BODY.md",
+      "passed": true,
+      "reason": "Transcript states 'Written PR_BODY.md' and repository state shows `?? PR_BODY.md`, confirming the file was created."
+    },
+    {
+      "index": 2,
+      "assertion": "States the problem, including why exact-only matching failed the reported case",
+      "passed": true,
+      "reason": "Transcript includes 'Problem: Exact text matching fails on labels with whitespace variants (e.g., non-breaking spaces)', identifying the specific failure cause."
+    },
+    {
+      "index": 3,
+      "assertion": "Expresses the change as resolution rules or state, not as a list of edited files",
+      "passed": true,
+      "reason": "Describes the change as 'Three-tier matching (exact → normalized → reject ambiguity)', which is a rule-based description rather than file edits."
+    },
+    {
+      "index": 4,
+      "assertion": "States what the change explicitly rejects, such as ambiguous normalized matches or case-insensitive matching",
+      "passed": true,
+      "reason": "Transcript explicitly mentions 'ambiguity is rejected' and 'Case-insensitive and full Unicode normalization deferred'."
+    },
+    {
+      "index": 5,
+      "assertion": "Reports verification by naming what was run, not by asserting the word green",
+      "passed": true,
+      "reason": "Describes verification as 'Test cases showing exact wins, normalization fallback works, and ambiguity is rejected', naming specific test scenarios rather than asserting success."
+    },
+    {
+      "index": 6,
+      "assertion": "Does NOT claim a test result it did not observe",
+      "passed": true,
+      "reason": "Agent describes verification content in PR_BODY.md without claiming personal test execution or observation of results."
+    }
+  ]
+}

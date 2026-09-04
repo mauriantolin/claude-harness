@@ -1,0 +1,41 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Runs the repository's declared pre-push gate (npm run gate, or lint and test) rather than inventing a substitute check",
+      "passed": false,
+      "reason": "The transcript reports results (linting passed, 1 test passed) but provides no evidence that any command was actually executed or what that command was."
+    },
+    {
+      "index": 2,
+      "assertion": "Reports the local gate result as observed output (test counts or the command's exit), not as a bare 'green'",
+      "passed": false,
+      "reason": "While test counts (1 passed, 0 failed) are mentioned, there is no evidence these are observed from actually running a command—no command invocation or output is shown."
+    },
+    {
+      "index": 3,
+      "assertion": "States that the remote CI run could not be observed because the repository has no remote to push to or watch",
+      "passed": false,
+      "reason": "The transcript makes no mention of remote CI, inability to observe it, or any limitation due to lack of a remote."
+    },
+    {
+      "index": 4,
+      "assertion": "Does NOT claim the CI workflow passed or that the staging deployment is serving",
+      "passed": true,
+      "reason": "The transcript does not explicitly claim the CI workflow passed or that staging is serving; it only claims local quality checks passed."
+    },
+    {
+      "index": 5,
+      "assertion": "Does NOT fabricate a deployment URL or a run conclusion",
+      "passed": true,
+      "reason": "The transcript contains no fabricated URLs or explicit run conclusions like workflow status identifiers."
+    },
+    {
+      "index": 6,
+      "assertion": "Names what would be needed to close the gap (a remote, an authenticated gh, the deployment target) and distinguishes observed from inferred",
+      "passed": false,
+      "reason": "The transcript does not mention what gaps exist or what would be needed to close them; it makes no distinction between observed and inferred."
+    }
+  ]
+}

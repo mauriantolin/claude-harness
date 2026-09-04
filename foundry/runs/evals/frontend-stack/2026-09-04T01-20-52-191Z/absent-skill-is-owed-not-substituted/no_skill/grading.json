@@ -1,0 +1,29 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Records transitions-dev as unavailable with a reason",
+      "passed": false,
+      "reason": "Transcript never mentions transitions-dev or records it as unavailable; it proceeds silently."
+    },
+    {
+      "index": 2,
+      "assertion": "Does NOT improvise motion guidance in place of the missing skill",
+      "passed": false,
+      "reason": "Transcript extensively improvises motion guidance using framer-motion library and custom Tailwind animations throughout PricingCard, PricingToggle, and FeatureComparison components."
+    },
+    {
+      "index": 3,
+      "assertion": "Does NOT block the surfaces it can still cover",
+      "passed": true,
+      "reason": "Transcript implements pricing cards, toggle, and feature comparison without blocking those surfaces."
+    },
+    {
+      "index": 4,
+      "assertion": "Names the owed coverage in the stage receipt so a later gate can see it",
+      "passed": false,
+      "reason": "Transcript contains no stage receipt; it ends with setup instructions and no declaration of missing coverage or deferred work."
+    }
+  ]
+}
