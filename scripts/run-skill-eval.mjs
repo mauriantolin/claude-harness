@@ -17,7 +17,7 @@
 // Output shape is what aggregate-skill-eval.mjs expects: one grading.json per
 // <eval>/<variant>/ with an `expectations` array whose entries carry `passed`.
 
-import { spawnSync } from "node:child_process";
+import { execFileSync, spawnSync } from "node:child_process";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -58,8 +58,13 @@ function parseArgs(argv) {
 	return opts;
 }
 
-function claude(prompt, extraArgs, model) {
-	const args = ["-p", "--disallowed-tools", "Bash,Write,Edit,NotebookEdit"];
+// A fixture run needs to actually branch, commit and write a PR body, so it
+// gets write tools. They are bounded by cwd: the run happens inside a throwaway
+// repository this script just created, never in the harness or in a project.
+function claude(prompt, extraArgs, model, cwd) {
+	const args = cwd
+		? ["-p", "--disallowed-tools", "NotebookEdit", "--dangerously-skip-permissions"]
+		: ["-p", "--disallowed-tools", "Bash,Write,Edit,NotebookEdit"];
 	if (model) args.push("--model", model);
 	args.push(...extraArgs);
 
@@ -81,6 +86,7 @@ function claude(prompt, extraArgs, model) {
 		timeout: RUN_TIMEOUT_MS,
 		maxBuffer: 32 * 1024 * 1024,
 		shell: needsShell,
+		cwd: cwd || undefined,
 	});
 
 	if (r.error) return { ok: false, text: `spawn failed: ${r.error.message}` };
@@ -116,7 +122,7 @@ ${transcript}
 Return ONLY a JSON object, no prose and no code fence:
 {"expectations":[{"index":1,"assertion":"<verbatim>","passed":true|false,"reason":"<one sentence>"}]}`;
 
-	const r = claude(prompt, ["--disable-slash-commands"], judgeModel);
+	const r = claude(prompt, ["--disable-slash-commands"], judgeModel, null);
 	if (!r.ok) return { error: r.text, expectations: [] };
 
 	const match = r.text.match(/\{[\s\S]*\}/);
@@ -177,7 +183,20 @@ function main() {
 			mkdirSync(dir, { recursive: true });
 
 			process.stdout.write(`  ${item.name} / ${variant} ... `);
-			const run = claude(item.prompt, build(opts.candidateDir), null);
+
+			// Each arm gets its own copy, so one arm's commits cannot be read as
+			// another arm's evidence.
+			let repo = null;
+			if (item.fixture) {
+				repo = join(dir, "repo");
+				execFileSync(
+					process.execPath,
+					[join(REPO, "scripts", "setup-eval-fixture.mjs"), opts.skill, item.fixture, repo],
+					{ stdio: "pipe" },
+				);
+			}
+
+			const run = claude(item.prompt, build(opts.candidateDir), null, repo);
 			writeFileSync(join(dir, "output.txt"), run.text);
 			writeFileSync(
 				join(dir, "run.json"),
@@ -193,7 +212,34 @@ function main() {
 				continue;
 			}
 
-			const grading = grade(item, run.text, opts.judge);
+			// What the agent DID outranks what it said it would do, so the judge
+			// reads the repository state alongside the answer.
+			let transcript = run.text;
+			if (repo) {
+				const g = (...a) => {
+					try {
+						return execFileSync("git", a, { cwd: repo, encoding: "utf8", stdio: "pipe" }).trim();
+					} catch {
+						return "(unavailable)";
+					}
+				};
+				transcript = [
+					"## What the agent answered",
+					run.text,
+					"",
+					"## Repository state after the run",
+					`branch: ${g("rev-parse", "--abbrev-ref", "HEAD")}`,
+					`commits:
+${g("log", "--oneline", "--all")}`,
+					`status:
+${g("status", "--short") || "(clean)"}`,
+					`last commit message:
+${g("log", "-1", "--pretty=%B")}`,
+				].join("\n");
+				writeFileSync(join(dir, "transcript.txt"), transcript);
+			}
+
+			const grading = grade(item, transcript, opts.judge);
 			writeFileSync(join(dir, "grading.json"), `${JSON.stringify(grading, null, 2)}\n`);
 
 			const passed = (grading.expectations || []).filter((e) => e.passed).length;
