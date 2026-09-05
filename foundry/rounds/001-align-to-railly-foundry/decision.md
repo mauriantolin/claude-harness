@@ -155,3 +155,47 @@ Proof: a scratch clone of his repository with the one `node:path` import in
 `validate-skills.mjs` switched to `node:path/posix` reports zero errors
 about any skill, trigger, fixture or installer group in this repository; the
 errors that remain are about his own foundry contracts, parsed from his clone.
+
+## Amendment (2026-09-05): his validator's remaining rules, and disclosure
+
+Running his validator and his CI's skillkit audit over this repository left
+one class of finding: three `SKILL.md` files over his 120-line cap
+(spec-gate 123, frontend-stack 143, ui-design-language 167). His own skills
+top out at 113 and keep reference material behind links.
+
+Adopted in `validate-skills.mjs`: the 120-line cap; no live foundry output
+inside a skill (`cases/`, `evals/runs/`, `evals/radius-dogfood/`);
+`type` required in the maturity entry; `expected_output` and `files`
+required on every eval; links checked in `README.md` and `foundry/` too.
+Added `npm run audit` (skillkit, strict, as his CI runs it).
+
+Restructured, without changing any method:
+
+- spec-gate: the report shape moved to `references/report.md` (100 lines).
+- frontend-stack: the index table, load order and duplicate history moved to
+  `references/index.md` (115 lines).
+- ui-design-language: the twelve recipes and seven guides moved from the skill
+  root into `references/`, the shadcn and transitions.dev integration into
+  `references/integration.md`, springs and porting into
+  `references/catalog.md`; `SKILL.md` gained a "when to read what" table so
+  every reference is linked and gated (109 lines).
+
+Proof: his validator (scratch clone, `node:path/posix`) reports zero errors
+about this repository; skillkit strict passes 7/7 with 0 findings and now
+counts 23 reference files as on-demand instead of 0. The three restructured
+skills were re-run on haiku as a regression check; results below.
+
+### Regression run after the restructuring (2026-09-05, haiku agent and judge)
+
+| Skill | no_skill (001 → now) | current (001 → now) | delta | skill loaded |
+|---|---|---|---|---:|
+| spec-gate | 13/20 (65.0%) → 13/20 (65.0%) | 11/20 (55.0%) → 14/20 (70.0%) | -10.0% → +5.0% | 4/4 |
+| frontend-stack | 4/18 (22.2%) → 7/18 (38.9%) | 3/18 (16.7%) → 3/18 (16.7%) | -5.6% → -22.2% | 5/5 |
+| ui-design-language | 2/13 (15.4%) → 4/13 (30.8%) | 3/13 (23.1%) → 7/13 (53.8%) | +7.7% → +23.1% | 3/3 |
+
+Read as "did not regress", not as improvement: one haiku run each, and the
+`no_skill` arm moved as much as the `current` arm did (frontend-stack's
+baseline went from 4 to 7 of 18 with no change on the baseline side), which is
+the variance floor of this model. spec-gate's `not-provided-is-not-a-soft-pass`
+and frontend-stack's flat result remain the round-002 candidates already
+listed. Gradings and benchmarks are under `foundry/runs/evals/<skill>/`.

@@ -1,0 +1,35 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Derives the neutrals (borders, hover washes, inputs) from a single ink color at fixed alphas rather than introducing multiple greys",
+      "passed": true,
+      "reason": "Code consistently uses rgba(0,0,0) at fixed alphas: 12% for borders, 5% for hovers/dividers, 60% for secondary text—a single ink at multiple fixed opacities."
+    },
+    {
+      "index": 2,
+      "assertion": "Gives the card continuous-curvature (squircle) corners and makes the button a pill",
+      "passed": false,
+      "reason": "Code uses `rounded-xl`, which is a standard Tailwind border-radius, not continuous-curvature; true squircles require clip-path or mask-image, not a regular border radius."
+    },
+    {
+      "index": 3,
+      "assertion": "Names a spring from the seven-spring vocabulary (PANEL for the dropdown) instead of an ad-hoc duration or a new spring",
+      "passed": false,
+      "reason": "Code uses ad-hoc `transition-colors duration-150` instead of referencing a named spring from the vocabulary; design section mentions springs but implementation does not apply them."
+    },
+    {
+      "index": 4,
+      "assertion": "Keeps font weights at 500 or below and uses sentence-case copy on the button",
+      "passed": true,
+      "reason": "All font weights are 500 or below (font-medium = 500), and button copy 'Change plan' is in sentence case."
+    },
+    {
+      "index": 5,
+      "assertion": "Does NOT ship a stock shadcn rounded-lg rectangle unchanged for the card surface",
+      "passed": true,
+      "reason": "Card uses `rounded-xl` with custom styling (border, padding, shadow), not the default shadcn `rounded-lg` rectangle."
+    }
+  ]
+}

@@ -87,32 +87,9 @@ Status is `pass` only when every accepted ID passes and every must-not-change
 behavior holds at the exact reviewed head. Any `Fail` makes the run `fail`. Any
 `not_provided` on a `Must-have` makes the run `fail`.
 
-Report shape:
-
-```markdown
-# <Repo> PR #<N> Spec gate
-
-Status: pass | fail
-
-Base: `<sha>`
-
-Head: `<sha>`
-
-Active contract: <what it is, and what supersedes what>
-
-## Acceptance review
-<the table>
-
-## Must-not-change review
-<one bullet per behavior, with verdict>
-
-## Superseded clause
-<only when something was superseded>
-
-Residual boundary: <accepted, unprotected truths>
-```
-
-Write the report to `.claude/knowledge/foundry/runs/spec/<date>-<repo>-<n>-<head>.md`.
+When emitting the verdict, read [the report shape](references/report.md) and
+write the report to the spec runs directory of the project's canonical source
+root.
 
 A `fail` returns to the factory at the earliest stage that can move the failing
 ID. A `fail` whose cause is that the contract itself was wrong returns to

@@ -15,6 +15,7 @@
     "eval": "node scripts/run-skill-eval.mjs",
     "triggers": "node scripts/run-trigger-eval.mjs",
     "aggregate": "node scripts/aggregate-skill-eval.mjs",
-    "verify-fixtures": "node scripts/verify-eval-fixtures.mjs"
+    "verify-fixtures": "node scripts/verify-eval-fixtures.mjs",
+    "audit": "bunx @crafter/skillkit@0.13.0 audit skills --strict"
   }
 }

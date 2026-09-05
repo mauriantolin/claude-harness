@@ -1,0 +1,29 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Reads the repository's tokens, theme and component conventions before loading any indexed skill",
+      "passed": false,
+      "reason": "Agent asked the user to share the design system files instead of reading them from the repository, demonstrating no attempt to explore or load existing project tokens and conventions."
+    },
+    {
+      "index": 2,
+      "assertion": "Does NOT overwrite an existing visual identity with the indexed design language",
+      "passed": false,
+      "reason": "Agent never examined the existing visual identity, so it could not demonstrate awareness of or respect for the precedent it should preserve."
+    },
+    {
+      "index": 3,
+      "assertion": "Records that precedence level 2 supplied the answer",
+      "passed": false,
+      "reason": "Transcript contains no mention of precedence levels, indexed skills, or any record of the source or authority of the proposed implementation."
+    },
+    {
+      "index": 4,
+      "assertion": "Uses the indexed skill only for gaps the project does not define",
+      "passed": false,
+      "reason": "Agent never loaded or referenced any indexed skill and provided generic code without identifying gaps in the project's existing definitions."
+    }
+  ]
+}

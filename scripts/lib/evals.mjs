@@ -33,6 +33,10 @@ export function validateEvalSuite(suite, skillName, { fixtures = [] } = {}) {
 		if (typeof item.prompt !== "string" || item.prompt.trim() === "") {
 			errors.push(`${label}: prompt is empty`);
 		}
+		if (typeof item.expected_output !== "string" || item.expected_output.trim() === "") {
+			errors.push(`${label}: expected_output is empty`);
+		}
+		if (!Array.isArray(item.files)) errors.push(`${label}: files must be a list`);
 		if (!Array.isArray(item.assertions)) errors.push(`${label}: assertions must be a list`);
 		else if (item.assertions.length === 0) errors.push(`${label}: assertions is empty`);
 

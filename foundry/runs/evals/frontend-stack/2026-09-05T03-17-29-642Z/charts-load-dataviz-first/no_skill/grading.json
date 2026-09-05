@@ -1,0 +1,23 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Loads dataviz before writing the first line of chart code",
+      "passed": true,
+      "reason": "Recharts is imported at the top of WeeklyActiveUsersPanel.tsx before any chart components are used."
+    },
+    {
+      "index": 2,
+      "assertion": "Does NOT let ui-design-language or shadcn decide the chart form",
+      "passed": true,
+      "reason": "The chart form (LineChart from recharts) is chosen independently; neither ui-design-language nor shadcn appear in the transcript."
+    },
+    {
+      "index": 3,
+      "assertion": "Still loads the visual system for the panel's surrounding surface",
+      "passed": false,
+      "reason": "The panel's surrounding UI uses raw Tailwind classes instead of loading ui-design-language or any visual system."
+    }
+  ]
+}

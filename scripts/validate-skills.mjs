@@ -15,6 +15,11 @@ import { CATALOGS, discoverSkills, readFrontmatter } from "./lib/skills.mjs";
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const MATURITY_STATES = new Set(["experimental", "dogfooded", "evaluated", "validated", "deprecated"]);
+// Progressive disclosure, as Railly enforces it: SKILL.md is the method, and
+// anything a reader needs only sometimes lives in references/ behind a link.
+const MAX_SKILL_LINES = 120;
+// Run evidence lives under foundry/runs, never inside an installable skill.
+const LIVE_OUTPUT_DIRS = ["cases", join("evals", "runs"), join("evals", "radius-dogfood")];
 const CHANNEL_FOR_CATALOG = { stable: ["stable"], experimental: ["candidate", "experimental"] };
 const CASE_FIELDS = [
 	"Status",
@@ -74,6 +79,11 @@ function checkSkill(skill) {
 	if (fm.name !== skill.name) fail(skillMd, `frontmatter name "${fm.name}" does not match directory "${skill.name}"`);
 	if (!fm.description) fail(skillMd, "frontmatter description is missing");
 	checkPlaceholders(skillMd, `${fm.description ?? ""}`);
+	const lines = readFileSync(skillMd, "utf8").split("\n").length;
+	if (lines > MAX_SKILL_LINES) fail(skillMd, `${lines} lines exceeds ${MAX_SKILL_LINES}; move reference material to references/`);
+	for (const dir of LIVE_OUTPUT_DIRS) {
+		if (existsSync(join(skill.root, dir))) fail(join(skill.root, dir), "live foundry output must not ship inside a skill");
+	}
 	for (const md of [skillMd, ...markdownFiles(join(skill.root, "references"))]) checkLinks(md);
 
 	const evalsDir = join(skill.root, "evals");
@@ -125,6 +135,7 @@ function checkMaturity(skills) {
 			fail(file, `${skill.name}: channel "${entry.channel}" does not match its ${skill.catalog} location`);
 		}
 		if (!entry.summary) fail(file, `${skill.name}: summary is missing`);
+		if (!entry.type) fail(file, `${skill.name}: type is missing`);
 		if (entry.decision && !existsSync(resolve(dirname(file), entry.decision))) {
 			fail(file, `${skill.name}: decision "${entry.decision}" does not exist`);
 		}
@@ -175,6 +186,7 @@ for (const skill of skills) checkSkill(skill);
 checkMaturity(skills);
 checkMarketplace(skills);
 checkCases();
+for (const md of [join(REPO, "README.md"), ...markdownFiles(join(REPO, "foundry"))]) checkLinks(md);
 
 if (errors.length) {
 	for (const e of errors) console.error(`✖ ${e}`);

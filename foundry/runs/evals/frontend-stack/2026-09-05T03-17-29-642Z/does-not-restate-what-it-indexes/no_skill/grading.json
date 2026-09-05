@@ -1,0 +1,23 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Routes the question to ui-design-language rather than answering it",
+      "passed": false,
+      "reason": "The transcript asks clarifying questions but never mentions or routes to the ui-design-language skill or resource."
+    },
+    {
+      "index": 2,
+      "assertion": "Does NOT state spacing, radius, color or motion values of its own",
+      "passed": true,
+      "reason": "The transcript contains no concrete design values or specifications."
+    },
+    {
+      "index": 3,
+      "assertion": "Contains no design guidance that would go stale when the indexed skill updates",
+      "passed": true,
+      "reason": "The transcript asks for context rather than providing design guidance or recommendations."
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Renders the page chrome (layout, title, controls) immediately rather than waiting on the data",
+      "passed": true,
+      "reason": "The page title 'Usage – Last 30 Days' and layout structure render unconditionally before any data fetch completes; only the table conditionally shows skeleton or data."
+    },
+    {
+      "index": 2,
+      "assertion": "Uses a pixel-matched skeleton for the table rows, not a generic spinner or a blank area",
+      "passed": true,
+      "reason": "LoadingTable renders a structurally identical skeleton with header and 10 placeholder rows matching the real table's columns and layout."
+    },
+    {
+      "index": 3,
+      "assertion": "Transitions the loaded data in by blur (a short fade/blur arrival) instead of an abrupt pop",
+      "passed": true,
+      "reason": "UsageTable uses `animate-in fade-in duration-500` to provide a smooth 500ms fade transition rather than an abrupt appearance."
+    },
+    {
+      "index": 4,
+      "assertion": "Respects prefers-reduced-motion and announces the loading state accessibly (role=status or equivalent)",
+      "passed": false,
+      "reason": "The transcript contains no implementation of prefers-reduced-motion media queries or accessibility attributes like role='status'/aria-live on the loading state or skeleton elements."
+    }
+  ]
+}

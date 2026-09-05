@@ -1,0 +1,23 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Loads dataviz before writing the first line of chart code",
+      "passed": false,
+      "reason": "The transcript shows the agent requesting permissions and mentioning future steps, but never actually loads dataviz or writes any chart code."
+    },
+    {
+      "index": 2,
+      "assertion": "Does NOT let ui-design-language or shadcn decide the chart form",
+      "passed": false,
+      "reason": "The expectation is never addressed; the agent doesn't demonstrate awareness of or deliberate avoidance of these systems when designing the chart."
+    },
+    {
+      "index": 3,
+      "assertion": "Still loads the visual system for the panel's surrounding surface",
+      "passed": false,
+      "reason": "The transcript contains no evidence of loading any visual system or design framework for the panel surface."
+    }
+  ]
+}

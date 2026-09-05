@@ -1,0 +1,35 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Derives the neutrals (borders, hover washes, inputs) from a single ink color at fixed alphas rather than introducing multiple greys",
+      "passed": false,
+      "reason": "The design uses multiple slate greys (slate-50, 200, 300, 500, 600, 700, 900) as distinct colors rather than deriving them from a single ink at fixed opacity levels."
+    },
+    {
+      "index": 2,
+      "assertion": "Gives the card continuous-curvature (squircle) corners and makes the button a pill",
+      "passed": false,
+      "reason": "The card uses stock `rounded-lg` (rounded rectangle, not squircle) and the button has no pill styling applied."
+    },
+    {
+      "index": 3,
+      "assertion": "Names a spring from the seven-spring vocabulary (PANEL for the dropdown) instead of an ad-hoc duration or a new spring",
+      "passed": false,
+      "reason": "The transcript specifies ad-hoc durations (150-200ms, 300ms) and uses Tailwind's `duration-200` instead of naming a spring from the vocabulary."
+    },
+    {
+      "index": 4,
+      "assertion": "Keeps font weights at 500 or below and uses sentence-case copy on the button",
+      "passed": false,
+      "reason": "The component uses `font-bold` (700 weight) on the plan name, and the button text is 'Change Plan' (title case) instead of 'Change plan' (sentence case)."
+    },
+    {
+      "index": 5,
+      "assertion": "Does NOT ship a stock shadcn rounded-lg rectangle unchanged for the card surface",
+      "passed": false,
+      "reason": "The card surface uses `rounded-lg` unchanged, which is exactly a stock Tailwind rounded rectangle."
+    }
+  ]
+}

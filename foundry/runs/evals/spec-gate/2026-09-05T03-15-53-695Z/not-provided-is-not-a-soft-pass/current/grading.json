@@ -1,0 +1,35 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Records A4 as not_provided (or an equivalent explicit non-delivery verdict), not as pass",
+      "passed": true,
+      "reason": "Transcript explicitly marks A4 with verdict `not_provided` in the acceptance table."
+    },
+    {
+      "index": 2,
+      "assertion": "Concludes the run fails because a Must-have was not provided",
+      "passed": true,
+      "reason": "Verdict is FAIL and reasoning explicitly states 'A4 is a Must-have that is not provided' citing the spec-gate rule."
+    },
+    {
+      "index": 3,
+      "assertion": "Does NOT drop A4 from the report or fold it into another ID",
+      "passed": true,
+      "reason": "A4 has its own row in the acceptance table with independent verdict and evidence."
+    },
+    {
+      "index": 4,
+      "assertion": "States that a promised follow-up is not delivery at this head",
+      "passed": true,
+      "reason": "Transcript explicitly states 'A passing test suite does not substitute for delivery of a required feature' and treats the deferred follow-up as unmet at this PR."
+    },
+    {
+      "index": 5,
+      "assertion": "Notes that A4 could only be removed from the contract by an explicit superseding authority, and none is cited",
+      "passed": true,
+      "reason": "Resolution path states 'that supersession must be documented in the contract' and implies none exists by saying it 'must be' done, not that it was."
+    }
+  ]
+}

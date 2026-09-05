@@ -22,15 +22,11 @@ allowed-tools:
 [Software Factory](https://github.com/Railly/skills/blob/main/skills/.experimental/software-factory/SKILL.md)
 stage 1 owns the behavior change. When that change is a user interface, the
 methods live across thirteen independently versioned skills totalling roughly
-46,000 lines. Loading all of them wastes the pass; loading none of them makes
-the pass improvise a design system.
-
-This skill is the index between those two failures. **It routes and orders. It
-does not restate the methods it points at**, and it never contains design
-guidance of its own — a rule it inherits from the factory's own delegation
-contract.
-
-It is a protocol, not a runtime.
+46,000 lines. Loading all of them wastes the pass; loading none makes the pass
+improvise a design system. This skill is the index between those two
+failures. **It routes and orders. It does not restate the methods it points
+at**, and it carries no design guidance of its own. It is a protocol, not a
+runtime.
 
 ## 0. Decide whether this fires
 
@@ -71,36 +67,20 @@ Resolve in this order, and record which level supplied the answer:
 3. **The indexed skill for that surface**, per §3.
 4. **Stock library defaults.** Last.
 
-Where two installed skills would claim the same surface, only one is installed.
-`shadcn`, `next-cache-components`, `ai-sdk` and `vercel-cli` once shipped twice,
-from the agents directory and from the Vercel plugin; the plugin copy is
-substantially more complete in every case, so the agents-directory copies were
-removed rather than left to compete. If a duplicate reappears after an install,
-resolve it by removing one, not by declaring a winner a reader must honour.
+Where two installed skills would claim the same surface, only one stays
+installed; resolve a duplicate by removing one, never by declaring a winner a
+reader must honour. [The index](references/index.md) records which copies were
+removed and why.
 
 **Complete when:** the precedence level and the duplicate resolution are
 recorded for every surface in conflict.
 
-## 3. The index
+## 3. Map each surface to exactly one skill
 
-| Surface the change touches | Skill |
-|---|---|
-| Tokens, surfaces, color, typography, spacing, the visual system | `ui-design-language` |
-| Motion: new transitions, animation, open/close, stagger | `transitions-dev` |
-| Motion already present that needs tuning against the token scale | `transitions-polish` |
-| shadcn components, registries, `components.json`, presets | `vercel:shadcn` |
-| Building a new reusable component, its API, its accessibility, publishing it | `building-components` |
-| Component architecture: compound components, render props, boolean-prop sprawl | `vercel-composition-patterns` |
-| React or Next performance: re-renders, bundle size, data fetching cost | `vercel-react-best-practices` |
-| App Router: file conventions, RSC boundaries, metadata, route handlers | `next-best-practices` |
-| Caching, PPR, `use cache`, `cacheLife`, `cacheTag` | `vercel:next-cache-components` |
-| Accessibility and interface-guideline review of existing UI | `web-design-guidelines` |
-| AI chat surfaces: conversations, messages, tool displays, prompt inputs | `ai-elements` |
-| Streaming markdown rendering | `streamdown` |
-| Migrating Radix primitives to Base UI | `migrate-radix-to-base` |
-
-Charts, dashboards, and any data visualization load `dataviz` before the first
-line of chart code, ahead of everything in this table.
+Read [the index](references/index.md): one row per surface, one skill per
+row, and `dataviz` ahead of everything for charts and dashboards. Map every
+surface the contract named. A surface with no row is recorded as having no
+coverage, not silently absorbed by the nearest skill.
 
 **Complete when:** every named surface has exactly one skill, or is recorded as
 having no coverage.
@@ -108,17 +88,9 @@ having no coverage.
 ## 4. Load in dependency order, not all at once
 
 Order matters because the later skills read what the earlier ones establish:
-
-```text
-project conventions
-  → ui-design-language      (establishes the token contract)
-  → vercel:shadcn           (consumes those tokens)
-  → building-components     (component API and a11y)
-  → composition / performance
-  → next-best-practices     (routing and rendering)
-  → transitions-dev         (motion, last: it moves what already exists)
-  → web-design-guidelines   (review of the result)
-```
+project conventions first, then the token contract, then the components that
+consume it, then routing and rendering, then motion, then review. The exact
+order is in [the index](references/index.md).
 
 Load only the levels the surface contract named. A skill loaded for a surface
 this change does not touch is context spent against the pass, and its advice

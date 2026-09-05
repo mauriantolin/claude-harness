@@ -1,0 +1,29 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Renders the page chrome (layout, title, controls) immediately rather than waiting on the data",
+      "passed": true,
+      "reason": "Transcript explicitly describes immediate rendering of title, filters, and table structure at 0ms."
+    },
+    {
+      "index": 2,
+      "assertion": "Uses a pixel-matched skeleton for the table rows, not a generic spinner or a blank area",
+      "passed": true,
+      "reason": "Transcript specifies 30 pixel-matched skeleton rows and explicitly rejects spinners and badges."
+    },
+    {
+      "index": 3,
+      "assertion": "Transitions the loaded data in by blur (a short fade/blur arrival) instead of an abrupt pop",
+      "passed": true,
+      "reason": "Transcript describes blur + opacity transition with spring animation, explicitly avoiding pop-in."
+    },
+    {
+      "index": 4,
+      "assertion": "Respects prefers-reduced-motion and announces the loading state accessibly (role=status or equivalent)",
+      "passed": false,
+      "reason": "Transcript addresses prefers-reduced-motion but never mentions accessible announcement mechanism like role=status or aria-live."
+    }
+  ]
+}

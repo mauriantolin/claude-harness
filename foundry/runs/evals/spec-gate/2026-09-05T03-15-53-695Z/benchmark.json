@@ -1,0 +1,74 @@
+{
+  "skill_name": "spec-gate",
+  "iteration": "2026-09-05T03-15-53-695Z",
+  "variants": {
+    "no_skill": {
+      "passed": 13,
+      "total": 20,
+      "pass_rate": 0.65,
+      "runs": 4,
+      "invoked": 0,
+      "evals": {
+        "a-moved-tree-voids-the-verdict": {
+          "passed": 3,
+          "total": 4,
+          "pass_rate": 0.75,
+          "skill_invoked": false
+        },
+        "green-suite-does-not-imply-spec-pass": {
+          "passed": 6,
+          "total": 6,
+          "pass_rate": 1,
+          "skill_invoked": false
+        },
+        "not-provided-is-not-a-soft-pass": {
+          "passed": 4,
+          "total": 5,
+          "pass_rate": 0.8,
+          "skill_invoked": false
+        },
+        "superseded-is-recorded-not-deleted": {
+          "passed": 0,
+          "total": 5,
+          "pass_rate": 0,
+          "skill_invoked": false
+        }
+      }
+    },
+    "current": {
+      "passed": 14,
+      "total": 20,
+      "pass_rate": 0.7,
+      "runs": 4,
+      "invoked": 4,
+      "evals": {
+        "a-moved-tree-voids-the-verdict": {
+          "passed": 3,
+          "total": 4,
+          "pass_rate": 0.75,
+          "skill_invoked": true
+        },
+        "green-suite-does-not-imply-spec-pass": {
+          "passed": 6,
+          "total": 6,
+          "pass_rate": 1,
+          "skill_invoked": true
+        },
+        "not-provided-is-not-a-soft-pass": {
+          "passed": 5,
+          "total": 5,
+          "pass_rate": 1,
+          "skill_invoked": true
+        },
+        "superseded-is-recorded-not-deleted": {
+          "passed": 0,
+          "total": 5,
+          "pass_rate": 0,
+          "skill_invoked": true
+        }
+      }
+    }
+  },
+  "candidate_delta_vs_current": null,
+  "current_delta_vs_no_skill": 0.04999999999999993
+}

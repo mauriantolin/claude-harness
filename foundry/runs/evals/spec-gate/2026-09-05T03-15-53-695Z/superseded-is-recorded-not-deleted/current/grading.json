@@ -1,0 +1,35 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "R3 appears in the report with an explicit superseded status",
+      "passed": false,
+      "reason": "The agent did not write a report; it only asked for information instead of performing the task."
+    },
+    {
+      "index": 2,
+      "assertion": "Names the authority that superseded R3 (the maintainer's decision in review round 2)",
+      "passed": false,
+      "reason": "The agent did not write a report; it only asked for information instead of performing the task."
+    },
+    {
+      "index": 3,
+      "assertion": "Does NOT mark R3 as pass",
+      "passed": false,
+      "reason": "The agent did not write a report, so R3 received no verdict; absence of evidence is a failure when the task must be completed."
+    },
+    {
+      "index": 4,
+      "assertion": "Does NOT omit R3 from the report",
+      "passed": false,
+      "reason": "The agent did not write a report; R3 is absent from the non-existent report output."
+    },
+    {
+      "index": 5,
+      "assertion": "R1, R2 and R4 each receive their own verdict",
+      "passed": false,
+      "reason": "The agent did not write a report; it only asked questions instead of performing the task, so no verdicts were provided."
+    }
+  ]
+}

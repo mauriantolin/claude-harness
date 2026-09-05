@@ -1,0 +1,29 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "States that the earlier verdict is void (not merely stale) because the tree moved",
+      "passed": true,
+      "reason": "Transcript explicitly states 'The verdict from a1b2c3d is void — not stale, but void' and attributes this to the rebase moving the tree."
+    },
+    {
+      "index": 2,
+      "assertion": "Requires a new Spec Gate run on the current head",
+      "passed": true,
+      "reason": "Transcript opens with 'You need to run Spec Gate again,' establishing the requirement for a new run."
+    },
+    {
+      "index": 3,
+      "assertion": "Does NOT carry the verdict forward on the grounds that the last change was only a comment",
+      "passed": true,
+      "reason": "Transcript acknowledges the comment typo but explicitly rejects it as grounds for reuse, stating 'Even though the new commit only fixed a comment typo...the rebase alone invalidates the prior verdict.'"
+    },
+    {
+      "index": 4,
+      "assertion": "Names the exact heads involved (the old head and the fact that the new one differs)",
+      "passed": false,
+      "reason": "Transcript names the old head (a1b2c3d) but never names or explicitly identifies the new current head."
+    }
+  ]
+}

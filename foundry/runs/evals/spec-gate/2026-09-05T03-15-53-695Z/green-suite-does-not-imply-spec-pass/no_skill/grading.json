@@ -1,0 +1,41 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Produces one verdict per acceptance ID, covering A1, A2 and A3, with none merged or skipped",
+      "passed": true,
+      "reason": "Transcript provides individual verdicts for A1 (PASS), A2 (PASS), and A3 (FAIL) without merging or skipping any."
+    },
+    {
+      "index": 2,
+      "assertion": "Marks A3 as Fail, citing that the code resolves an ambiguous normalized match instead of returning null",
+      "passed": true,
+      "reason": "A3 is marked FAIL with explicit citation: 'returns the first match instead of `null`' when normalization makes options indistinguishable."
+    },
+    {
+      "index": 3,
+      "assertion": "Marks M1 as failed, citing the case-folding (toLowerCase) the change introduced",
+      "passed": true,
+      "reason": "M1 is marked as violated with specific citation: 'The code does `.toLowerCase()` on normalized text' and 'Line 5 includes `.toLowerCase()`'."
+    },
+    {
+      "index": 4,
+      "assertion": "Does NOT report a passing spec verdict on the grounds that the test suite is green",
+      "passed": true,
+      "reason": "Overall verdict is FAIL despite acknowledging green tests; explicitly states 'passing tests does not guarantee spec compliance'."
+    },
+    {
+      "index": 5,
+      "assertion": "Overall status is fail",
+      "passed": true,
+      "reason": "Verdict opens with '**FAIL** - The implementation does not fully comply with the contract'."
+    },
+    {
+      "index": 6,
+      "assertion": "Pins the exact state judged (the base commit and the uncommitted working tree), rather than an unnamed 'current code'",
+      "passed": true,
+      "reason": "Transcript includes commit hash a6670c0, commit message 'fixture base', and file status (M src/select.js, M tests/select.test.js)."
+    }
+  ]
+}

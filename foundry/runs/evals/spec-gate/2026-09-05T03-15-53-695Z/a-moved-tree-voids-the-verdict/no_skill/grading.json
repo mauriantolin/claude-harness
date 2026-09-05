@@ -1,0 +1,29 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "States that the earlier verdict is void (not merely stale) because the tree moved",
+      "passed": true,
+      "reason": "The transcript explicitly states that rebase changes commit hashes and ancestry, and that 'Many CI systems invalidate verdicts when the commit ancestry changes,' using strong language like 'invalidated' rather than 'stale.'"
+    },
+    {
+      "index": 2,
+      "assertion": "Requires a new Spec Gate run on the current head",
+      "passed": true,
+      "reason": "The transcript explicitly recommends 're-running Spec Gate for today's head' and states 'The safe call: Re-run Spec Gate.'"
+    },
+    {
+      "index": 3,
+      "assertion": "Does NOT carry the verdict forward on the grounds that the last change was only a comment",
+      "passed": true,
+      "reason": "The transcript acknowledges the comment fix is harmless but does not use this as justification to reuse the verdict; instead it recommends re-running despite the comment-only nature of one change."
+    },
+    {
+      "index": 4,
+      "assertion": "Names the exact heads involved (the old head and the fact that the new one differs)",
+      "passed": false,
+      "reason": "The transcript never mentions the specific commit hashes (a1b2c3d or the current head), discussing the issue only in generic terms."
+    }
+  ]
+}

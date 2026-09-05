@@ -6,7 +6,7 @@ that marketplace does not publish, plus the machinery that keeps every skill
 here measured. The layout mirrors Railly's so there is one structure to learn.
 
 ```text
-skills/<name>/                stable skills: SKILL.md + evals/{evals.json,triggers.json,fixtures/<fx>/{base,changed}}
+skills/<name>/                stable skills: SKILL.md (<=120 lines) + references/ + evals/{evals.json,triggers.json,fixtures/<fx>/{base,changed}}
 skills/.experimental/<name>/  where every new skill is born
 cases/<repo>/                 evidence from real work
 foundry/maturity.json         channel + maturity per skill (the registry)
@@ -39,6 +39,7 @@ factory-loop needs it installed, not that it is validated.
 npm test                      # scripts/lib unit tests (node:test, no dependencies)
 npm run validate              # repository content: frontmatter, links, evals, triggers, maturity, marketplace, cases
 npm run verify-fixtures       # materialize every fixture and run its declared verification command
+npm run audit                 # skillkit audit, as Railly's CI runs it (needs bun; network on first run)
 npm run doctor                # the machine: binaries, plugins, links, factory-loop dependencies, clean Railly clone
 npm run check                 # test + validate + verify-fixtures + claude plugin validate
 ./install.sh                  # link skills and script launchers into ~/.claude (re-runnable)
@@ -74,6 +75,15 @@ invocations. Both need the skill linked into `~/.claude/skills`, which is what
 
 `claude plugin eval` is early-access on this account; when it opens up, the
 suites here are close enough to its shape to port.
+
+### Progressive disclosure
+
+`SKILL.md` is the method and stays under 120 lines, as Railly's validator
+requires. Anything a reader needs only sometimes (report shapes, index tables,
+recipes, catalogs) lives in `references/` behind a link whose sentence says
+when to read it ("read X when Y"). `npm run validate` enforces the line cap
+and the links; `npm run audit` enforces that every reference is linked and
+gated.
 
 ### Compatibility with Railly's tooling
 

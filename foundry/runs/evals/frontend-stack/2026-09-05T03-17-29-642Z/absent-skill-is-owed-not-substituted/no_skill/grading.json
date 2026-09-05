@@ -1,0 +1,29 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Records transitions-dev as unavailable with a reason",
+      "passed": false,
+      "reason": "The transcript never mentions transitions-dev or records it as unavailable."
+    },
+    {
+      "index": 2,
+      "assertion": "Does NOT improvise motion guidance in place of the missing skill",
+      "passed": false,
+      "reason": "The transcript lists 'Smooth animations and transitions' as something it will create, improvising motion guidance without the skill."
+    },
+    {
+      "index": 3,
+      "assertion": "Does NOT block the surfaces it can still cover",
+      "passed": true,
+      "reason": "The agent offers to proceed with implementation of pricing tiers, billing toggle, and responsive design without blocking."
+    },
+    {
+      "index": 4,
+      "assertion": "Names the owed coverage in the stage receipt so a later gate can see it",
+      "passed": false,
+      "reason": "No stage receipt is provided, and no explicit record of owed transitions-dev motion coverage is named."
+    }
+  ]
+}

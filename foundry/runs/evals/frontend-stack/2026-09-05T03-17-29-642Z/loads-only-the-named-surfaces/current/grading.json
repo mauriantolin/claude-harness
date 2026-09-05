@@ -1,0 +1,29 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Names the surfaces before naming any skill",
+      "passed": false,
+      "reason": "The transcript never explicitly names the surfaces (e.g., 'the settings page's save button'); it jumps directly to code implementation."
+    },
+    {
+      "index": 2,
+      "assertion": "Loads ui-design-language for the pending state's visual treatment and transitions-dev for the motion",
+      "passed": false,
+      "reason": "The transcript references no skills at all; it provides custom inline styles instead of loading ui-design-language or transitions-dev."
+    },
+    {
+      "index": 3,
+      "assertion": "Does NOT load next-best-practices, ai-elements, or migrate-radix-to-base for a contract that touches none of them",
+      "passed": true,
+      "reason": "The transcript does not load or reference any of these three skills."
+    },
+    {
+      "index": 4,
+      "assertion": "Records skills not loaded as not applicable rather than silently omitting them",
+      "passed": false,
+      "reason": "The transcript silently omits all skill analysis; it never explicitly records any skill (loaded or not) as applicable or not applicable."
+    }
+  ]
+}

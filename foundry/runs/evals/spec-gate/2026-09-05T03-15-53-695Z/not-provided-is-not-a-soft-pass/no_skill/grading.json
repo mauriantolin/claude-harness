@@ -1,0 +1,35 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Records A4 as not_provided (or an equivalent explicit non-delivery verdict), not as pass",
+      "passed": true,
+      "reason": "Transcript explicitly marks A4 with ❌ and states 'A4 is missing (deferred to follow-up)'"
+    },
+    {
+      "index": 2,
+      "assertion": "Concludes the run fails because a Must-have was not provided",
+      "passed": true,
+      "reason": "Verdict is FAIL with explicit reason: 'Requirement A4 (Must-have...) is deferred to a follow-up PR, but it is specified as a must-have'"
+    },
+    {
+      "index": 3,
+      "assertion": "Does NOT drop A4 from the report or fold it into another ID",
+      "passed": true,
+      "reason": "A4 is listed as its own item with explicit checkmark: '❌ A4 is missing (deferred to follow-up)'"
+    },
+    {
+      "index": 4,
+      "assertion": "States that a promised follow-up is not delivery at this head",
+      "passed": true,
+      "reason": "Transcript states 'the PR must deliver the full contracted scope to move forward' and that follow-up deferral breaks the gate"
+    },
+    {
+      "index": 5,
+      "assertion": "Notes that A4 could only be removed from the contract by an explicit superseding authority, and none is cited",
+      "passed": false,
+      "reason": "Transcript offers reclassification as a solution but does not explicitly state that contract modification requires explicit authority or that none is cited in the PR"
+    }
+  ]
+}

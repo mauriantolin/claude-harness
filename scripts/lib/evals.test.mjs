@@ -21,8 +21,8 @@ test("validateEvalSuite reports every structural defect by eval name", () => {
 			{ id: 1, name: "dup", prompt: "", assertions: [] },
 			{ id: 1, name: "dup", prompt: "p", assertions: ["a"], fixture: "missing" },
 			{ id: 3, prompt: "p", assertions: "not-a-list" },
-			{ id: 4, name: "fx-no-check", prompt: "p", assertions: ["a"], fixture: "fx" },
-			{ id: 5, name: "bad-check", prompt: "p", assertions: ["a"], verification: { command: [], expected_exit: "0" } },
+			{ id: 4, name: "fx-no-check", prompt: "p", expected_output: "x", files: [], assertions: ["a"], fixture: "fx" },
+			{ id: 5, name: "bad-check", prompt: "p", expected_output: "x", files: [], assertions: ["a"], verification: { command: [], expected_exit: "0" } },
 		],
 	};
 	const text = validateEvalSuite(bad, "ship", { fixtures: ["fx"] }).join("\n");
@@ -34,6 +34,8 @@ test("validateEvalSuite reports every structural defect by eval name", () => {
 	assert.match(text, /fixture "missing" does not exist/);
 	assert.match(text, /#3: name is missing/);
 	assert.match(text, /#3: assertions must be a list/);
+	assert.match(text, /dup: expected_output is empty/);
+	assert.match(text, /dup: files must be a list/);
 	assert.match(text, /fx-no-check: a fixture eval needs a verification/);
 	assert.match(text, /bad-check: verification.command must be a non-empty list/);
 	assert.match(text, /bad-check: verification.expected_exit must be an integer/);

@@ -1,0 +1,29 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Records transitions-dev as unavailable with a reason",
+      "passed": false,
+      "reason": "The transcript contains no mention of transitions-dev or any attempt to check its availability."
+    },
+    {
+      "index": 2,
+      "assertion": "Does NOT improvise motion guidance in place of the missing skill",
+      "passed": false,
+      "reason": "The transcript explicitly recommends 'Smooth transitions using CSS and Tailwind utilities' without the transitions-dev skill, which is motion guidance improvisation."
+    },
+    {
+      "index": 3,
+      "assertion": "Does NOT block the surfaces it can still cover",
+      "passed": false,
+      "reason": "The agent does not proceed with implementation; instead it asks the user which of three approaches to take, deferring all work rather than proceeding with what it can deliver."
+    },
+    {
+      "index": 4,
+      "assertion": "Names the owed coverage in the stage receipt so a later gate can see it",
+      "passed": false,
+      "reason": "The transcript contains no stage receipt or explicit record of what coverage remains outstanding or owed."
+    }
+  ]
+}
