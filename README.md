@@ -97,6 +97,22 @@ repository carries node ports of the pieces that matter for testing skills,
 and the runners he does not have. Details in
 `foundry/rounds/001-align-to-railly-foundry/decision.md`.
 
+## External dependencies factory-loop needs
+
+`solution-gate` delegates to Ryan Singer's `shaping` skill (and resumes it
+for breadboarding after a pass), and says not to recreate it locally. It is
+not part of Railly's marketplace, so it is installed the way its README says:
+
+```sh
+git clone https://github.com/rjs/shaping-skills.git ~/.local/share/shaping-skills
+# then link shaping/ and breadboarding/ into ~/.claude/skills (junctions on Windows)
+```
+
+`npm run doctor` checks every installed Railly skill's `Skill(...)` list, so a
+missing delegate shows up as an error before an agent has to report it as a
+gap. `herdr` is the one dependency Railly's own text calls optional; the
+doctor warns instead of failing.
+
 ## Working in a project
 
 Railly's skills write contracts, cases and gate runs to a canonical source

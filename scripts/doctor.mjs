@@ -162,6 +162,14 @@ for (const script of readdirSync(join(REPO, "scripts")).filter((f) => f.endsWith
 
 section("skill dependencies (allowed-tools Skill(...))");
 
+// Dependencies Railly's own text declares optional: their absence is a
+// capability the loop runs without, not a broken install. Everything else
+// that is missing is an error, because a delegate that does not exist gets
+// re-invented by the agent, which is exactly what the skills forbid.
+const OPTIONAL_DEPS = {
+	herdr: "optional runtime adapter; factory-loop and solution-gate run without Herdr",
+};
+
 function railllyPluginRoots() {
 	const roots = [];
 	for (const id of RAILLY_PLUGINS) {
@@ -186,21 +194,24 @@ function resolveSkill(ref) {
 	);
 }
 
+// Every installed Railly skill, not only the orchestrators: solution-gate
+// delegates to an external `shaping` skill, and a dependency two hops down
+// is still a dependency factory-loop cannot run without.
 const railllySkillMds = railllyPluginRoots().flatMap((r) => findFiles(join(r, "skills"), "SKILL.md"));
-const orchestrators = ["factory-loop", "software-factory"].map((n) =>
-	railllySkillMds.find((f) => basename(dirname(f)) === n),
-);
+const seen = new Set();
 const toCheck = [
-	...orchestrators.filter(Boolean).map((f) => ({ name: basename(dirname(f)), file: f })),
+	...railllySkillMds.map((f) => ({ name: basename(dirname(f)), file: f })).filter((s) => !seen.has(s.name) && seen.add(s.name)),
 	...skills.map((s) => ({ name: s.name, file: join(s.root, "SKILL.md") })),
 ];
-if (!orchestrators[0]) err("factory-loop SKILL.md not found in the installed railly-skills plugins");
+if (!seen.has("factory-loop")) err("factory-loop SKILL.md not found in the installed railly-skills plugins");
 for (const { name, file } of toCheck) {
 	const fm = parseFrontmatter(readFileSync(file, "utf8"));
 	for (const dep of skillTools(fm)) {
 		if (resolveSkill(dep)) ok(`${name} → ${dep}`);
 		else if (["dataviz", "artifact-design", "artifact-diagramming", "artifact-capabilities"].includes(dep)) {
 			ok(`${name} → ${dep} (built into Claude Code, not on disk)`);
+		} else if (OPTIONAL_DEPS[dep]) {
+			warn(`${name} → ${dep} is not installed (${OPTIONAL_DEPS[dep]})`);
 		} else err(`${name} needs Skill(${dep}) and it is not installed`);
 	}
 }

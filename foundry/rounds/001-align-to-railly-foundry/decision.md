@@ -199,3 +199,20 @@ baseline went from 4 to 7 of 18 with no change on the baseline side), which is
 the variance floor of this model. spec-gate's `not-provided-is-not-a-soft-pass`
 and frontend-stack's flat result remain the round-002 candidates already
 listed. Gradings and benchmarks are under `foundry/runs/evals/<skill>/`.
+
+## Amendment (2026-09-05): dependencies two hops down, and the source root per repository
+
+Two gaps surfaced in real use on the nomenclator repositories, both reported
+correctly by the agents as gaps rather than improvised around:
+
+1. **`shaping` was not installed.** `solution-gate` declares
+   `Skill(shaping)` and forbids a parallel proposal format. The doctor only
+   checked the two orchestrators' dependencies, so a delegate one hop further
+   was never verified. The doctor now checks every installed Railly skill;
+   `shaping` and `breadboarding` (rjs/shaping-skills, d8b65d7, no license
+   file in the repository) are linked into `~/.claude/skills`; `herdr` is
+   marked optional per Railly's text.
+2. **No `RAILLY_SKILLS_REPO` in those repositories.** Scaffolded with
+   `railly-inrepo.mjs` in all six working trees (three repositories, three
+   worktrees), each with its own `.claude/knowledge` and a gitignored
+   `settings.local.json`; Railly's unmodified resolver agrees with each.
