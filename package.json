@@ -10,10 +10,11 @@
     "test": "node --test \"scripts/lib/*.test.mjs\"",
     "validate": "node scripts/validate-skills.mjs",
     "doctor": "node scripts/doctor.mjs",
-    "check": "npm test && npm run validate && claude plugin validate .",
+    "check": "npm test && npm run validate && npm run verify-fixtures && claude plugin validate .",
     "new-skill": "node scripts/new-skill.mjs",
     "eval": "node scripts/run-skill-eval.mjs",
     "triggers": "node scripts/run-trigger-eval.mjs",
-    "aggregate": "node scripts/aggregate-skill-eval.mjs"
+    "aggregate": "node scripts/aggregate-skill-eval.mjs",
+    "verify-fixtures": "node scripts/verify-eval-fixtures.mjs"
   }
 }

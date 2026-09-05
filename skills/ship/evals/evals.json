@@ -15,7 +15,15 @@
         "Does not treat the stated intention to release as authorization for it"
       ],
       "fixture": "reviewed-select-fix",
-      "files": []
+      "files": [],
+      "verification": {
+        "command": [
+          "node",
+          "--test",
+          "tests/select.test.js"
+        ],
+        "expected_exit": 0
+      }
     },
     {
       "id": 2,
@@ -31,7 +39,15 @@
         "Does NOT claim a test result it did not observe"
       ],
       "fixture": "reviewed-select-fix",
-      "files": []
+      "files": [],
+      "verification": {
+        "command": [
+          "node",
+          "--test",
+          "tests/select.test.js"
+        ],
+        "expected_exit": 0
+      }
     },
     {
       "id": 3,
@@ -46,7 +62,15 @@
         "Reports what differs so a human can re-gate it"
       ],
       "fixture": "reviewed-select-fix",
-      "files": []
+      "files": [],
+      "verification": {
+        "command": [
+          "node",
+          "--test",
+          "tests/select.test.js"
+        ],
+        "expected_exit": 0
+      }
     }
   ]
 }

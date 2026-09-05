@@ -83,6 +83,7 @@ function checkSkill(skill) {
 		: [];
 	for (const f of fixtures) {
 		if (!existsSync(join(fixturesDir, f, "base"))) fail(join(fixturesDir, f), "fixture has no base/");
+		if (!existsSync(join(fixturesDir, f, "changed"))) fail(join(fixturesDir, f), "fixture has no changed/ (the diff the eval starts on)");
 	}
 
 	const evalsFile = join(evalsDir, "evals.json");

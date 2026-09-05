@@ -1,12 +1,52 @@
 [
-  { "query": "Three PRs are approved and green. Merge them and cut release 1.4.0.", "should_trigger": true },
-  { "query": "Bump the version everywhere, write the release notes with credits, and prepare the release PR.", "should_trigger": true },
-  { "query": "Clean up the PR queue: which ones are stale, superseded or ready to merge?", "should_trigger": true },
-  { "query": "Verify the 2.1.0 tarball installs cleanly and the CLI runs before we publish to npm.", "should_trigger": true },
-  { "query": "Implement the feature from the accepted contract and take it through the factory.", "should_trigger": false },
-  { "query": "Commit this reviewed change on a branch and take it to PR-ready.", "should_trigger": false },
-  { "query": "Review this diff for correctness and security.", "should_trigger": false },
-  { "query": "Watch CI for this push and confirm the deployment is serving.", "should_trigger": false },
-  { "query": "Which open issue should I pick up next?", "should_trigger": false },
-  { "query": "Write a changelog entry for the bug I just fixed.", "should_trigger": false }
+  {
+    "id": "positive-three-prs-approved-green",
+    "query": "Three PRs are approved and green. Merge them and cut release 1.4.0.",
+    "should_trigger": true
+  },
+  {
+    "id": "positive-bump-version-everywhere-write",
+    "query": "Bump the version everywhere, write the release notes with credits, and prepare the release PR.",
+    "should_trigger": true
+  },
+  {
+    "id": "positive-clean-up-pr-queue",
+    "query": "Clean up the PR queue: which ones are stale, superseded or ready to merge?",
+    "should_trigger": true
+  },
+  {
+    "id": "positive-verify-tarball-installs-cleanly",
+    "query": "Verify the 2.1.0 tarball installs cleanly and the CLI runs before we publish to npm.",
+    "should_trigger": true
+  },
+  {
+    "id": "negative-implement-feature-accepted-contract",
+    "query": "Implement the feature from the accepted contract and take it through the factory.",
+    "should_trigger": false
+  },
+  {
+    "id": "negative-commit-reviewed-change-branch",
+    "query": "Commit this reviewed change on a branch and take it to PR-ready.",
+    "should_trigger": false
+  },
+  {
+    "id": "negative-review-diff-correctness-security",
+    "query": "Review this diff for correctness and security.",
+    "should_trigger": false
+  },
+  {
+    "id": "negative-watch-ci-push-confirm",
+    "query": "Watch CI for this push and confirm the deployment is serving.",
+    "should_trigger": false
+  },
+  {
+    "id": "negative-open-issue-pick-up",
+    "query": "Which open issue should I pick up next?",
+    "should_trigger": false
+  },
+  {
+    "id": "negative-write-changelog-entry-bug",
+    "query": "Write a changelog entry for the bug I just fixed.",
+    "should_trigger": false
+  }
 ]

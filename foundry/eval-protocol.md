@@ -56,6 +56,17 @@ committing, writing a file or opening a pull request in such a run measures
 the cage, not the skill. Give the eval a fixture, or phrase the assertion as
 what the agent says it would do and why.
 
+## Fixtures are proven before they are used
+
+A fixture is `fixtures/<name>/base/` (committed as the first commit) plus
+`changed/` (copied over it, left uncommitted), so the run starts on a
+repository with a live diff. Every eval that names a fixture declares a
+`verification` (`{ "command": [...], "expected_exit": n }`) that states what
+the materialized fixture is: a green suite, a failing version check.
+`npm run verify-fixtures` materializes each one and runs that command, and
+`npm run check` includes it. A fixture whose claim cannot be reproduced by a
+command is not a fixture yet.
+
 ## Judge discipline
 
 The judge (`--judge`, default `haiku`) receives the assertions and the

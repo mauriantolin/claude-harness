@@ -15,7 +15,15 @@
         "Pins the exact state judged (the base commit and the uncommitted working tree), rather than an unnamed 'current code'"
       ],
       "fixture": "contract-select-fix",
-      "files": []
+      "files": [],
+      "verification": {
+        "command": [
+          "node",
+          "--test",
+          "tests/select.test.js"
+        ],
+        "expected_exit": 0
+      }
     },
     {
       "id": 2,

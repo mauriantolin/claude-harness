@@ -1,23 +1,102 @@
 [
-  {"query": "Rediseñá la pantalla de settings: las cards tienen que respirar más y el tab bar necesita una transición decente", "should_trigger": true},
-  {"query": "The dropdown in the header pops in abruptly. Make it open smoothly.", "should_trigger": true},
-  {"query": "I need a reusable table component for the dashboard, with sorting and an empty state", "should_trigger": true},
-  {"query": "Migrate this project's Radix primitives to Base UI", "should_trigger": true},
-  {"query": "The settings page renders on every keystroke. Fix the re-renders.", "should_trigger": true},
-  {"query": "Add a bar chart comparing the plans, and put it above the pricing table", "should_trigger": true},
-  {"query": "Build the chat surface: message list, streaming responses, prompt input", "should_trigger": true},
-  {"query": "This page is a wall of grey boxes. Give it a real visual hierarchy.", "should_trigger": true},
-  {"query": "Move the product listing to the App Router and add metadata", "should_trigger": true},
-  {"query": "Audit the onboarding flow for accessibility before we ship it", "should_trigger": true},
-
-  {"query": "Add an index to the users table, the tenant queries are timing out", "should_trigger": false},
-  {"query": "The daemon does not close its sockets on SIGTERM and leaks file descriptors", "should_trigger": false},
-  {"query": "Change the save button's label from \"Guardar\" to \"Aplicar\"", "should_trigger": false},
-  {"query": "Write the changelog for v2.1 and list the merged pull requests", "should_trigger": false},
-  {"query": "The integration tests fail on Windows in CI but pass locally", "should_trigger": false},
-  {"query": "Our CDP transport mis-parses lone UTF-16 surrogates in responses", "should_trigger": false},
-  {"query": "Bump the package version and publish to npm", "should_trigger": false},
-  {"query": "Review this diff and tell me whether it is correct", "should_trigger": false},
-  {"query": "Which open issue should I work on next in this repo?", "should_trigger": false},
-  {"query": "Explain how the retry budget in this orchestrator works", "should_trigger": false}
+  {
+    "id": "positive-redisena-pantalla-settings",
+    "query": "Rediseñá la pantalla de settings: las cards tienen que respirar más y el tab bar necesita una transición decente",
+    "should_trigger": true
+  },
+  {
+    "id": "positive-dropdown-header-pops-abruptly",
+    "query": "The dropdown in the header pops in abruptly. Make it open smoothly.",
+    "should_trigger": true
+  },
+  {
+    "id": "positive-need-reusable-table-component",
+    "query": "I need a reusable table component for the dashboard, with sorting and an empty state",
+    "should_trigger": true
+  },
+  {
+    "id": "positive-migrate-radix-to-base",
+    "query": "Migrate this project's Radix primitives to Base UI",
+    "should_trigger": true
+  },
+  {
+    "id": "positive-settings-page-renders-every",
+    "query": "The settings page renders on every keystroke. Fix the re-renders.",
+    "should_trigger": true
+  },
+  {
+    "id": "positive-add-bar-chart-comparing",
+    "query": "Add a bar chart comparing the plans, and put it above the pricing table",
+    "should_trigger": true
+  },
+  {
+    "id": "positive-build-chat-surface-message",
+    "query": "Build the chat surface: message list, streaming responses, prompt input",
+    "should_trigger": true
+  },
+  {
+    "id": "positive-page-wall-grey-boxes",
+    "query": "This page is a wall of grey boxes. Give it a real visual hierarchy.",
+    "should_trigger": true
+  },
+  {
+    "id": "positive-move-product-listing-app",
+    "query": "Move the product listing to the App Router and add metadata",
+    "should_trigger": true
+  },
+  {
+    "id": "positive-audit-onboarding-flow-accessibility",
+    "query": "Audit the onboarding flow for accessibility before we ship it",
+    "should_trigger": true
+  },
+  {
+    "id": "negative-add-index-users-table",
+    "query": "Add an index to the users table, the tenant queries are timing out",
+    "should_trigger": false
+  },
+  {
+    "id": "negative-daemon-close-sockets-sigterm",
+    "query": "The daemon does not close its sockets on SIGTERM and leaks file descriptors",
+    "should_trigger": false
+  },
+  {
+    "id": "negative-change-save-button-copy",
+    "query": "Change the save button's label from \"Guardar\" to \"Aplicar\"",
+    "should_trigger": false
+  },
+  {
+    "id": "negative-write-changelog-v2-list",
+    "query": "Write the changelog for v2.1 and list the merged pull requests",
+    "should_trigger": false
+  },
+  {
+    "id": "negative-integration-tests-fail-windows",
+    "query": "The integration tests fail on Windows in CI but pass locally",
+    "should_trigger": false
+  },
+  {
+    "id": "negative-cdp-transport-mis-parses-lone",
+    "query": "Our CDP transport mis-parses lone UTF-16 surrogates in responses",
+    "should_trigger": false
+  },
+  {
+    "id": "negative-bump-package-version-publish",
+    "query": "Bump the package version and publish to npm",
+    "should_trigger": false
+  },
+  {
+    "id": "negative-review-diff-correct",
+    "query": "Review this diff and tell me whether it is correct",
+    "should_trigger": false
+  },
+  {
+    "id": "negative-open-issue-work-next",
+    "query": "Which open issue should I work on next in this repo?",
+    "should_trigger": false
+  },
+  {
+    "id": "negative-explain-how-retry-budget",
+    "query": "Explain how the retry budget in this orchestrator works",
+    "should_trigger": false
+  }
 ]

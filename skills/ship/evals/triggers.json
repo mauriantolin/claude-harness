@@ -1,12 +1,52 @@
 [
-  { "query": "Spec and review both passed on this head. Approved: commit it on a branch and take it to PR-ready.", "should_trigger": true },
-  { "query": "The human authorized opening the pull request for the reviewed state. Do it, with the evidence ledger as the body.", "should_trigger": true },
-  { "query": "Absorb the useful parts of the stale PR #57 into a fresh branch, keeping the original author's credit, and open ours.", "should_trigger": true },
-  { "query": "Merge PR #40 into main.", "should_trigger": false },
-  { "query": "Cut release 1.2.0 and publish to npm.", "should_trigger": false },
-  { "query": "Review this diff before I push it.", "should_trigger": false },
-  { "query": "Implement the feature from the accepted contract.", "should_trigger": false },
-  { "query": "Watch CI and confirm the deployment is serving.", "should_trigger": false },
-  { "query": "Which open issue should I pick up next?", "should_trigger": false },
-  { "query": "Write a good commit message for these changes.", "should_trigger": false }
+  {
+    "id": "positive-spec-review-both-passed",
+    "query": "Spec and review both passed on this head. Approved: commit it on a branch and take it to PR-ready.",
+    "should_trigger": true
+  },
+  {
+    "id": "positive-human-authorized-opening-pull",
+    "query": "The human authorized opening the pull request for the reviewed state. Do it, with the evidence ledger as the body.",
+    "should_trigger": true
+  },
+  {
+    "id": "positive-absorb-useful-parts-stale",
+    "query": "Absorb the useful parts of the stale PR #57 into a fresh branch, keeping the original author's credit, and open ours.",
+    "should_trigger": true
+  },
+  {
+    "id": "negative-merge-pr-#40-main",
+    "query": "Merge PR #40 into main.",
+    "should_trigger": false
+  },
+  {
+    "id": "negative-cut-release-publish-npm",
+    "query": "Cut release 1.2.0 and publish to npm.",
+    "should_trigger": false
+  },
+  {
+    "id": "negative-review-diff-push",
+    "query": "Review this diff before I push it.",
+    "should_trigger": false
+  },
+  {
+    "id": "negative-implement-feature-accepted-contract",
+    "query": "Implement the feature from the accepted contract.",
+    "should_trigger": false
+  },
+  {
+    "id": "negative-watch-ci-confirm-deployment",
+    "query": "Watch CI and confirm the deployment is serving.",
+    "should_trigger": false
+  },
+  {
+    "id": "negative-open-issue-pick-up",
+    "query": "Which open issue should I pick up next?",
+    "should_trigger": false
+  },
+  {
+    "id": "negative-write-good-commit-message",
+    "query": "Write a good commit message for these changes.",
+    "should_trigger": false
+  }
 ]

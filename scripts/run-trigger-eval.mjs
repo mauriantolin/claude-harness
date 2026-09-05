@@ -102,7 +102,7 @@ async function main() {
 		const triggered = judgeTrigger(invoked, opts.skill);
 		const match = usable && triggered === t.should_trigger;
 		console.log(`  ${match ? "✔" : "✖"} expected ${t.should_trigger ? "trigger" : "silence"}, got ${usable ? (triggered ? "trigger" : "silence") : "RUN FAILED"}  ${t.query.slice(0, 70)}`);
-		return { query: t.query, should_trigger: t.should_trigger, triggered, invoked, match, error: usable ? null : r.text };
+		return { id: t.id, query: t.query, should_trigger: t.should_trigger, triggered, invoked, match, error: usable ? null : r.text };
 	});
 	const results = await runWithLimit(tasks, opts.parallel);
 
@@ -118,9 +118,9 @@ async function main() {
 		"",
 		`Model: ${opts.model}. ${matched}/${results.length} matched (${(accuracy * 100).toFixed(1)}%), ${misses} missed trigger(s), ${falsePositives} false positive(s).`,
 		"",
-		"| Expected | Got | Query |",
-		"|---|---|---|",
-		...results.map((r) => `| ${r.should_trigger ? "trigger" : "silence"} | ${r.error ? "run failed" : r.triggered ? "trigger" : "silence"} | ${r.query.replace(/\|/g, "\\|")} |`),
+		"| Case | Expected | Got | Query |",
+		"|---|---|---|---|",
+		...results.map((r) => `| ${r.id} | ${r.should_trigger ? "trigger" : "silence"} | ${r.error ? "run failed" : r.triggered ? "trigger" : "silence"} | ${r.query.replace(/\|/g, "\\|")} |`),
 		"",
 	].join("\n");
 	writeFileSync(join(workspace, "results.md"), md);

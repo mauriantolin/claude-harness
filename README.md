@@ -6,7 +6,7 @@ that marketplace does not publish, plus the machinery that keeps every skill
 here measured. The layout mirrors Railly's so there is one structure to learn.
 
 ```text
-skills/<name>/                stable skills: SKILL.md + evals/{evals.json,triggers.json,fixtures/}
+skills/<name>/                stable skills: SKILL.md + evals/{evals.json,triggers.json,fixtures/<fx>/{base,changed}}
 skills/.experimental/<name>/  where every new skill is born
 cases/<repo>/                 evidence from real work
 foundry/maturity.json         channel + maturity per skill (the registry)
@@ -38,8 +38,9 @@ factory-loop needs it installed, not that it is validated.
 ```sh
 npm test                      # scripts/lib unit tests (node:test, no dependencies)
 npm run validate              # repository content: frontmatter, links, evals, triggers, maturity, marketplace, cases
+npm run verify-fixtures       # materialize every fixture and run its declared verification command
 npm run doctor                # the machine: binaries, plugins, links, factory-loop dependencies, clean Railly clone
-npm run check                 # test + validate + claude plugin validate
+npm run check                 # test + validate + verify-fixtures + claude plugin validate
 ./install.sh                  # link skills and script launchers into ~/.claude (re-runnable)
 ```
 
@@ -73,6 +74,18 @@ invocations. Both need the skill linked into `~/.claude/skills`, which is what
 
 `claude plugin eval` is early-access on this account; when it opens up, the
 suites here are close enough to its shape to port.
+
+### Compatibility with Railly's tooling
+
+`evals.json`, `triggers.json` (with a unique `id` per case) and the
+`fixtures/<name>/{base,changed}` layout with a `verification` command per
+fixture eval are the shapes Railly's `validate-skills.mjs` accepts, and it
+passes over this repository when pointed at it with `RAILLY_SKILLS_REPO`.
+His scripts themselves are Linux tooling (bun, `import.meta.dir`, forward-slash
+paths, CI on ubuntu) and his eval scripts only look at his own checkout; this
+repository carries node ports of the pieces that matter for testing skills,
+and the runners he does not have. Details in
+`foundry/rounds/001-align-to-railly-foundry/decision.md`.
 
 ## Working in a project
 

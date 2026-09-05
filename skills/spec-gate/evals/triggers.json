@@ -1,11 +1,47 @@
 [
-  { "query": "The factory finished and tests are green. Check the head against every acceptance ID in the contract before review.", "should_trigger": true },
-  { "query": "Run the spec gate on this exact head against CONTRACT.md.", "should_trigger": true },
-  { "query": "Did this change actually deliver A1 through A5 and keep the must-not-change behaviors? Judge it against the frozen contract, not the suite.", "should_trigger": true },
-  { "query": "Requirement R3 was dropped by the maintainer mid-review. How should the acceptance report record that?", "should_trigger": true },
-  { "query": "Review this diff for correctness, style and security.", "should_trigger": false },
-  { "query": "Write the acceptance criteria for the export feature before we implement it.", "should_trigger": false },
-  { "query": "The tests fail on CI but pass locally. Find out why.", "should_trigger": false },
-  { "query": "Commit this on a branch and open the PR.", "should_trigger": false },
-  { "query": "Make the suite stronger: mutate the fix and prove the tests go red.", "should_trigger": false }
+  {
+    "id": "positive-factory-finished-tests-green",
+    "query": "The factory finished and tests are green. Check the head against every acceptance ID in the contract before review.",
+    "should_trigger": true
+  },
+  {
+    "id": "positive-spec-gate-exact-head",
+    "query": "Run the spec gate on this exact head against CONTRACT.md.",
+    "should_trigger": true
+  },
+  {
+    "id": "positive-does-change-deliver-a1",
+    "query": "Did this change actually deliver A1 through A5 and keep the must-not-change behaviors? Judge it against the frozen contract, not the suite.",
+    "should_trigger": true
+  },
+  {
+    "id": "positive-requirement-r3-dropped-maintainer",
+    "query": "Requirement R3 was dropped by the maintainer mid-review. How should the acceptance report record that?",
+    "should_trigger": true
+  },
+  {
+    "id": "negative-review-diff-correctness-style",
+    "query": "Review this diff for correctness, style and security.",
+    "should_trigger": false
+  },
+  {
+    "id": "negative-write-acceptance-criteria-export",
+    "query": "Write the acceptance criteria for the export feature before we implement it.",
+    "should_trigger": false
+  },
+  {
+    "id": "negative-tests-fail-on-ci",
+    "query": "The tests fail on CI but pass locally. Find out why.",
+    "should_trigger": false
+  },
+  {
+    "id": "negative-commit-branch-open-pr",
+    "query": "Commit this on a branch and open the PR.",
+    "should_trigger": false
+  },
+  {
+    "id": "negative-make-suite-stronger-mutate",
+    "query": "Make the suite stronger: mutate the fix and prove the tests go red.",
+    "should_trigger": false
+  }
 ]

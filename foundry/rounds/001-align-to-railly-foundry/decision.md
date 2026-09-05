@@ -116,3 +116,42 @@ each delta is about the method, not about whether it was read.
 Every skill moves to `evaluated`: a baseline comparison exists and the
 evidence is incomplete. Nothing is `validated`; nothing was promoted or
 changed on the strength of these numbers.
+
+## Amendment (2026-09-05): byte-compatible with Railly's validator
+
+Running Railly's scripts against this repository (`RAILLY_SKILLS_REPO` set)
+established what they can and cannot do here:
+
+- Only `validate-skills.mjs`, `resolve-source-root.mjs` and `work-item.mjs`
+  read `RAILLY_SKILLS_REPO`. His eval scripts (`setup-skill-eval`,
+  `setup-eval-fixture`, `verify-eval-fixtures`, `aggregate-skill-eval`,
+  `lens-coverage`) resolve his own checkout through `import.meta.dir`, which
+  is bun-only, and never read another repository.
+- On Windows his validator fails against his own repository: skill roots are
+  built with `path.join` (backslashes) and compared with the forward-slash
+  paths in the marketplace. `skills-doctor` audits junction links under
+  `.agents/skills`, an install model this machine does not use.
+  `verify-eval-fixtures` needs `python` on PATH. His CI runs ubuntu + bun.
+- He has no runner that executes the arms and none that reads
+  `triggers.json`; the arms are run by an agent by hand and aggregated after.
+
+Decision: keep this repository Windows-native and make its data shapes pass
+his validator unchanged, rather than fork his repository or run it under WSL.
+
+Changes: every trigger case carries a unique `id`; every fixture has
+`base/` and `changed/`; every fixture eval declares a `verification`
+command and exit code; `scripts/verify-eval-fixtures.mjs` (node port, all
+skills) runs them and `npm run check` includes it; `validate-skills.mjs` and
+`validateTriggers`/`validateEvalSuite` enforce all three.
+
+Two fixture evals changed prompt so that `changed/` is the diff the eval
+starts on: deploy-gate's `unobserved-remote-is-a-gap-not-a-green` now starts
+on an unpushed reviewed change (gate green), and software-factory-maintenance's
+`release-is-a-reviewed-change-with-version-sync` starts on a half-done bump
+(`package.json` at 1.1.0, `version:check` failing). Their round-001 numbers
+predate this and are not comparable to the next run of those two evals.
+
+Proof: a scratch clone of his repository with the one `node:path` import in
+`validate-skills.mjs` switched to `node:path/posix` reports zero errors
+about any skill, trigger, fixture or installer group in this repository; the
+errors that remain are about his own foundry contracts, parsed from his clone.

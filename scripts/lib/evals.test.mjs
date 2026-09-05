@@ -5,7 +5,7 @@ import { aggregate, renderBenchmark, validateEvalSuite, validateTriggers } from 
 const good = {
 	skill_name: "ship",
 	evals: [
-		{ id: 1, name: "one", prompt: "do it", expected_output: "done", assertions: ["Does X"], fixture: "fx", files: [] },
+		{ id: 1, name: "one", prompt: "do it", expected_output: "done", assertions: ["Does X"], fixture: "fx", verification: { command: ["node", "--test"], expected_exit: 0 }, files: [] },
 		{ id: 2, name: "two", prompt: "again", expected_output: "done", assertions: ["Does Y"], files: [] },
 	],
 };
@@ -21,9 +21,11 @@ test("validateEvalSuite reports every structural defect by eval name", () => {
 			{ id: 1, name: "dup", prompt: "", assertions: [] },
 			{ id: 1, name: "dup", prompt: "p", assertions: ["a"], fixture: "missing" },
 			{ id: 3, prompt: "p", assertions: "not-a-list" },
+			{ id: 4, name: "fx-no-check", prompt: "p", assertions: ["a"], fixture: "fx" },
+			{ id: 5, name: "bad-check", prompt: "p", assertions: ["a"], verification: { command: [], expected_exit: "0" } },
 		],
 	};
-	const text = validateEvalSuite(bad, "ship", { fixtures: [] }).join("\n");
+	const text = validateEvalSuite(bad, "ship", { fixtures: ["fx"] }).join("\n");
 	assert.match(text, /skill_name "other" does not match "ship"/);
 	assert.match(text, /dup: prompt is empty/);
 	assert.match(text, /dup: assertions is empty/);
@@ -32,20 +34,29 @@ test("validateEvalSuite reports every structural defect by eval name", () => {
 	assert.match(text, /fixture "missing" does not exist/);
 	assert.match(text, /#3: name is missing/);
 	assert.match(text, /#3: assertions must be a list/);
+	assert.match(text, /fx-no-check: a fixture eval needs a verification/);
+	assert.match(text, /bad-check: verification.command must be a non-empty list/);
+	assert.match(text, /bad-check: verification.expected_exit must be an integer/);
 });
 
-test("validateTriggers wants a non-empty list with both polarities", () => {
+test("validateTriggers wants a non-empty list with unique ids and both polarities", () => {
 	assert.deepEqual(
 		validateTriggers([
-			{ query: "yes", should_trigger: true },
-			{ query: "no", should_trigger: false },
+			{ id: "positive-yes", query: "yes", should_trigger: true },
+			{ id: "negative-no", query: "no", should_trigger: false },
 		]),
 		[],
 	);
-	const text = validateTriggers([{ query: "only positive", should_trigger: true }, { should_trigger: "x" }]).join("\n");
+	const text = validateTriggers([
+		{ id: "positive-a", query: "only positive", should_trigger: true },
+		{ id: "positive-a", should_trigger: "x" },
+		{ query: "no id", should_trigger: true },
+	]).join("\n");
 	assert.match(text, /no negative/);
+	assert.match(text, /#2: duplicate id "positive-a"/);
 	assert.match(text, /#2: query is missing/);
 	assert.match(text, /#2: should_trigger must be boolean/);
+	assert.match(text, /#3: id is missing/);
 	assert.match(validateTriggers([]).join("\n"), /empty/);
 	assert.match(validateTriggers({}).join("\n"), /must be a list/);
 });

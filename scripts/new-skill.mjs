@@ -82,8 +82,8 @@ writeFileSync(
 	join(root, "evals", "triggers.json"),
 	`${JSON.stringify(
 		[
-			{ query: "TODO: a prompt that should load this skill", should_trigger: true },
-			{ query: "TODO: a tempting near miss that must not load it", should_trigger: false },
+			{ id: "positive-TODO", query: "TODO: a prompt that should load this skill", should_trigger: true },
+			{ id: "negative-TODO", query: "TODO: a tempting near miss that must not load it", should_trigger: false },
 		],
 		null,
 		2,

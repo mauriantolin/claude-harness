@@ -2,8 +2,10 @@
 //
 // The suite shape is the one skill-creator and Railly Skills share:
 // `evals.json` with `skill_name` and `evals[]`, each carrying `name`, `prompt`,
-// `assertions` and an optional `fixture`. A run writes one `grading.json` per
-// eval and variant, with `expectations[].passed`, and the aggregate reads that.
+// `assertions` and an optional `fixture` with its `verification`. Trigger
+// cases carry `id`, `query` and `should_trigger`. Both files pass Railly's
+// `validate-skills.mjs` unchanged. A run writes one `grading.json` per eval
+// and variant, with `expectations[].passed`, and the aggregate reads that.
 
 export const VARIANTS = ["no_skill", "current", "candidate"];
 
@@ -37,6 +39,19 @@ export function validateEvalSuite(suite, skillName, { fixtures = [] } = {}) {
 		if (item.fixture !== undefined && !fixtures.includes(item.fixture)) {
 			errors.push(`${label}: fixture "${item.fixture}" does not exist`);
 		}
+		// A fixture eval declares how to prove the materialized fixture is the
+		// state it claims to be (a green suite, a failing check). Same shape as
+		// Railly's: a command array and the exit code it must produce.
+		if (item.fixture !== undefined && item.verification === undefined) {
+			errors.push(`${label}: a fixture eval needs a verification { command, expected_exit }`);
+		}
+		if (item.verification !== undefined) {
+			const v = item.verification;
+			if (!Array.isArray(v?.command) || v.command.length === 0 || !v.command.every((c) => typeof c === "string")) {
+				errors.push(`${label}: verification.command must be a non-empty list of strings`);
+			}
+			if (!Number.isInteger(v?.expected_exit)) errors.push(`${label}: verification.expected_exit must be an integer`);
+		}
 	});
 	return errors;
 }
@@ -45,8 +60,12 @@ export function validateTriggers(triggers) {
 	if (!Array.isArray(triggers)) return ["triggers.json must be a list"];
 	if (triggers.length === 0) return ["triggers.json is empty"];
 	const errors = [];
+	const ids = new Set();
 	triggers.forEach((t, i) => {
 		const label = `#${i + 1}`;
+		if (typeof t?.id !== "string" || t.id.trim() === "") errors.push(`${label}: id is missing`);
+		else if (ids.has(t.id)) errors.push(`${label}: duplicate id "${t.id}"`);
+		ids.add(t?.id);
 		if (typeof t?.query !== "string" || t.query.trim() === "") errors.push(`${label}: query is missing`);
 		if (typeof t?.should_trigger !== "boolean") errors.push(`${label}: should_trigger must be boolean`);
 	});
