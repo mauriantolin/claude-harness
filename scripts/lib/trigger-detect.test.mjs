@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { finalResult, isCompleteRun, judgeTrigger, skillInvocations } from "./trigger-detect.mjs";
+import { finalResult, isCompleteRun, judgeTrigger, skillInvocations, skillLoads } from "./trigger-detect.mjs";
 
 const stream = [
 	'{"type":"system","subtype":"init"}',
@@ -14,6 +14,21 @@ const stream = [
 test("skillInvocations lists every Skill tool call in order, ignoring junk lines", () => {
 	assert.deepEqual(skillInvocations(stream), ["frontend-stack", "vercel:shadcn"]);
 	assert.deepEqual(skillInvocations(""), []);
+});
+
+test("skillLoads keeps only the Skill calls whose result was not an error", () => {
+	const denied = [
+		'{"type":"assistant","message":{"content":[{"type":"tool_use","id":"t1","name":"Skill","input":{"skill":"experimental:factory-loop"}}]}}',
+		'{"type":"user","message":{"content":[{"type":"tool_result","tool_use_id":"t1","content":"Execute skill: experimental:factory-loop","is_error":true}]}}',
+		'{"type":"assistant","message":{"content":[{"type":"tool_use","id":"t2","name":"Skill","input":{"skill":"spec-gate"}}]}}',
+		'{"type":"user","message":{"content":[{"type":"tool_result","tool_use_id":"t2","content":"Launching skill: spec-gate"}]}}',
+		'{"type":"assistant","message":{"content":[{"type":"tool_use","id":"t3","name":"Skill","input":{"skill":"ship"}}]}}',
+		'{"type":"result","result":"done"}',
+	].join("\n");
+	assert.deepEqual(skillInvocations(denied), ["experimental:factory-loop", "spec-gate", "ship"]);
+	assert.deepEqual(skillLoads(denied), ["spec-gate", "ship"]);
+	assert.equal(judgeTrigger(skillLoads(denied), "factory-loop"), false);
+	assert.deepEqual(skillLoads(""), []);
 });
 
 test("finalResult returns the last result event's text, else the last assistant text, else empty", () => {

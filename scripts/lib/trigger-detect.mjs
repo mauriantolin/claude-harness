@@ -57,6 +57,27 @@ export function skillInvocations(streamText) {
 	return names;
 }
 
+// The subset of invocations whose tool_result was not an error: the skills
+// that actually loaded. A plugin skill in a headless run without `Skill`
+// permission is invoked and then denied ("Execute skill: x", is_error), and
+// a run graded on that call would be measuring the model, not the skill.
+export function skillLoads(streamText) {
+	const pending = new Map();
+	const failed = new Set();
+	for (const event of events(streamText)) {
+		const blocks = event?.message?.content;
+		if (!Array.isArray(blocks)) continue;
+		for (const block of blocks) {
+			if (block?.type === "tool_use" && block.name === "Skill" && typeof block.input?.skill === "string") {
+				pending.set(block.id, block.input.skill);
+			} else if (block?.type === "tool_result" && block.is_error === true && pending.has(block.tool_use_id)) {
+				failed.add(block.tool_use_id);
+			}
+		}
+	}
+	return [...pending].filter(([id]) => !failed.has(id)).map(([, name]) => name);
+}
+
 // A plugin-served skill is invoked as `plugin:name`; a user skill as `name`.
 export function judgeTrigger(invocations, skillName) {
 	return invocations.some((n) => n === skillName || n.endsWith(`:${skillName}`));

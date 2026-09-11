@@ -13,6 +13,11 @@
 //     --judge <model>    grader model           (default: haiku)
 //     --parallel <n>     runs in flight         (default: 1)
 //     --candidate-dir <d> plugin dir for the candidate arm (default: this repo)
+//     --evals <file>     evals.json to run instead of the skill's own, for a
+//                        skill this repository does not author (Railly's
+//                        factory-loop, measured under hooks/*/evals/)
+//     --env K=V          set a variable for the agent runs (repeatable); how a
+//                        hook is switched off for a baseline arm
 //     --dry-run          print the plan, run nothing
 //     --regrade <ws>     re-run only the judge over an existing workspace, for
 //                        gradings that failed (add --regrade-all for every run)
@@ -29,7 +34,7 @@ import { fileURLToPath } from "node:url";
 import { runClaude, runWithLimit } from "./lib/claude-cli.mjs";
 import { aggregate, renderBenchmark } from "./lib/evals.mjs";
 import { skillDir } from "./lib/skills.mjs";
-import { finalResult, isCompleteRun, judgeTrigger, skillInvocations } from "./lib/trigger-detect.mjs";
+import { finalResult, isCompleteRun, judgeTrigger, skillInvocations, skillLoads } from "./lib/trigger-detect.mjs";
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -63,6 +68,8 @@ function parseArgs(argv) {
 		judge: "haiku",
 		parallel: 1,
 		candidateDir: REPO,
+		evals: null,
+		env: {},
 		dryRun: false,
 		regrade: null,
 		regradeAll: false,
@@ -76,7 +83,11 @@ function parseArgs(argv) {
 		else if (a === "--judge") opts.judge = argv[++i];
 		else if (a === "--parallel") opts.parallel = Number(argv[++i]) || 1;
 		else if (a === "--candidate-dir") opts.candidateDir = resolve(argv[++i]);
-		else if (a === "--dry-run") opts.dryRun = true;
+		else if (a === "--evals") opts.evals = resolve(argv[++i]);
+		else if (a === "--env") {
+			const [k, ...v] = argv[++i].split("=");
+			opts.env[k] = v.join("=");
+		} else if (a === "--dry-run") opts.dryRun = true;
 		else if (a === "--regrade") opts.regrade = resolve(argv[++i]);
 		else if (a === "--regrade-all") opts.regradeAll = true;
 		else if (!opts.skill && !a.startsWith("--")) opts.skill = a;
@@ -90,11 +101,15 @@ function parseArgs(argv) {
 
 // A fixture run has to branch, commit and write, so it gets write tools,
 // bounded by cwd to a throwaway repository this script just created. A run
-// without a fixture is read-only.
+// without a fixture is read-only. `Skill` is pre-approved in both: a plugin
+// skill asks for permission in a headless run, a user skill does not, and
+// a denied load ("Execute skill: x", is_error) measures the model.
+// SendMessage is out in both: an eval agent denied a clone asked a live
+// session on this machine to run it for it. The cage ends at the process.
 function agentArgs(variantArgs, model, hasFixture) {
 	const args = hasFixture
-		? ["--disallowed-tools", "NotebookEdit", "--dangerously-skip-permissions"]
-		: ["--disallowed-tools", "Bash,Write,Edit,NotebookEdit"];
+		? ["--disallowed-tools", "NotebookEdit,SendMessage", "--dangerously-skip-permissions"]
+		: ["--disallowed-tools", "Bash,Write,Edit,NotebookEdit,SendMessage", "--allowedTools", "Skill"];
 	if (model) args.push("--model", model);
 	// The stream is what says whether the skill actually loaded.
 	return [...args, "--output-format", "stream-json", "--verbose", ...variantArgs];
@@ -160,8 +175,34 @@ Return ONLY a JSON object, no prose and no code fence:
 
 // Re-runs only the judge over an existing workspace, for gradings that failed
 // or when the judge prompt changed. Agent runs are never repeated here.
+// What the agent DID outranks what it said, so the judge reads, alongside the
+// answer, the Skill calls the session stream recorded and, for a fixture run,
+// the repository state. An assertion about delegating to a skill is only
+// observable this way: prose can name a skill it never invoked.
+function buildTranscript(answer, invocations, loads, repo) {
+	const parts = [`## What the agent answered\n${answer}`];
+	const remaining = [...loads];
+	const lines = invocations.map((n) => {
+		const i = remaining.indexOf(n);
+		if (i === -1) return `- ${n} (denied: the skill did not load)`;
+		remaining.splice(i, 1);
+		return `- ${n}`;
+	});
+	parts.push(
+		`## Skills the agent invoked through the Skill tool (from the session stream, in order)\n${lines.length ? lines.join("\n") : "(none)"}`,
+	);
+	if (repo) parts.push(`## Repository state after the run\n${gitState(repo)}`);
+	return parts.join("\n\n");
+}
+
+function evalsPath(opts) {
+	if (opts.evals) return opts.evals;
+	const root = skillDir(REPO, opts.skill);
+	return root ? join(root, "evals", "evals.json") : null;
+}
+
 async function regrade(workspace, opts) {
-	const suite = JSON.parse(readFileSync(join(skillDir(REPO, opts.skill), "evals", "evals.json"), "utf8"));
+	const suite = JSON.parse(readFileSync(evalsPath(opts), "utf8"));
 	const tasks = [];
 	for (const item of suite.evals) {
 		for (const variant of ["no_skill", "current", "candidate"]) {
@@ -181,16 +222,17 @@ async function regrade(workspace, opts) {
 				if (!isCompleteRun(stream)) continue;
 				const answer = finalResult(stream);
 				const invocations = skillInvocations(stream);
-				skillInvoked = judgeTrigger(invocations, opts.skill);
+				const loads = skillLoads(stream);
+				skillInvoked = judgeTrigger(loads, opts.skill);
 				writeFileSync(join(dir, "output.txt"), answer);
 				const repo = join(dir, "repo");
-				if (existsSync(repo)) {
-					writeFileSync(join(dir, "transcript.txt"), `## What the agent answered\n${answer}\n\n## Repository state after the run\n${gitState(repo)}`);
-				}
-				writeFileSync(runFile, `${JSON.stringify({ ...runInfo, ok: true, recovered: true, skill_invoked: skillInvoked, invocations }, null, 2)}\n`);
+				writeFileSync(join(dir, "transcript.txt"), buildTranscript(answer, invocations, loads, existsSync(repo) ? repo : null));
+				writeFileSync(runFile, `${JSON.stringify({ ...runInfo, ok: true, recovered: true, skill_invoked: skillInvoked, invocations, loads }, null, 2)}\n`);
 			}
 			const transcriptFile = join(dir, "transcript.txt");
-			const transcript = readFileSync(existsSync(transcriptFile) ? transcriptFile : join(dir, "output.txt"), "utf8");
+			const transcript = existsSync(transcriptFile)
+				? readFileSync(transcriptFile, "utf8")
+				: buildTranscript(readFileSync(join(dir, "output.txt"), "utf8"), runInfo.invocations ?? [], runInfo.loads ?? runInfo.invocations ?? [], null);
 			tasks.push(async () => {
 				const grading = { skill_invoked: skillInvoked, ...(await grade(item, transcript, opts.judge)) };
 				writeFileSync(gradingFile, `${JSON.stringify(grading, null, 2)}\n`);
@@ -242,6 +284,7 @@ async function runOne({ item, variant, dir, opts }) {
 		prompt: item.prompt,
 		args: agentArgs(VARIANT_ARGS[variant](opts.candidateDir, opts.skill), opts.model, Boolean(repo)),
 		cwd,
+		env: Object.keys(opts.env).length ? opts.env : undefined,
 	});
 	// A session that ran out of turns still produced a transcript worth
 	// grading: what the agent did before stopping is the evidence.
@@ -249,13 +292,14 @@ async function runOne({ item, variant, dir, opts }) {
 	const usable = run.ok || isCompleteRun(stream);
 	const answer = usable ? finalResult(stream) : run.text;
 	const invocations = usable ? skillInvocations(stream) : [];
-	const skillInvoked = judgeTrigger(invocations, opts.skill);
+	const loads = usable ? skillLoads(stream) : [];
+	const skillInvoked = judgeTrigger(loads, opts.skill);
 	writeFileSync(join(dir, "stream.jsonl"), usable ? stream : run.text);
 	writeFileSync(join(dir, "output.txt"), answer);
 	writeFileSync(
 		join(dir, "run.json"),
 		`${JSON.stringify(
-			{ variant, prompt: item.prompt, model: opts.model, judge: opts.judge, cwd, ok: usable, exit_status: run.status, skill_invoked: skillInvoked, invocations },
+			{ variant, prompt: item.prompt, model: opts.model, judge: opts.judge, cwd, env: opts.env, ok: usable, exit_status: run.status, skill_invoked: skillInvoked, invocations, loads },
 			null,
 			2,
 		)}\n`,
@@ -271,13 +315,8 @@ async function runOne({ item, variant, dir, opts }) {
 		return { item, variant, label: "RUN FAILED", grading };
 	}
 
-	// What the agent DID outranks what it said, so the judge reads the
-	// repository state alongside the answer.
-	let transcript = answer;
-	if (repo) {
-		transcript = `## What the agent answered\n${answer}\n\n## Repository state after the run\n${gitState(repo)}`;
-		writeFileSync(join(dir, "transcript.txt"), transcript);
-	}
+	const transcript = buildTranscript(answer, invocations, loads, repo);
+	writeFileSync(join(dir, "transcript.txt"), transcript);
 
 	const grading = { skill_invoked: skillInvoked, ...(await grade(item, transcript, opts.judge)) };
 	writeFileSync(join(dir, "grading.json"), `${JSON.stringify(grading, null, 2)}\n`);
@@ -295,14 +334,13 @@ async function main() {
 		);
 		process.exit(1);
 	}
-	const root = skillDir(REPO, opts.skill);
-	if (!root) {
-		console.error(`no skill named "${opts.skill}" under skills/ or skills/.experimental/`);
+	const suitePath = evalsPath(opts);
+	if (!suitePath) {
+		console.error(`no skill named "${opts.skill}" under skills/ or skills/.experimental/ (pass --evals <file> for a skill this repository does not author)`);
 		process.exit(1);
 	}
-	const evalsPath = join(root, "evals", "evals.json");
-	if (!existsSync(evalsPath)) {
-		console.error(`${opts.skill} has no evals/evals.json`);
+	if (!existsSync(suitePath)) {
+		console.error(`${opts.skill} has no evals at ${suitePath}`);
 		process.exit(1);
 	}
 	if (opts.regrade) {
@@ -310,10 +348,10 @@ async function main() {
 		execFileSync(process.execPath, [join(REPO, "scripts", "aggregate-skill-eval.mjs"), opts.skill, opts.regrade], { stdio: "inherit" });
 		return;
 	}
-	const suite = JSON.parse(readFileSync(evalsPath, "utf8"));
+	const suite = JSON.parse(readFileSync(suitePath, "utf8"));
 	const items = opts.caseName ? suite.evals.filter((e) => e.name === opts.caseName) : suite.evals;
 	if (!items.length) {
-		console.error(`no eval named "${opts.caseName}" in ${evalsPath}`);
+		console.error(`no eval named "${opts.caseName}" in ${suitePath}`);
 		process.exit(1);
 	}
 	for (const v of opts.variants) {
@@ -331,6 +369,7 @@ async function main() {
 	console.log(`variants   ${opts.variants.join(", ")}`);
 	console.log(`runs       ${items.length * opts.variants.length} (parallel ${opts.parallel})`);
 	console.log(`model      ${opts.model ?? "(default)"}   judge ${opts.judge}`);
+	if (Object.keys(opts.env).length) console.log(`env        ${Object.entries(opts.env).map(([k, v]) => `${k}=${v}`).join(" ")}`);
 	console.log(`workspace  ${workspace}\n`);
 
 	if (opts.dryRun) {
