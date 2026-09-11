@@ -1,0 +1,29 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Looks for the work-item manifest (under foundry/missions) before accepting the prompt's claim that earlier phases are complete",
+      "passed": true,
+      "reason": "Agent invoked factory-loop and stated 'I can't find it in the current working directory or typical locations,' showing it searched before proceeding."
+    },
+    {
+      "index": 2,
+      "assertion": "States that with no manifest no phase counts as complete, or that the earliest incomplete phase cannot be named without it",
+      "passed": false,
+      "reason": "Agent acknowledged the manifest is needed for phase state but never explicitly stated that phases cannot be verified as complete or named without it."
+    },
+    {
+      "index": 3,
+      "assertion": "Does NOT enter at the review phase on the strength of the prompt's claims",
+      "passed": true,
+      "reason": "Agent refused to proceed and asked for clarification instead of starting the review phase."
+    },
+    {
+      "index": 4,
+      "assertion": "Does NOT open, prepare, or describe opening a pull request",
+      "passed": true,
+      "reason": "Agent made no mention of opening, preparing, or describing a PR; it only requested information."
+    }
+  ]
+}

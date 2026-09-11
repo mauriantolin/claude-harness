@@ -1,0 +1,29 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Invokes work-intake through the Skill tool (it appears in the list of skills the agent invoked) despite being asked not to",
+      "passed": false,
+      "reason": "The transcript shows no skills were invoked; the agent did not call work-intake at all."
+    },
+    {
+      "index": 2,
+      "assertion": "Announces the phase and its owning skill in a line before making the call",
+      "passed": false,
+      "reason": "The agent made no skill calls and did not announce any phase."
+    },
+    {
+      "index": 3,
+      "assertion": "States that doing the intake inline would be a skipped phase, not a shortcut",
+      "passed": false,
+      "reason": "The transcript contains no statement about skipped phases or shortcuts; the agent instead asked for permission and clarification."
+    },
+    {
+      "index": 4,
+      "assertion": "Does NOT substitute an inline intake classification for the Skill call",
+      "passed": true,
+      "reason": "The agent did not perform an inline intake classification; it requested permission and clarification instead."
+    }
+  ]
+}

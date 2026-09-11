@@ -158,6 +158,45 @@ for (const script of readdirSync(join(REPO, "scripts")).filter((f) => f.endsWith
 	}
 }
 
+// ------------------------------------------------------------------- hooks
+
+// A hook under hooks/<name>/ is live only when its launcher exists AND
+// settings.json runs it on the event it was written for. install.sh does the
+// first; the second is a manual edit, so this is the only place that notices
+// it was never made or was later removed.
+section("hooks (hooks/*/hook.mjs registered in ~/.claude/settings.json)");
+const HOOK_EVENTS = { "factory-loop-checkpoints": { event: "PostToolUse", matcher: "Skill" } };
+const hooksDir = join(REPO, "hooks");
+const hookNames = existsSync(hooksDir)
+	? readdirSync(hooksDir, { withFileTypes: true })
+			.filter((d) => d.isDirectory() && existsSync(join(hooksDir, d.name, "hook.mjs")))
+			.map((d) => d.name)
+	: [];
+for (const name of hookNames) {
+	const launcher = join(CLAUDE_DIR, "hooks", `${name}.mjs`);
+	if (!existsSync(launcher)) {
+		err(`hooks/${name} has no launcher in ~/.claude/hooks (run ./install.sh)`);
+		continue;
+	}
+	if (!readFileSync(launcher, "utf8").includes("claude-harness:launcher")) {
+		err(`~/.claude/hooks/${name}.mjs is not a launcher this repository generated`);
+		continue;
+	}
+	const want = HOOK_EVENTS[name];
+	if (!want) {
+		warn(`hooks/${name}: no event declared in doctor.mjs, cannot check registration`);
+		continue;
+	}
+	const groups = settings.hooks?.[want.event] ?? [];
+	const registered = groups.some(
+		(g) =>
+			(g.matcher ?? "").split("|").includes(want.matcher) &&
+			(g.hooks ?? []).some((h) => h.type === "command" && typeof h.command === "string" && h.command.replace(/\\\\/g, "\\").includes(`${name}.mjs`)),
+	);
+	if (registered) ok(`${name} → ${want.event}(${want.matcher})`);
+	else err(`${name} is linked but not registered: add a ${want.event} hook with matcher "${want.matcher}" running ~/.claude/hooks/${name}.mjs`);
+}
+
 // ------------------------------------------------------ skill dependencies
 
 section("skill dependencies (allowed-tools Skill(...))");

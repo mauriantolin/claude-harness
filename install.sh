@@ -122,6 +122,17 @@ main() {
     link_one "$script" "$CLAUDE_DIR/scripts/$(basename "$script")" || failed=1
   done
 
+  # hooks/<name>/hook.mjs becomes ~/.claude/hooks/<name>.mjs, a launcher like
+  # the scripts, so settings.json points at a stable path while the hook body
+  # and its addendum stay in the working copy. Registering the hook in
+  # settings.json is a one-time manual step; `npm run doctor` checks it.
+  printf 'hooks -> %s/hooks\n' "$CLAUDE_DIR"
+  mkdir -p "$CLAUDE_DIR/hooks"
+  for hook in "$REPO_ROOT"/hooks/*/hook.mjs; do
+    [[ -f "$hook" ]] || continue
+    link_one "$hook" "$CLAUDE_DIR/hooks/$(basename "$(dirname "$hook")").mjs" || failed=1
+  done
+
   if [[ "$failed" -ne 0 ]]; then
     printf '\nSome links were refused. Nothing was destroyed.\n' >&2
     return 1

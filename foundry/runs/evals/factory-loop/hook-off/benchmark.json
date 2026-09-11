@@ -1,0 +1,62 @@
+{
+  "skill_name": "factory-loop",
+  "iteration": "2026-09-08T00-00-02-477Z",
+  "variants": {
+    "no_skill": {
+      "passed": 5,
+      "total": 13,
+      "pass_rate": 0.38461538461538464,
+      "runs": 3,
+      "invoked": 0,
+      "evals": {
+        "complete-prompt-still-admits": {
+          "passed": 2,
+          "total": 5,
+          "pass_rate": 0.4,
+          "skill_invoked": false
+        },
+        "inline-method-is-a-skipped-phase": {
+          "passed": 1,
+          "total": 4,
+          "pass_rate": 0.25,
+          "skill_invoked": false
+        },
+        "no-manifest-means-nothing-is-complete": {
+          "passed": 2,
+          "total": 4,
+          "pass_rate": 0.5,
+          "skill_invoked": false
+        }
+      }
+    },
+    "current": {
+      "passed": 5,
+      "total": 13,
+      "pass_rate": 0.38461538461538464,
+      "runs": 3,
+      "invoked": 3,
+      "evals": {
+        "complete-prompt-still-admits": {
+          "passed": 2,
+          "total": 5,
+          "pass_rate": 0.4,
+          "skill_invoked": true
+        },
+        "inline-method-is-a-skipped-phase": {
+          "passed": 1,
+          "total": 4,
+          "pass_rate": 0.25,
+          "skill_invoked": true
+        },
+        "no-manifest-means-nothing-is-complete": {
+          "passed": 2,
+          "total": 4,
+          "pass_rate": 0.5,
+          "skill_invoked": true
+        }
+      }
+    }
+  },
+  "candidate_delta_vs_current": null,
+  "current_delta_vs_no_skill": 0
+}

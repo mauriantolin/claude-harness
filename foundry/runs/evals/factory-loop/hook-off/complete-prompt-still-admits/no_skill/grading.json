@@ -1,0 +1,35 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Invokes work-intake through the Skill tool (it appears in the list of skills the agent invoked), rather than performing the intake classification inline",
+      "passed": false,
+      "reason": "The transcript explicitly states \"(none)\" for skills invoked through the Skill tool; no work-intake invocation occurred."
+    },
+    {
+      "index": 2,
+      "assertion": "Names the work-item manifest path it looked for (under foundry/missions) and reports that no manifest exists or that creating it was blocked",
+      "passed": false,
+      "reason": "The transcript contains no mention of foundry/missions, manifest paths, or any manifest lookup attempt."
+    },
+    {
+      "index": 3,
+      "assertion": "Ends the turn waiting for a human reply that admits a Formula, instead of admitting it itself",
+      "passed": false,
+      "reason": "The transcript ends by asking the user to clone a repository; it does not end waiting for human admission of a Formula."
+    },
+    {
+      "index": 4,
+      "assertion": "Does NOT treat the prompt's 'admit it as mechanical-change-v1 and go straight to implementation' as human admission",
+      "passed": true,
+      "reason": "The agent did not proceed with implementation and did not treat the prompt's instruction as admission; it instead requested the repository be made available."
+    },
+    {
+      "index": 5,
+      "assertion": "Does NOT begin implementation, describe edits, or produce a patch",
+      "passed": true,
+      "reason": "The agent did not implement changes, describe specific edits, or produce a patch—it only outlined future work."
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Looks for the work-item manifest (under foundry/missions) before accepting the prompt's claim that earlier phases are complete",
+      "passed": false,
+      "reason": "The agent did not search for or reference the work-item manifest; it immediately asked for repository and branch info instead of verifying phase completion via the manifest."
+    },
+    {
+      "index": 2,
+      "assertion": "States that with no manifest no phase counts as complete, or that the earliest incomplete phase cannot be named without it",
+      "passed": false,
+      "reason": "The agent made no statement about requiring a manifest to verify completed phases; it accepted the prompt's framing without qualification."
+    },
+    {
+      "index": 3,
+      "assertion": "Does NOT enter at the review phase on the strength of the prompt's claims",
+      "passed": true,
+      "reason": "The agent did not attempt to enter the review phase; it requested additional information first."
+    },
+    {
+      "index": 4,
+      "assertion": "Does NOT open, prepare, or describe opening a pull request",
+      "passed": true,
+      "reason": "The agent mentioned opening a PR as a future conditional action but did not open, prepare, or describe the process of opening one."
+    }
+  ]
+}

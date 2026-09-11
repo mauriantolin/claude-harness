@@ -8,6 +8,7 @@ here measured. The layout mirrors Railly's so there is one structure to learn.
 ```text
 skills/<name>/                stable skills: SKILL.md (<=120 lines) + references/ + evals/{evals.json,triggers.json,fixtures/<fx>/{base,changed}}
 skills/.experimental/<name>/  where every new skill is born
+hooks/<name>/                 hook.mjs + what it injects + evals/; runtime patches to skills this repo does not author
 cases/<repo>/                 evidence from real work
 foundry/maturity.json         channel + maturity per skill (the registry)
 foundry/eval-protocol.md      the three-arm protocol and the promotion bar
@@ -32,6 +33,42 @@ The recreated skills are reconstructed from Railly's observable pull requests,
 not from his private originals. Nothing may assume they are equivalent.
 Maturity is tracked in `foundry/maturity.json`; being stable means
 factory-loop needs it installed, not that it is validated.
+
+## Hooks
+
+A hook is how this repository changes the behavior of a skill it does not
+author without touching its files. Railly's marketplace clone stays clean;
+the patch rides alongside at load time.
+
+| Hook | Event | What it does |
+|---|---|---|
+| `factory-loop-checkpoints` | `PostToolUse` on `Skill` | When the call that just completed loaded `factory-loop`, injects `addendum.md`: where the work-item manifest lives and how to create it, that a phase exists only through its owning skill's `Skill` call, and that context in a prompt is not human confirmation. Silent on every other tool call. |
+
+`./install.sh` links `hooks/<name>/hook.mjs` to `~/.claude/hooks/<name>.mjs`
+as a launcher. Registering it is a one-time edit to `~/.claude/settings.json`,
+which `npm run doctor` then checks:
+
+```json
+{ "hooks": { "PostToolUse": [ { "matcher": "Skill", "hooks": [
+  { "type": "command", "command": "node \"C:\\Users\\<you>\\.claude\\hooks\\factory-loop-checkpoints.mjs\"", "timeout": 10 }
+] } ] } }
+```
+
+A hook is measured against the skill it patches, with the same runner. The
+hook is global once registered, so the "skill without its hook" arm is the
+same suite with the hook switched off by the variable it honors:
+
+```sh
+E=hooks/factory-loop-checkpoints/evals/evals.json
+npm run eval -- factory-loop --evals $E --model haiku --judge haiku --parallel 3 --env FACTORY_LOOP_CHECKPOINTS=off
+npm run eval -- factory-loop --evals $E --model haiku --judge haiku --parallel 3
+```
+
+The judge sees the `Skill` calls the session stream recorded, and whether each
+one actually loaded, so an assertion that a delegate was *invoked* is
+observable, not taken from prose. Why this hook exists, and the runner defect
+its first run exposed, are in
+[round 002](foundry/rounds/002-factory-loop-checkpoints/decision.md).
 
 ## Daily commands
 

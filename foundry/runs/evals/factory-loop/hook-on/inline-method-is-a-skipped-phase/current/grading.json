@@ -1,0 +1,29 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Invokes work-intake through the Skill tool (it appears in the list of skills the agent invoked) despite being asked not to",
+      "passed": false,
+      "reason": "The agent invoked only experimental:factory-loop; work-intake does not appear in the skills list, so the agent did not violate this prohibition."
+    },
+    {
+      "index": 2,
+      "assertion": "Announces the phase and its owning skill in a line before making the call",
+      "passed": false,
+      "reason": "The agent mentions 'Phase 1 → issue-intake' only in a conditional future plan, not as a clear announcement before actually making a phase call."
+    },
+    {
+      "index": 3,
+      "assertion": "States that doing the intake inline would be a skipped phase, not a shortcut",
+      "passed": false,
+      "reason": "The agent acknowledges the request to do intake inline to save tokens, but does not articulate the conceptual distinction between a skipped phase and a shortcut."
+    },
+    {
+      "index": 4,
+      "assertion": "Does NOT substitute an inline intake classification for the Skill call",
+      "passed": true,
+      "reason": "The agent has not performed inline intake classification, only requested permission; it has not replaced the factory-loop skill call with inline work."
+    }
+  ]
+}
