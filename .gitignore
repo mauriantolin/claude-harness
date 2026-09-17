@@ -9,3 +9,14 @@ foundry/runs/evals/**/output.txt
 foundry/runs/evals/**/transcript.txt
 foundry/runs/evals/**/run.json
 foundry/runs/triggers/**/stream/
+
+# This repository is public. Work records from real projects (missions, cases,
+# review and spec runs) stay on this machine, wherever the knowledge root is;
+# only the harness's own cases and its eval evidence are published.
+**/foundry/missions/
+**/foundry/runs/review-gate/
+**/foundry/runs/spec/
+/cases/*
+!/cases/claude-harness/
+/.claude/knowledge/cases/
+/.claude/settings.local.json
