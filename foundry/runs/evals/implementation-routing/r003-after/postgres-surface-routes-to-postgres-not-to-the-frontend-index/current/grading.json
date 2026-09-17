@@ -1,0 +1,29 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Routes the schema, backfill, index and RLS work to supabase-postgres-best-practices",
+      "passed": true,
+      "reason": "The routing table explicitly assigns 'Postgres schema, migrations, RLS, queries' to supabase-postgres-best-practices, covering all four components."
+    },
+    {
+      "index": 2,
+      "assertion": "Routes the settings toggle to frontend-stack",
+      "passed": true,
+      "reason": "The routing table explicitly assigns 'Settings page UI (admin toggle)' to frontend-stack."
+    },
+    {
+      "index": 3,
+      "assertion": "Does NOT load frontend-stack for the database surface or the Postgres skill for the toggle",
+      "passed": true,
+      "reason": "Only implementation-routing was loaded; neither frontend-stack nor supabase-postgres-best-practices were invoked during routing, and neither skill was inappropriately loaded for the wrong surface."
+    },
+    {
+      "index": 4,
+      "assertion": "Every named surface has exactly one owner",
+      "passed": true,
+      "reason": "The four named surfaces (schema, migrations, RLS, queries) all map to supabase-postgres-best-practices, and the settings UI maps to frontend-stack—no surface has multiple owners."
+    }
+  ]
+}

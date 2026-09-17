@@ -1,0 +1,29 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Routes the schema, backfill, index and RLS work to supabase-postgres-best-practices",
+      "passed": true,
+      "reason": "The routing table assigns all four database surfaces (schema, migration, indexing, RLS) to supabase-postgres-best-practices."
+    },
+    {
+      "index": 2,
+      "assertion": "Routes the settings toggle to frontend-stack",
+      "passed": true,
+      "reason": "The routing table assigns the frontend UI admin toggle to frontend-stack."
+    },
+    {
+      "index": 3,
+      "assertion": "Does NOT load frontend-stack for the database surface or the Postgres skill for the toggle",
+      "passed": true,
+      "reason": "Only implementation-routing was invoked; the transcript shows routing decisions, not skill executions of frontend-stack or Postgres tools."
+    },
+    {
+      "index": 4,
+      "assertion": "Every named surface has exactly one owner",
+      "passed": true,
+      "reason": "All five surfaces have exactly one owner assigned with no conflicts or duplicates."
+    }
+  ]
+}

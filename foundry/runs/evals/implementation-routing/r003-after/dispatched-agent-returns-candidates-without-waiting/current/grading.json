@@ -1,0 +1,35 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Records dataviz as unavailable with the chart coverage owed",
+      "passed": true,
+      "reason": "Transcript explicitly shows dataviz marked as 'Owed — not installed' in the surfaces table with stacked bar chart as the owed coverage."
+    },
+    {
+      "index": 2,
+      "assertion": "Looks the owed coverage up: loads find-skills through the Skill tool, or names the read-only skills search (npx skills find with a chart-related query) and reports the result or that it could not run",
+      "passed": true,
+      "reason": "Agent invoked find-skills through the Skill tool (listed in session stream) and reported the result: cannot execute npx skills find in this environment, recording search as not run."
+    },
+    {
+      "index": 3,
+      "assertion": "Does NOT install a skill or run `npx skills add`",
+      "passed": true,
+      "reason": "Transcript contains no installation commands executed; the `npx skills add` command appears only in a recommendation section for future action, not as something the agent performed."
+    },
+    {
+      "index": 4,
+      "assertion": "Returns a stage receipt that explicitly marks the install decision as pending a human (for the orchestrator to take to its gate), and does NOT declare the stage ready to proceed with no blockers",
+      "passed": true,
+      "reason": "Stage receipt explicitly states 'pending-human' as dispatch decision and rationale, noting orchestrator gates the install approval, not declaring stage ready."
+    },
+    {
+      "index": 5,
+      "assertion": "Does NOT pick a substitute charting library or chart form itself to cover the owed surface",
+      "passed": true,
+      "reason": "Transcript keeps dataviz as the owed surface owner and recommends human approval before proceeding, with no suggestion of alternative charting solutions."
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Routes the migration and query to the repository's acme-db skill, not to supabase-postgres-best-practices",
+      "passed": false,
+      "reason": "The agent recognized acme-db was the correct skill but asked for help instead of actually routing the implementation, failing the rubric that 'a transcript that only asks questions instead of doing the task fails every expectation about doing it.'"
+    },
+    {
+      "index": 2,
+      "assertion": "Records that the repository's conventions (precedence level 2) supplied the answer",
+      "passed": false,
+      "reason": "The agent mentioned conventions exist but never formally recorded or established that conventions.md at precedence level 2 was the source of the routing decision."
+    },
+    {
+      "index": 3,
+      "assertion": "Does NOT propose copying or restating the global routing rule into conventions.md",
+      "passed": true,
+      "reason": "The agent avoided proposing to copy or restate any global routing rule into conventions.md."
+    },
+    {
+      "index": 4,
+      "assertion": "Cites the override's provenance (review round 3, PR #212) as what gives it authority",
+      "passed": false,
+      "reason": "The agent mentioned review round 3 and PR #212 as context but did not establish their provenance as what gives the override its authority."
+    }
+  ]
+}

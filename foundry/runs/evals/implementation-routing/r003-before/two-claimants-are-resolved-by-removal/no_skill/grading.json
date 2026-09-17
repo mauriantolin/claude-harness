@@ -1,0 +1,29 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Resolves the overlap by removing (uninstalling or retiring) one skill rather than by declaring a winner in prose",
+      "passed": false,
+      "reason": "The transcript declares the newer skill as the winner and suggests flagging the conflict for later cleanup, but does not uninstall or retire one of the skills."
+    },
+    {
+      "index": 2,
+      "assertion": "Explains that a declared precedence holds only while every reader honours it, while a removal always holds",
+      "passed": false,
+      "reason": "The transcript contains no explanation of why removal is more reliable than declared precedence; it only asks which skill to use."
+    },
+    {
+      "index": 3,
+      "assertion": "Does NOT load both skills for the same surface",
+      "passed": true,
+      "reason": "The agent loaded no skills at all (the skill invocations section is empty), so it did not load both for the same surface."
+    },
+    {
+      "index": 4,
+      "assertion": "Ends with exactly one owner for the component-structure surface",
+      "passed": false,
+      "reason": "The transcript ends with a question to the user and a suggestion to use the newer skill 'later,' leaving both skills in contention rather than resolving ownership."
+    }
+  ]
+}

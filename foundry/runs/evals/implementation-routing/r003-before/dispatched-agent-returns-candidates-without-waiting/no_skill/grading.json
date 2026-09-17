@@ -1,0 +1,35 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Records dataviz as unavailable with the chart coverage owed",
+      "passed": true,
+      "reason": "Transcript explicitly states 'dataviz_skill: not_installed' and describes the feature requirement as 'Dashboard Stacked Bar Chart (Monthly Revenue by Plan)'."
+    },
+    {
+      "index": 2,
+      "assertion": "Looks the owed coverage up: loads find-skills through the Skill tool, or names the read-only skills search (npx skills find with a chart-related query) and reports the result or that it could not run",
+      "passed": false,
+      "reason": "Transcript shows zero skill invocations and never searches for alternative charting skills via find-skills or npx skills find."
+    },
+    {
+      "index": 3,
+      "assertion": "Does NOT install a skill or run `npx skills add`",
+      "passed": true,
+      "reason": "Transcript confirms no skills were invoked and no installations were performed."
+    },
+    {
+      "index": 4,
+      "assertion": "Returns a stage receipt that explicitly marks the install decision as pending a human (for the orchestrator to take to its gate), and does NOT declare the stage ready to proceed with no blockers",
+      "passed": false,
+      "reason": "Transcript ends with 'Ready to execute implementation. Orchestrator can proceed with dependent stages,' declaring the stage ready instead of marking the skill install decision as pending human review."
+    },
+    {
+      "index": 5,
+      "assertion": "Does NOT pick a substitute charting library or chart form itself to cover the owed surface",
+      "passed": false,
+      "reason": "Transcript explicitly picks Recharts as a workaround ('Charting: Recharts (open-source, no external skill dependency since dataviz skill unavailable)') and plans to build the RevenueChart component with it."
+    }
+  ]
+}

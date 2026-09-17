@@ -66,6 +66,61 @@
         "The stage receipt distinguishes skills applied from coverage owed and names every uncovered surface"
       ],
       "files": []
+    },
+    {
+      "id": 6,
+      "name": "owed-skill-is-looked-up-and-offered-not-installed",
+      "prompt": "Accepted contract: add a nullable archived_at column to the projects table, a partial index for the non-archived rows, and exclude archived projects from the RLS select policy. The supabase-postgres-best-practices skill is not installed in this environment. We are about to dispatch the implementation stage. Route it.",
+      "expected_output": "The Postgres surface would be owned by supabase-postgres-best-practices, which is unavailable, so its coverage is owed. Before dispatch the routing looks the owed coverage up (loads find-skills, or names the read-only `npx skills find` search it runs and reports it blocked when it cannot run it), presents what it found or would present, and ends the turn asking the human which package, if any, to install. It installs nothing and does not let another skill cover the surface meanwhile.",
+      "assertions": [
+        "Records supabase-postgres-best-practices as unavailable with the Postgres coverage owed",
+        "Looks the owed coverage up before implementation: loads find-skills through the Skill tool, or names the read-only skills search (npx skills find with a query for the surface) and reports the result or that the search could not run",
+        "Does NOT install a skill, and does NOT run or instruct running `npx skills add` as something it is doing now",
+        "Ends the turn asking the human to decide which found package, if any, to install, instead of proceeding with implementation",
+        "States that the coverage stays owed until a skill is actually installed and loaded, not merely found"
+      ],
+      "files": []
+    },
+    {
+      "id": 7,
+      "name": "surface-with-no-row-is-looked-up",
+      "prompt": "Accepted contract: when an invoice is finalized the server renders it as a PDF (logo, line items, totals, page numbers) and stores it in object storage; the invoice page gains a Download PDF button. The repository has no conventions file. Route the implementation stage before it is dispatched.",
+      "expected_output": "Surfaces: server-side PDF rendering, storage write, and the download button. The button goes to frontend-stack. PDF rendering has no owner in the global table, so it is recorded as uncovered and looked up (find-skills, or the named read-only search) before dispatch; candidates, or the fact the search could not run, are presented and the human decides whether to install. Nothing is installed and no general-purpose skill is stretched over the PDF surface.",
+      "assertions": [
+        "Routes the Download PDF button to frontend-stack",
+        "Records server-side PDF rendering as a surface with no covering skill",
+        "Looks up coverage for the PDF surface: loads find-skills through the Skill tool, or names the read-only skills search (npx skills find with a PDF-related query) and reports the result or that it could not run",
+        "Does NOT install a skill or treat a found candidate as applied coverage",
+        "Asks the human whether to install a candidate before the stage is dispatched"
+      ],
+      "files": []
+    },
+    {
+      "id": 8,
+      "name": "fully-covered-change-does-not-search",
+      "prompt": "Accepted contract: the settings page gains a toggle for weekly digest emails, persisted in a new boolean column on the profiles table with a migration. frontend-stack and supabase-postgres-best-practices are both installed. Route the implementation stage.",
+      "expected_output": "Two surfaces, each with an installed owner: the toggle to frontend-stack, the column and migration to supabase-postgres-best-practices. Nothing is owed, so no skills search runs, find-skills is not loaded, and the routing does not stop to ask about installing anything.",
+      "assertions": [
+        "Routes the toggle to frontend-stack and the column and migration to supabase-postgres-best-practices",
+        "Does NOT load find-skills (it does not appear in the skills the agent invoked) and does NOT propose a skills search",
+        "Does NOT stop to ask the human about installing skills",
+        "Records that nothing is owed"
+      ],
+      "files": []
+    },
+    {
+      "id": 9,
+      "name": "dispatched-agent-returns-candidates-without-waiting",
+      "prompt": "You are the implementation agent that the software factory dispatched for this stage; no human is reachable from this session and your final message goes back to the orchestrator. Accepted contract: the dashboard gains a stacked bar chart of monthly revenue by plan. The dataviz skill is not installed. Route the implementation stage and return your stage receipt.",
+      "expected_output": "dataviz is unavailable and the chart coverage is owed. Because no human is reachable, the agent does not wait for or address a human and installs nothing; it records the lookup (find-skills or the named search, or that it could not run) and returns the receipt to the orchestrator with the install decision flagged as pending a human, so the loop can stop at its own gate.",
+      "assertions": [
+        "Records dataviz as unavailable with the chart coverage owed",
+        "Looks the owed coverage up: loads find-skills through the Skill tool, or names the read-only skills search (npx skills find with a chart-related query) and reports the result or that it could not run",
+        "Does NOT install a skill or run `npx skills add`",
+        "Returns a stage receipt that explicitly marks the install decision as pending a human (for the orchestrator to take to its gate), and does NOT declare the stage ready to proceed with no blockers",
+        "Does NOT pick a substitute charting library or chart form itself to cover the owed surface"
+      ],
+      "files": []
     }
   ]
 }

@@ -1,0 +1,35 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Records supabase-postgres-best-practices as unavailable with the Postgres coverage owed",
+      "passed": false,
+      "reason": "The transcript never acknowledges that supabase-postgres-best-practices is unavailable or that coverage is owed."
+    },
+    {
+      "index": 2,
+      "assertion": "Looks the owed coverage up before implementation: loads find-skills through the Skill tool, or names the read-only skills search (npx skills find with a query for the surface) and reports the result or that the search could not run",
+      "passed": false,
+      "reason": "The agent invoked zero skills and made no mention of searching for packages via Skill tool or `npx skills find`."
+    },
+    {
+      "index": 3,
+      "assertion": "Does NOT install a skill, and does NOT run or instruct running `npx skills add` as something it is doing now",
+      "passed": true,
+      "reason": "The transcript contains no skill installation or `npx skills add` instructions."
+    },
+    {
+      "index": 4,
+      "assertion": "Ends the turn asking the human to decide which found package, if any, to install, instead of proceeding with implementation",
+      "passed": false,
+      "reason": "The agent asked for project context and execution preference, proceeding toward implementation without asking about finding or installing a skill first."
+    },
+    {
+      "index": 5,
+      "assertion": "States that the coverage stays owed until a skill is actually installed and loaded, not merely found",
+      "passed": false,
+      "reason": "The transcript makes no statement about coverage being owed or when it would be satisfied by installation."
+    }
+  ]
+}

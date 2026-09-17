@@ -25,7 +25,7 @@ scripts/                      validate, doctor, scaffold, eval and trigger runne
 | `spec-gate` | independent Spec check between software-factory and review-gate | recreated from Railly's three published spec runs |
 | `software-factory-maintenance` | maintainer workflow after the loop: queue, merge, release, publish | recreated from the `chore(release)` PRs |
 | `deploy-gate` | after ship: watch CI, verify the deployment serves this commit | ours; Railly covers no deploy surface |
-| `implementation-routing` | software-factory stage 1: which skill owns which surface | ours |
+| `implementation-routing` | software-factory stage 1: which skill owns which surface, and a lookup for what is owed | ours |
 | `frontend-stack` | the frontend index that routing delegates to | ours |
 | `ui-design-language` | the design language frontend-stack routes to | derived from `oa-design` (MIT) |
 

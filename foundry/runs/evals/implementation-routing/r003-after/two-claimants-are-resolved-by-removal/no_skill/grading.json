@@ -1,0 +1,29 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Resolves the overlap by removing (uninstalling or retiring) one skill rather than by declaring a winner in prose",
+      "passed": false,
+      "reason": "The transcript offers prose guidance about how to decide between skills rather than performing an actual removal; it recommends comparing them, checking for supersession, and making a scoped decision but never executes an uninstall or retirement."
+    },
+    {
+      "index": 2,
+      "assertion": "Explains that a declared precedence holds only while every reader honours it, while a removal always holds",
+      "passed": false,
+      "reason": "The transcript never contrasts the fragility of declared precedence with the permanence of removal; it does not explain why one is stronger than the other."
+    },
+    {
+      "index": 3,
+      "assertion": "Does NOT load both skills for the same surface",
+      "passed": false,
+      "reason": "Step 1 explicitly instructs to 'Load both skill guides and identify exactly where they diverge,' violating the expectation."
+    },
+    {
+      "index": 4,
+      "assertion": "Ends with exactly one owner for the component-structure surface",
+      "passed": false,
+      "reason": "The transcript ends without designating a single owner; it leaves multiple options open (prefer new if early-stage, check coexistence, ask the team) and closes with a question rather than a resolution."
+    }
+  ]
+}

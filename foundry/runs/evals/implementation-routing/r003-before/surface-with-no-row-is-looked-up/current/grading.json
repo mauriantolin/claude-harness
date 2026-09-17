@@ -1,0 +1,35 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Routes the Download PDF button to frontend-stack",
+      "passed": true,
+      "reason": "Transcript explicitly assigns 'Invoice page UI (button, interactions)' to 'frontend-stack'."
+    },
+    {
+      "index": 2,
+      "assertion": "Records server-side PDF rendering as a surface with no covering skill",
+      "passed": true,
+      "reason": "Transcript identifies 'Server-side PDF rendering library and architecture' as owed with no covering skill."
+    },
+    {
+      "index": 3,
+      "assertion": "Looks up coverage for the PDF surface: loads find-skills through the Skill tool, or names the read-only skills search (npx skills find with a PDF-related query) and reports the result or that it could not run",
+      "passed": false,
+      "reason": "Transcript shows only 'implementation-routing' was invoked through the Skill tool; no skills search or coverage lookup for PDF rendering is documented."
+    },
+    {
+      "index": 4,
+      "assertion": "Does NOT install a skill or treat a found candidate as applied coverage",
+      "passed": true,
+      "reason": "Transcript shows no skill installation and no candidate skills marked as applied coverage."
+    },
+    {
+      "index": 5,
+      "assertion": "Asks the human whether to install a candidate before the stage is dispatched",
+      "passed": false,
+      "reason": "Transcript never shows the agent asking the human whether to install a candidate; it only recommends clarifying surface owners."
+    }
+  ]
+}

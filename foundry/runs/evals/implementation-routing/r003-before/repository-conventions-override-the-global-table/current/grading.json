@@ -1,0 +1,29 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Routes the migration and query to the repository's acme-db skill, not to supabase-postgres-best-practices",
+      "passed": true,
+      "reason": "Transcript explicitly routes both surfaces to `acme-db` and notes that `supabase-postgres-best-practices` is suppressed by the repository convention override."
+    },
+    {
+      "index": 2,
+      "assertion": "Records that the repository's conventions (precedence level 2) supplied the answer",
+      "passed": true,
+      "reason": "Transcript identifies both surfaces as routed per 'Repository conventions (§2.2)' and cites `.claude/knowledge/cases/acme-web/conventions.md` as the source."
+    },
+    {
+      "index": 3,
+      "assertion": "Does NOT propose copying or restating the global routing rule into conventions.md",
+      "passed": true,
+      "reason": "Transcript contains no proposal, suggestion, or mention of updating or restating any rule into conventions.md; it only applies the existing convention."
+    },
+    {
+      "index": 4,
+      "assertion": "Cites the override's provenance (review round 3, PR #212) as what gives it authority",
+      "passed": false,
+      "reason": "Transcript cites the conventions.md file but does not explicitly mention PR #212 or review round 3 as the provenance that establishes the override's authority."
+    }
+  ]
+}

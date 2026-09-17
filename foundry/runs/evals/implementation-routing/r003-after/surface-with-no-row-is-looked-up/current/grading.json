@@ -1,0 +1,35 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Routes the Download PDF button to frontend-stack",
+      "passed": true,
+      "reason": "The transcript explicitly marks 'Invoice page UI' as routed to 'frontend-stack' with a checkmark in the applied surfaces table."
+    },
+    {
+      "index": 2,
+      "assertion": "Records server-side PDF rendering as a surface with no covering skill",
+      "passed": true,
+      "reason": "The transcript shows PDF rendering marked as '*Owed*' in the surfaces table, indicating it is recorded as uncovered rather than having an applied skill."
+    },
+    {
+      "index": 3,
+      "assertion": "Looks up coverage for the PDF surface: loads find-skills through the Skill tool, or names the read-only skills search (npx skills find with a PDF-related query) and reports the result or that it could not run",
+      "passed": true,
+      "reason": "The transcript invoked find-skills seven times (shown in skills list) and explicitly named the npx command that could not run, then reported findings including the anthropics/skills candidate."
+    },
+    {
+      "index": 4,
+      "assertion": "Does NOT install a skill or treat a found candidate as applied coverage",
+      "passed": true,
+      "reason": "No skill installations occurred; all candidates are recorded as 'Candidate available' or 'Pending' rather than applied, and the transcript explicitly notes 'no install needed' for vercel-storage."
+    },
+    {
+      "index": 5,
+      "assertion": "Asks the human whether to install a candidate before the stage is dispatched",
+      "passed": true,
+      "reason": "The transcript ends with a direct question to the human: 'Which approach for PDF rendering? Install the anthropics skill for templates, or write it directly?' before stage dispatch."
+    }
+  ]
+}

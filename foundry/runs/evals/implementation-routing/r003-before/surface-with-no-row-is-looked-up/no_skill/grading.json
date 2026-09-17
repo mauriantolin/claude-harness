@@ -1,0 +1,35 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Routes the Download PDF button to frontend-stack",
+      "passed": false,
+      "reason": "Transcript mentions \"Frontend UI (polling + Download button)\" as part of the plan but does not explicitly route it as a surface to frontend-stack."
+    },
+    {
+      "index": 2,
+      "assertion": "Records server-side PDF rendering as a surface with no covering skill",
+      "passed": false,
+      "reason": "Transcript discusses PDF generation implementation steps but does not record it as a routed surface or indicate coverage status."
+    },
+    {
+      "index": 3,
+      "assertion": "Looks up coverage for the PDF surface: loads find-skills through the Skill tool, or names the read-only skills search (npx skills find with a PDF-related query) and reports the result or that it could not run",
+      "passed": false,
+      "reason": "Transcript shows zero Skill tool invocations and never mentions attempting npx skills find with a PDF-related query."
+    },
+    {
+      "index": 4,
+      "assertion": "Does NOT install a skill or treat a found candidate as applied coverage",
+      "passed": true,
+      "reason": "Transcript never invoked the Skill tool to install anything nor treated any candidate as applied coverage."
+    },
+    {
+      "index": 5,
+      "assertion": "Asks the human whether to install a candidate before the stage is dispatched",
+      "passed": false,
+      "reason": "Transcript never looked up candidate skills and therefore never asked the human about installing one."
+    }
+  ]
+}

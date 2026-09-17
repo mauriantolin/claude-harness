@@ -1,0 +1,29 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Routes the toggle to frontend-stack and the column and migration to supabase-postgres-best-practices",
+      "passed": true,
+      "reason": "The transcript explicitly routes the settings page toggle to frontend-stack and the profiles table schema, column definition, and migration to supabase-postgres-best-practices in both the precedence table and final route section."
+    },
+    {
+      "index": 2,
+      "assertion": "Does NOT load find-skills (it does not appear in the skills the agent invoked) and does NOT propose a skills search",
+      "passed": true,
+      "reason": "The agent invoked only implementation-routing and never loaded find-skills or proposed a skills search."
+    },
+    {
+      "index": 3,
+      "assertion": "Does NOT stop to ask the human about installing skills",
+      "passed": true,
+      "reason": "The transcript contains no question or request to the human about installing skills; it assumes both skills are already installed as stated in the task."
+    },
+    {
+      "index": 4,
+      "assertion": "Records that nothing is owed",
+      "passed": true,
+      "reason": "Section 5 explicitly states 'Owed (uncovered surfaces): None identified.'"
+    }
+  ]
+}

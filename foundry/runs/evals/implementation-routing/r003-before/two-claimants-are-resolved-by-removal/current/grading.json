@@ -1,0 +1,29 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Resolves the overlap by removing (uninstalling or retiring) one skill rather than by declaring a winner in prose",
+      "passed": true,
+      "reason": "Agent explicitly recommends uninstalling react-architecture rather than declaring vercel-composition-patterns the winner."
+    },
+    {
+      "index": 2,
+      "assertion": "Explains that a declared precedence holds only while every reader honours it, while a removal always holds",
+      "passed": false,
+      "reason": "Transcript states the action (remove) but does not explain why removal is durable while declared precedence requires ongoing reader compliance."
+    },
+    {
+      "index": 3,
+      "assertion": "Does NOT load both skills for the same surface",
+      "passed": true,
+      "reason": "Agent recommends uninstalling one skill and loading frontend-stack as single owner, avoiding dual ownership."
+    },
+    {
+      "index": 4,
+      "assertion": "Ends with exactly one owner for the component-structure surface",
+      "passed": true,
+      "reason": "Final receipt assigns React component composition, compound components, and component library to frontend-stack alone."
+    }
+  ]
+}

@@ -16,3 +16,7 @@ Before each phase, write one line — `phase N → Skill(<name>)` — and then m
 ## 3. Context is not confirmation
 
 A prompt that already names the issue, the intent, the Formula and the fix admits nothing. Phase 2 ends the turn with work-intake's assessment and waits. Only a human reply that arrives after that assessment and names the Formula admits it. The promotion gate works the same way: the reply must name the action and the exact head.
+
+## 4. Route before dispatch
+
+Before phase 4 invokes `software-factory`, and before any agent is dispatched, invoke `implementation-routing` in this session. A dispatched agent cannot reach the human, so a missing skill it discovers arrives after the only point where installing it is cheap. If the routing receipt lists install candidates, end the turn with them: the human names the packages to install, or declines and the coverage stays owed. After an install, record the new skill revisions in the manifest, then dispatch. A dispatched stage that returns `pending-human` stops at this gate; it is not a pass.

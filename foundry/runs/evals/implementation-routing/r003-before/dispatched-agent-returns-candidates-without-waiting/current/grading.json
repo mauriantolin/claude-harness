@@ -1,0 +1,35 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Records dataviz as unavailable with the chart coverage owed",
+      "passed": true,
+      "reason": "Transcript explicitly states 'Chart surface → `dataviz` (NOT INSTALLED; coverage owed)' and includes this in the stage receipt."
+    },
+    {
+      "index": 2,
+      "assertion": "Looks the owed coverage up: loads find-skills through the Skill tool, or names the read-only skills search (npx skills find with a chart-related query) and reports the result or that it could not run",
+      "passed": false,
+      "reason": "Transcript shows only 'implementation-routing' skill was invoked; no attempt to search for available charting skills via find-skills or npx skills find was made or reported."
+    },
+    {
+      "index": 3,
+      "assertion": "Does NOT install a skill or run `npx skills add`",
+      "passed": true,
+      "reason": "Transcript contains no indication of installation attempts; dataviz is identified as not installed but left uninstalled."
+    },
+    {
+      "index": 4,
+      "assertion": "Returns a stage receipt that explicitly marks the install decision as pending a human (for the orchestrator to take to its gate), and does NOT declare the stage ready to proceed with no blockers",
+      "passed": false,
+      "reason": "Stage receipt lists 'Install dataviz skill' as a next step without explicitly marking it as pending human/orchestrator decision; lacks the explicit deference language required."
+    },
+    {
+      "index": 5,
+      "assertion": "Does NOT pick a substitute charting library or chart form itself to cover the owed surface",
+      "passed": true,
+      "reason": "Transcript defers chart implementation to dataviz or documentation; no alternative library or substitute form is proposed."
+    }
+  ]
+}

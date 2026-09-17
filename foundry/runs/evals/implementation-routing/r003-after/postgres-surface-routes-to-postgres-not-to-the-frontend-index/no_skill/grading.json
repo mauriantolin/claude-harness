@@ -1,0 +1,29 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Routes the schema, backfill, index and RLS work to supabase-postgres-best-practices",
+      "passed": false,
+      "reason": "The agent produced a detailed plan but invoked no skills; the transcript shows '(none)' under skills invoked, so no routing to supabase-postgres-best-practices occurred."
+    },
+    {
+      "index": 2,
+      "assertion": "Routes the settings toggle to frontend-stack",
+      "passed": false,
+      "reason": "The agent described the toggle work but did not invoke any skills; no routing to frontend-stack was performed."
+    },
+    {
+      "index": 3,
+      "assertion": "Does NOT load frontend-stack for the database surface or the Postgres skill for the toggle",
+      "passed": true,
+      "reason": "The agent invoked no skills at all, so it successfully avoided loading frontend-stack for database work or Postgres skill for the toggle."
+    },
+    {
+      "index": 4,
+      "assertion": "Every named surface has exactly one owner",
+      "passed": false,
+      "reason": "Without explicit routing via skill invocation, surfaces lack assigned owners; the plan describes work but does not establish clear ownership through the routing mechanism the task requires."
+    }
+  ]
+}

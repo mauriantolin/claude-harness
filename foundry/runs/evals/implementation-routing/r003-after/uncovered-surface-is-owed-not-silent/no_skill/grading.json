@@ -1,0 +1,29 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Records dataviz as unavailable with the chart coverage explicitly owed",
+      "passed": false,
+      "reason": "Transcript records dataviz unavailable but then pivots to 'using platform-native solution' instead of explicitly marking chart coverage as owed/pending."
+    },
+    {
+      "index": 2,
+      "assertion": "Does NOT let frontend-stack or a design skill decide the chart form in dataviz's absence",
+      "passed": true,
+      "reason": "Transcript makes no mention of these skills deciding chart form; chart library selection is not attributed to them."
+    },
+    {
+      "index": 3,
+      "assertion": "Routes the materialized view to supabase-postgres-best-practices and the surrounding page to frontend-stack",
+      "passed": false,
+      "reason": "Transcript says 'Implementation routed to Task #1' but does not explicitly route components to the named skills."
+    },
+    {
+      "index": 4,
+      "assertion": "The stage receipt distinguishes skills applied from coverage owed and names every uncovered surface",
+      "passed": false,
+      "reason": "Receipt lacks a clear section separating applied skills from owed coverage, and does not explicitly name uncovered surfaces."
+    }
+  ]
+}

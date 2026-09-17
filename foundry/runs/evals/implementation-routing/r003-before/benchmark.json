@@ -1,0 +1,134 @@
+{
+  "skill_name": "implementation-routing",
+  "iteration": "2026-09-17T15-57-35-637Z",
+  "variants": {
+    "no_skill": {
+      "passed": 12,
+      "total": 40,
+      "pass_rate": 0.3,
+      "runs": 9,
+      "invoked": 0,
+      "evals": {
+        "dispatched-agent-returns-candidates-without-waiting": {
+          "passed": 2,
+          "total": 5,
+          "pass_rate": 0.4,
+          "skill_invoked": false
+        },
+        "fully-covered-change-does-not-search": {
+          "passed": 2,
+          "total": 4,
+          "pass_rate": 0.5,
+          "skill_invoked": false
+        },
+        "owed-skill-is-looked-up-and-offered-not-installed": {
+          "passed": 1,
+          "total": 5,
+          "pass_rate": 0.2,
+          "skill_invoked": false
+        },
+        "postgres-surface-routes-to-postgres-not-to-the-frontend-index": {
+          "passed": 1,
+          "total": 4,
+          "pass_rate": 0.25,
+          "skill_invoked": false
+        },
+        "repository-conventions-override-the-global-table": {
+          "passed": 3,
+          "total": 4,
+          "pass_rate": 0.75,
+          "skill_invoked": false
+        },
+        "surface-with-no-row-is-looked-up": {
+          "passed": 1,
+          "total": 5,
+          "pass_rate": 0.2,
+          "skill_invoked": false
+        },
+        "surfaces-first-then-one-owner-each": {
+          "passed": 1,
+          "total": 5,
+          "pass_rate": 0.2,
+          "skill_invoked": false
+        },
+        "two-claimants-are-resolved-by-removal": {
+          "passed": 1,
+          "total": 4,
+          "pass_rate": 0.25,
+          "skill_invoked": false
+        },
+        "uncovered-surface-is-owed-not-silent": {
+          "passed": 0,
+          "total": 4,
+          "pass_rate": 0,
+          "skill_invoked": false
+        }
+      }
+    },
+    "current": {
+      "passed": 30,
+      "total": 40,
+      "pass_rate": 0.75,
+      "runs": 9,
+      "invoked": 9,
+      "evals": {
+        "dispatched-agent-returns-candidates-without-waiting": {
+          "passed": 3,
+          "total": 5,
+          "pass_rate": 0.6,
+          "skill_invoked": true
+        },
+        "fully-covered-change-does-not-search": {
+          "passed": 4,
+          "total": 4,
+          "pass_rate": 1,
+          "skill_invoked": true
+        },
+        "owed-skill-is-looked-up-and-offered-not-installed": {
+          "passed": 2,
+          "total": 5,
+          "pass_rate": 0.4,
+          "skill_invoked": true
+        },
+        "postgres-surface-routes-to-postgres-not-to-the-frontend-index": {
+          "passed": 4,
+          "total": 4,
+          "pass_rate": 1,
+          "skill_invoked": true
+        },
+        "repository-conventions-override-the-global-table": {
+          "passed": 3,
+          "total": 4,
+          "pass_rate": 0.75,
+          "skill_invoked": true
+        },
+        "surface-with-no-row-is-looked-up": {
+          "passed": 3,
+          "total": 5,
+          "pass_rate": 0.6,
+          "skill_invoked": true
+        },
+        "surfaces-first-then-one-owner-each": {
+          "passed": 4,
+          "total": 5,
+          "pass_rate": 0.8,
+          "skill_invoked": true
+        },
+        "two-claimants-are-resolved-by-removal": {
+          "passed": 3,
+          "total": 4,
+          "pass_rate": 0.75,
+          "skill_invoked": true
+        },
+        "uncovered-surface-is-owed-not-silent": {
+          "passed": 4,
+          "total": 4,
+          "pass_rate": 1,
+          "skill_invoked": true
+        }
+      }
+    }
+  },
+  "candidate_delta_vs_current": null,
+  "current_delta_vs_no_skill": 0.45
+}

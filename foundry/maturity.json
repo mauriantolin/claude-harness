@@ -19,8 +19,8 @@
       "type": "routing",
       "channel": "stable",
       "maturity": "evaluated",
-      "summary": "Global routing and precedence for the implementation stage; repository specifics defer to cases/<repo>/conventions.md. Round 001 (haiku): 9.5% → 38.1%; triggers 9/10.",
-      "decision": "rounds/001-align-to-railly-foundry/decision.md"
+      "summary": "Global routing and precedence for the implementation stage; repository specifics defer to cases/<repo>/conventions.md. Owed coverage is looked up with find-skills and installed only on a named human approval. Round 003 (haiku): 75.0% → 90.0% on 9 evals; lookup 0/3 → 3/3. Loop-level rule 4 unmeasured.",
+      "decision": "rounds/003-owed-coverage-lookup/decision.md"
     },
     "ship": {
       "type": "delivery",

@@ -1,0 +1,29 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Resolves the overlap by removing (uninstalling or retiring) one skill rather than by declaring a winner in prose",
+      "passed": true,
+      "reason": "The agent explicitly advocates for removal ('resolve it by **removing one**, not by declaring a winner') and rejects prose declaration, providing exact commands for `npx skills remove`."
+    },
+    {
+      "index": 2,
+      "assertion": "Explains that a declared precedence holds only while every reader honours it, while a removal always holds",
+      "passed": true,
+      "reason": "The agent explains the durability difference: 'a declaration that \"skill A wins\" will go stale the day you forget it; removing one doesn't,' establishing that declarations are fragile while removal is durable."
+    },
+    {
+      "index": 3,
+      "assertion": "Does NOT load both skills for the same surface",
+      "passed": true,
+      "reason": "The transcript does not load both vercel-composition-patterns and react-architecture together; it explicitly states 'Loading both is a defect' and recommends against it."
+    },
+    {
+      "index": 4,
+      "assertion": "Ends with exactly one owner for the component-structure surface",
+      "passed": false,
+      "reason": "The transcript ends with a template ('Owned by [chosen-skill]') and defers the decision as 'a **human decision**', leaving the surface without a designated owner."
+    }
+  ]
+}

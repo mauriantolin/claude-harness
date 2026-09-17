@@ -1,0 +1,35 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Records supabase-postgres-best-practices as unavailable with the Postgres coverage owed",
+      "passed": true,
+      "reason": "The transcript explicitly records the skill as unavailable in Step 5 and identifies the three surfaces (schema, indexing, RLS) whose coverage is owed."
+    },
+    {
+      "index": 2,
+      "assertion": "Looks the owed coverage up before implementation: loads find-skills through the Skill tool, or names the read-only skills search (npx skills find with a query for the surface) and reports the result or that the search could not run",
+      "passed": false,
+      "reason": "The transcript does not invoke any Skill tool, does not mention or run npx skills find, and does not report search results; it only states the skill is unavailable without demonstrating a lookup."
+    },
+    {
+      "index": 3,
+      "assertion": "Does NOT install a skill, and does NOT run or instruct running `npx skills add` as something it is doing now",
+      "passed": true,
+      "reason": "The transcript contains no installation instruction or invocation of npx skills add."
+    },
+    {
+      "index": 4,
+      "assertion": "Ends the turn asking the human to decide which found package, if any, to install, instead of proceeding with implementation",
+      "passed": false,
+      "reason": "The transcript asks the human to decide between two paths but does not reference any found or searched packages because the lookup step was not performed."
+    },
+    {
+      "index": 5,
+      "assertion": "States that the coverage stays owed until a skill is actually installed and loaded, not merely found",
+      "passed": false,
+      "reason": "The transcript does not explicitly state that coverage remains owed until actual installation and loading, only that the skill is not currently installed."
+    }
+  ]
+}

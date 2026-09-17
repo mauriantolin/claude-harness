@@ -1,0 +1,29 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Routes the toggle to frontend-stack and the column and migration to supabase-postgres-best-practices",
+      "passed": false,
+      "reason": "The agent provided a planning document but did not actually route work to the skills; no skill invocation or routing mechanism was used to assign tasks to frontend-stack or supabase-postgres-best-practices."
+    },
+    {
+      "index": 2,
+      "assertion": "Does NOT load find-skills (it does not appear in the skills the agent invoked) and Does NOT propose a skills search",
+      "passed": true,
+      "reason": "The transcript shows no find-skills skill was invoked and no skills search was proposed; the skills list shows '(none)'."
+    },
+    {
+      "index": 3,
+      "assertion": "Does NOT stop to ask the human about installing skills",
+      "passed": true,
+      "reason": "The agent did not ask about installing skills; it assumed frontend-stack and supabase-postgres-best-practices were available as stated in the task."
+    },
+    {
+      "index": 4,
+      "assertion": "Records that nothing is owed",
+      "passed": false,
+      "reason": "The agent ended with an open question asking if the human wants help, leaving work incomplete rather than recording that routing was done and nothing remains."
+    }
+  ]
+}

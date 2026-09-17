@@ -1,0 +1,35 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Names the surfaces the change touches before naming any skill",
+      "passed": true,
+      "reason": "Surfaces section appears first and lists four distinct surfaces (frontend rendering, dynamic state & interactivity, data fetching, accessibility) before routing to any skills."
+    },
+    {
+      "index": 2,
+      "assertion": "Routes the visible UI surfaces to frontend-stack",
+      "passed": true,
+      "reason": "Covered surfaces table explicitly routes filter bar UI, list rendering, and re-render without reload to frontend-stack with a source citation."
+    },
+    {
+      "index": 3,
+      "assertion": "Does NOT route to dataviz or supabase-postgres-best-practices for a change with no chart and no Postgres surface, and records them as not applicable rather than omitting them",
+      "passed": false,
+      "reason": "Dataviz is completely omitted with no explicit 'not applicable' notation, and supabase-postgres-best-practices is presented as optional/conditional rather than explicitly recorded as not applicable to the contract."
+    },
+    {
+      "index": 4,
+      "assertion": "Records which precedence level supplied each routing answer",
+      "passed": true,
+      "reason": "Precedence applied section clearly documents the hierarchy checked, and the covered surfaces table's Source column cites Global routing §3."
+    },
+    {
+      "index": 5,
+      "assertion": "Does NOT give frontend guidance of its own (component structure, styling, motion values)",
+      "passed": true,
+      "reason": "Transcript names surfaces and routes to skills without prescribing component structure, styling, or motion values; appropriately defers to frontend-stack for those details."
+    }
+  ]
+}

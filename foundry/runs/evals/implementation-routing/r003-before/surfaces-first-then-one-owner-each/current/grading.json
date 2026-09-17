@@ -1,0 +1,35 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Names the surfaces the change touches before naming any skill",
+      "passed": true,
+      "reason": "Stage 1 lists all surfaces (filter bar UI, list rendering, state, data loading, synchronization) before Stage 3 names frontend-stack as the owner."
+    },
+    {
+      "index": 2,
+      "assertion": "Routes the visible UI surfaces to frontend-stack",
+      "passed": true,
+      "reason": "The routing table and receipt both explicitly route filter bar UI, list rendering, and state management to frontend-stack with the precedence citation."
+    },
+    {
+      "index": 3,
+      "assertion": "Does NOT route to dataviz or supabase-postgres-best-practices for a change with no chart and no Postgres surface, and records them as not applicable rather than omitting them",
+      "passed": false,
+      "reason": "The transcript omits dataviz and supabase-postgres-best-practices entirely rather than recording them as not applicable."
+    },
+    {
+      "index": 4,
+      "assertion": "Records which precedence level supplied each routing answer",
+      "passed": true,
+      "reason": "The routing table includes a Precedence column that cites 'Global routing §3' for frontend-stack and '—' for the owed item."
+    },
+    {
+      "index": 5,
+      "assertion": "Does NOT give frontend guidance of its own (component structure, styling, motion values)",
+      "passed": true,
+      "reason": "The transcript describes surfaces and routes them to frontend-stack, then explicitly defers to frontend-stack for guidance on component choice, state patterns, and accessibility."
+    }
+  ]
+}

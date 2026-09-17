@@ -1,0 +1,29 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Records dataviz as unavailable with the chart coverage explicitly owed",
+      "passed": false,
+      "reason": "The transcript mentions 'No dataviz skill (using recharts)' but does not explicitly record that chart coverage is owed; instead it sidesteps the gap by deciding to use recharts."
+    },
+    {
+      "index": 2,
+      "assertion": "Does NOT let frontend-stack or a design skill decide the chart form in dataviz's absence",
+      "passed": false,
+      "reason": "The transcript directly decides the chart form by stating '(using recharts)', which violates the prohibition against making this decision when dataviz is unavailable."
+    },
+    {
+      "index": 3,
+      "assertion": "Routes the materialized view to supabase-postgres-best-practices and the surrounding page to frontend-stack",
+      "passed": false,
+      "reason": "The transcript lists implementation stages but does not explicitly route to named skills like supabase-postgres-best-practices or frontend-stack."
+    },
+    {
+      "index": 4,
+      "assertion": "The stage receipt distinguishes skills applied from coverage owed and names every uncovered surface",
+      "passed": false,
+      "reason": "The stage receipt lists sequential stages without distinguishing which skills are applied versus which surfaces remain uncovered (e.g., chart form decision is not named as owed)."
+    }
+  ]
+}
