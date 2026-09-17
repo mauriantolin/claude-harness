@@ -20,3 +20,5 @@ foundry/runs/triggers/**/stream/
 !/cases/claude-harness/
 /.claude/knowledge/cases/
 /.claude/settings.local.json
+# An eval fixture's knowledge root is invented for the eval, not a record.
+!/hooks/*/evals/fixtures/**/foundry/missions/

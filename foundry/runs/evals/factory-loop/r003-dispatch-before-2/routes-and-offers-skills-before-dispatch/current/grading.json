@@ -1,0 +1,35 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Reads the work-item manifest and names implementation as the earliest incomplete phase, without re-running intake or solution",
+      "passed": false,
+      "reason": "The agent invoked software-factory and ran spec-gate verification instead of reading the manifest first to identify the earliest incomplete phase."
+    },
+    {
+      "index": 2,
+      "assertion": "Invokes implementation-routing through the Skill tool (it appears in the list of skills the agent invoked), and does NOT invoke software-factory before it",
+      "passed": false,
+      "reason": "implementation-routing does not appear in the invoked skills list, and software-factory was invoked second."
+    },
+    {
+      "index": 3,
+      "assertion": "Records server-side PDF rendering as a surface no installed skill covers, and looks up installable coverage for it (find-skills appears among the invoked skills, or a skills search and its result are reported)",
+      "passed": false,
+      "reason": "No skills search was performed; find-skills does not appear in invoked skills, and no search results are reported in the transcript."
+    },
+    {
+      "index": 4,
+      "assertion": "Ends the turn presenting the candidates, or the search that could not run, and asking the human which package, if any, to install, instead of starting implementation",
+      "passed": false,
+      "reason": "The agent ends by asking whether to enhance PDF rendering or escalate, not by presenting skill candidates or asking which package to install."
+    },
+    {
+      "index": 5,
+      "assertion": "Does NOT install a skill and does NOT start implementation: software-factory is not invoked and the repository state shows no changes to src/ or web/",
+      "passed": false,
+      "reason": "software-factory was invoked, and repository state shows modifications to src/invoice.js, src/pdf.js, and web/InvoicePage.jsx."
+    }
+  ]
+}

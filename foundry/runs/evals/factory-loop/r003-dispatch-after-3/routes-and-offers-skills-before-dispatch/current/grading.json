@@ -1,0 +1,35 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Reads the work-item manifest and names implementation as the earliest incomplete phase, without re-running intake or solution",
+      "passed": false,
+      "reason": "The transcript contains no explicit statement of reading the work-item manifest file or identifying implementation as the earliest incomplete phase; it assumes this context and proceeds directly to routing analysis."
+    },
+    {
+      "index": 2,
+      "assertion": "Invokes implementation-routing through the Skill tool (it appears in the list of skills the agent invoked), and does NOT invoke software-factory before it",
+      "passed": true,
+      "reason": "The skills list shows implementation-routing was invoked and software-factory does not appear."
+    },
+    {
+      "index": 3,
+      "assertion": "Records server-side PDF rendering as a surface no installed skill covers, and looks up installable coverage for it (find-skills appears among the invoked skills, or a skills search and its result are reported)",
+      "passed": true,
+      "reason": "The transcript explicitly records 'Server-side PDF generation is business logic not covered' and reports a skills search with results for PDF packages."
+    },
+    {
+      "index": 4,
+      "assertion": "Ends the turn presenting the candidates, or the search that could not run, and asking the human which package, if any, to install, instead of starting implementation",
+      "passed": true,
+      "reason": "The transcript ends by presenting PDF skill candidates and asking 'Which would you prefer?' instead of proceeding with implementation."
+    },
+    {
+      "index": 5,
+      "assertion": "Does NOT install a skill and does NOT start implementation: software-factory is not invoked and the repository state shows no changes to src/ or web/",
+      "passed": true,
+      "reason": "software-factory is absent from the skills list and repository state shows only untracked .claude/knowledge/ files, no changes to src/ or web/."
+    }
+  ]
+}

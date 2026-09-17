@@ -18,6 +18,9 @@
 //                        factory-loop, measured under hooks/*/evals/)
 //     --env K=V          set a variable for the agent runs (repeatable); how a
 //                        hook is switched off for a baseline arm
+//     --deny <rule>      add a permission rule the agent may not use
+//                        (repeatable), e.g. "Bash(npx skills add:*)"; holds
+//                        in fixture runs too, where permissions are skipped
 //     --dry-run          print the plan, run nothing
 //     --regrade <ws>     re-run only the judge over an existing workspace, for
 //                        gradings that failed (add --regrade-all for every run)
@@ -32,6 +35,7 @@ import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { runClaude, runWithLimit } from "./lib/claude-cli.mjs";
+import { diffSnapshots, snapshotDirs } from "./lib/environment-guard.mjs";
 import { aggregate, renderBenchmark } from "./lib/evals.mjs";
 import { skillDir } from "./lib/skills.mjs";
 import { finalResult, isCompleteRun, judgeTrigger, skillInvocations, skillLoads } from "./lib/trigger-detect.mjs";
@@ -70,6 +74,7 @@ function parseArgs(argv) {
 		candidateDir: REPO,
 		evals: null,
 		env: {},
+		deny: [],
 		dryRun: false,
 		regrade: null,
 		regradeAll: false,
@@ -87,7 +92,8 @@ function parseArgs(argv) {
 		else if (a === "--env") {
 			const [k, ...v] = argv[++i].split("=");
 			opts.env[k] = v.join("=");
-		} else if (a === "--dry-run") opts.dryRun = true;
+		} else if (a === "--deny") opts.deny.push(argv[++i]);
+		else if (a === "--dry-run") opts.dryRun = true;
 		else if (a === "--regrade") opts.regrade = resolve(argv[++i]);
 		else if (a === "--regrade-all") opts.regradeAll = true;
 		else if (!opts.skill && !a.startsWith("--")) opts.skill = a;
@@ -106,10 +112,13 @@ function parseArgs(argv) {
 // a denied load ("Execute skill: x", is_error) measures the model.
 // SendMessage is out in both: an eval agent denied a clone asked a live
 // session on this machine to run it for it. The cage ends at the process.
-function agentArgs(variantArgs, model, hasFixture) {
+// A --deny rule is added to both; a disallowed rule still holds under
+// --dangerously-skip-permissions (checked 2026-09-17 with a canary command).
+function agentArgs(variantArgs, model, hasFixture, deny = []) {
+	const denied = (base) => [base, ...deny].join(",");
 	const args = hasFixture
-		? ["--disallowed-tools", "NotebookEdit,SendMessage", "--dangerously-skip-permissions"]
-		: ["--disallowed-tools", "Bash,Write,Edit,NotebookEdit,SendMessage", "--allowedTools", "Skill"];
+		? ["--disallowed-tools", denied("NotebookEdit,SendMessage"), "--dangerously-skip-permissions"]
+		: ["--disallowed-tools", denied("Bash,Write,Edit,NotebookEdit,SendMessage"), "--allowedTools", "Skill"];
 	if (model) args.push("--model", model);
 	// The stream is what says whether the skill actually loaded.
 	return [...args, "--output-format", "stream-json", "--verbose", ...variantArgs];
@@ -272,7 +281,9 @@ async function runOne({ item, variant, dir, opts }) {
 	let repo = null;
 	if (item.fixture) {
 		repo = join(dir, "repo");
-		execFileSync(process.execPath, [join(REPO, "scripts", "setup-eval-fixture.mjs"), opts.skill, item.fixture, repo], {
+		// A suite passed with --evals keeps its fixtures beside it.
+		const fixturesRoot = opts.evals ? [join(dirname(opts.evals), "fixtures")] : [];
+		execFileSync(process.execPath, [join(REPO, "scripts", "setup-eval-fixture.mjs"), opts.skill, item.fixture, repo, ...fixturesRoot], {
 			stdio: "pipe",
 		});
 		cwd = repo;
@@ -280,9 +291,10 @@ async function runOne({ item, variant, dir, opts }) {
 		cwd = mkdtempSync(join(tmpdir(), `harness-eval-${opts.skill}-`));
 	}
 
+	const before = snapshotDirs();
 	const run = await runClaude({
 		prompt: item.prompt,
-		args: agentArgs(VARIANT_ARGS[variant](opts.candidateDir, opts.skill), opts.model, Boolean(repo)),
+		args: agentArgs(VARIANT_ARGS[variant](opts.candidateDir, opts.skill), opts.model, Boolean(repo), opts.deny),
 		cwd,
 		env: Object.keys(opts.env).length ? opts.env : undefined,
 	});
@@ -294,12 +306,18 @@ async function runOne({ item, variant, dir, opts }) {
 	const invocations = usable ? skillInvocations(stream) : [];
 	const loads = usable ? skillLoads(stream) : [];
 	const skillInvoked = judgeTrigger(loads, opts.skill);
+	// With --parallel above 1 another run may be the one that changed it; the
+	// flag says the workspace needs a look, not which run to blame.
+	const environmentChanged = diffSnapshots(before, snapshotDirs());
+	if (environmentChanged.length) {
+		console.warn(`!! ${item.name} / ${variant}: skill directories changed during the run: ${JSON.stringify(environmentChanged)}`);
+	}
 	writeFileSync(join(dir, "stream.jsonl"), usable ? stream : run.text);
 	writeFileSync(join(dir, "output.txt"), answer);
 	writeFileSync(
 		join(dir, "run.json"),
 		`${JSON.stringify(
-			{ variant, prompt: item.prompt, model: opts.model, judge: opts.judge, cwd, env: opts.env, ok: usable, exit_status: run.status, skill_invoked: skillInvoked, invocations, loads },
+			{ variant, prompt: item.prompt, model: opts.model, judge: opts.judge, cwd, env: opts.env, deny: opts.deny, ok: usable, exit_status: run.status, skill_invoked: skillInvoked, invocations, loads, environment_changed: environmentChanged },
 			null,
 			2,
 		)}\n`,
@@ -330,7 +348,7 @@ async function main() {
 	const opts = parseArgs(process.argv.slice(2));
 	if (!opts.skill) {
 		console.error(
-			"usage: node scripts/run-skill-eval.mjs <skill> [--variants a,b] [--case n] [--out d] [--model m] [--judge m] [--parallel n] [--dry-run]",
+			"usage: node scripts/run-skill-eval.mjs <skill> [--variants a,b] [--case n] [--out d] [--model m] [--judge m] [--parallel n] [--evals f] [--env K=V] [--deny rule] [--dry-run]",
 		);
 		process.exit(1);
 	}

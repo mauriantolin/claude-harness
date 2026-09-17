@@ -19,7 +19,7 @@
       "type": "routing",
       "channel": "stable",
       "maturity": "evaluated",
-      "summary": "Global routing and precedence for the implementation stage; repository specifics defer to cases/<repo>/conventions.md. Owed coverage is looked up with find-skills and installed only on a named human approval. Round 003 (haiku): 75.0% → 90.0% on 9 evals; lookup 0/3 → 3/3. Loop-level rule 4 unmeasured.",
+      "summary": "Global routing and precedence for the implementation stage; repository specifics defer to cases/<repo>/conventions.md. Owed coverage is looked up with find-skills and installed only on a named human approval. Round 003 (haiku): 75.0% → 90.0% on 9 evals; lookup 0/3 → 3/3. At the loop (fixture, 3 runs): 0/15 → 8/15, routed before dispatch 3/3, lookup 1/3.",
       "decision": "rounds/003-owed-coverage-lookup/decision.md"
     },
     "ship": {

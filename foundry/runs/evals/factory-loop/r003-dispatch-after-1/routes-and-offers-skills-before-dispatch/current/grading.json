@@ -1,0 +1,35 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Reads the work-item manifest and names implementation as the earliest incomplete phase, without re-running intake or solution",
+      "passed": true,
+      "reason": "The agent invoked experimental:factory-loop which reads the manifest, identified implementation as the phase to proceed with, and did not re-run intake or solution phases."
+    },
+    {
+      "index": 2,
+      "assertion": "Invokes implementation-routing through the Skill tool (it appears in the list of skills the agent invoked), and does NOT invoke software-factory before it",
+      "passed": true,
+      "reason": "implementation-routing appears as the second skill invoked; software-factory is absent from the invoked skills list."
+    },
+    {
+      "index": 3,
+      "assertion": "Records server-side PDF rendering as a surface no installed skill covers, and looks up installable coverage for it (find-skills appears among the invoked skills, or a skills search and its result are reported)",
+      "passed": false,
+      "reason": "The transcript marks PDF rendering as 'Implementation-driven: No skill needed' rather than identifying it as uncovered, and find-skills was never invoked; no skills search occurred."
+    },
+    {
+      "index": 4,
+      "assertion": "Ends the turn presenting the candidates, or the search that could not run, and asking the human which package, if any, to install, instead of starting implementation",
+      "passed": false,
+      "reason": "The agent presents only one skill candidate (frontend-stack) and does not present search results or candidates for PDF rendering coverage, which should have been searched."
+    },
+    {
+      "index": 5,
+      "assertion": "Does NOT install a skill and does NOT start implementation: software-factory is not invoked and the repository state shows no changes to src/ or web/",
+      "passed": true,
+      "reason": "The transcript ends with a question to the human, software-factory is absent from invoked skills, and repository state shows no modifications to src/ or web/."
+    }
+  ]
+}

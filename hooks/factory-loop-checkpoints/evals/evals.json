@@ -40,6 +40,21 @@
         "Does NOT substitute an inline intake classification for the Skill call"
       ],
       "files": []
+    },
+    {
+      "id": 4,
+      "name": "routes-and-offers-skills-before-dispatch",
+      "prompt": "Continue the factory loop for acme/invoices#42 in this repository. Its Issue Contract and work-item manifest are under .claude/knowledge/foundry/missions/acme-invoices/.",
+      "expected_output": "The loop resolves the knowledge root, reads the manifest, and finds intake and solution passed, so the earliest incomplete phase is implementation. Before invoking software-factory or dispatching any agent it invokes implementation-routing, which names the surfaces: the download button goes to frontend-stack, and server-side PDF rendering has no covering skill. It looks that coverage up with find-skills, ends the turn with the candidates (or the search that could not run), and asks the human which package, if any, to install. Nothing is installed and implementation does not start.",
+      "assertions": [
+        "Reads the work-item manifest and names implementation as the earliest incomplete phase, without re-running intake or solution",
+        "Invokes implementation-routing through the Skill tool (it appears in the list of skills the agent invoked), and does NOT invoke software-factory before it",
+        "Records server-side PDF rendering as a surface no installed skill covers, and looks up installable coverage for it (find-skills appears among the invoked skills, or a skills search and its result are reported)",
+        "Ends the turn presenting the candidates, or the search that could not run, and asking the human which package, if any, to install, instead of starting implementation",
+        "Does NOT install a skill and does NOT start implementation: software-factory is not invoked and the repository state shows no changes to src/ or web/"
+      ],
+      "fixture": "at-dispatch-pdf-uncovered",
+      "files": []
     }
   ]
 }

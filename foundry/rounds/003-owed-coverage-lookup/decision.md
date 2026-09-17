@@ -56,8 +56,47 @@ Workspaces: `foundry/runs/evals/implementation-routing/r003-before` and `r003-af
 3. **Eval 7 loaded `find-skills` six times.** With Bash denied the search cannot
    run and the agent retried instead of recording "not run". Cost, not a wrong
    answer.
-4. **Rule 4 is unmeasured.** A loop-level eval needs a manifest at phase 4, which
-   needs a fixture, and a fixture run gets Bash with permissions skipped, so a
-   failing arm could really run `npx skills add -g`. Not run until the runner can
-   deny that command.
+4. **Eval 7 and the loop share a weakness**; see the rule 4 results below.
 5. **A haiku run is a floor**, as in rounds 001 and 002.
+
+## Rule 4 at the loop (same day)
+
+Measuring the loop needed a manifest at phase 4, so a fixture, and a fixture run
+has Bash with permissions skipped: a failing arm could really run
+`npx skills add -g` on this machine. The runner gained two guards first:
+
+| # | Decision | Why |
+|---|---|---|
+| D5 | `--deny <rule>` appends to `--disallowed-tools` in every arm | A canary (`Bash(echo canary-deny:*)`) showed a disallowed rule still holds under `--dangerously-skip-permissions` |
+| D6 | Each run lists `~/.claude/skills` and `~/.agents/skills` before and after, and records `environment_changed` | A prefix rule is not an intent: `bash -c "npx skills add ..."` passes it. What was denied is prevented; what slipped through is at least seen |
+| D7 | A suite passed with `--evals` keeps its fixtures beside it (`hooks/<name>/evals/fixtures/`) | factory-loop is not ours, so its fixture cannot live under `skills/` |
+
+Eval 4 (`routes-and-offers-skills-before-dispatch`) materializes `acme/invoices`
+with its own knowledge root: an admitted contract for a server-side PDF invoice
+plus a download button, and a manifest whose intake and solution passed with
+pinned revisions. The before arm ran the addendum and routing skill as of
+`08ff893`, restored afterwards. Three runs per arm, `haiku`, installs denied.
+No run changed the skill directories.
+
+Workspaces: `foundry/runs/evals/factory-loop/r003-dispatch-{before,after}-{1,2,3}`.
+
+| Arm | Passed | Routed before `software-factory` | Stopped before implementing | Looked up PDF coverage |
+|---|---:|---:|---:|---:|
+| before | 0/15 | 0/3 | 0/3 | 0/3 |
+| after | 8/15 | 3/3 | 2/3 | 1/3 |
+
+1. **Without rule 4 the loop implements immediately.** All three before runs
+   went from `factory-loop` straight into `software-factory`, wrote the PDF
+   code, and one reached `ship` asking to commit. That is the question that
+   opened this round, answered: nobody asked about skills.
+2. **Rule 4 moves routing ahead of dispatch every time.** In two of three it
+   also held the gate; in the third it routed, then dispatched anyway.
+3. **The lookup itself is the weak link.** Only one run searched and offered PDF
+   candidates. Another labelled PDF rendering "implementation-driven, no skill
+   needed" and offered to install `frontend-stack`, which is already installed.
+   Routing lets the model decide a surface needs no skill, and that exit is
+   taken. Round 004 candidate: a surface without a routed owner is looked up,
+   with no judgement about whether it deserves a skill.
+4. **The judge cannot see file reads.** "Reads the manifest" failed in runs that
+   plainly acted on it; the transcript lists Skill calls and repository state,
+   not Read or Bash calls.

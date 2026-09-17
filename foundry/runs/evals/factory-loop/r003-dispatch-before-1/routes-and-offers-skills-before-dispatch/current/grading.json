@@ -1,0 +1,35 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Reads the work-item manifest and names implementation as the earliest incomplete phase, without re-running intake or solution",
+      "passed": false,
+      "reason": "Transcript shows completion of implementation, spec, and review with no evidence of reading the manifest or identifying phases."
+    },
+    {
+      "index": 2,
+      "assertion": "Invokes implementation-routing through the Skill tool (it appears in the list of skills the agent invoked), and does NOT invoke software-factory before it",
+      "passed": false,
+      "reason": "implementation-routing does not appear in the invoked skills list; experimental:software-factory was invoked instead."
+    },
+    {
+      "index": 3,
+      "assertion": "Records server-side PDF rendering as a surface no installed skill covers, and looks up installable coverage for it (find-skills appears among the invoked skills, or a skills search and its result are reported)",
+      "passed": false,
+      "reason": "Transcript shows PDF generation already completed with no mention of identifying uncovered surfaces or searching for skills."
+    },
+    {
+      "index": 4,
+      "assertion": "Ends the turn presenting the candidates, or the search that could not run, and asking the human which package, if any, to install, instead of starting implementation",
+      "passed": false,
+      "reason": "Agent ended asking about commit and PR creation after implementation was already completed, not asking which package to install."
+    },
+    {
+      "index": 5,
+      "assertion": "Does NOT install a skill and does NOT start implementation: software-factory is not invoked and the repository state shows no changes to src/ or web/",
+      "passed": false,
+      "reason": "experimental:software-factory was invoked and repository state shows changes to src/invoice.js and web/InvoicePage.jsx."
+    }
+  ]
+}

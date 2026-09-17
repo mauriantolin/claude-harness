@@ -1,0 +1,206 @@
+{
+  "schema_version": 1,
+  "work_item": {
+    "source": "https://github.com/acme/invoices/issues/42",
+    "repository": "acme/invoices",
+    "cwd": ".",
+    "base_sha": null,
+    "head_sha": null,
+    "dirty_digest": null,
+    "authorization": "local-write",
+    "profile": "standard",
+    "budget_minutes": 60,
+    "budget_started_at": "2026-09-16T14:00:00.000Z",
+    "budget_escalation": null
+  },
+  "skill_revisions": {
+    "work-intake": {
+      "revision": "77fdde3e8d7e",
+      "digest": "sha256:cb7d2bc8af6c8b75d8efe1fa9ac72eb695ec4da6bb4a35201791f14f4f81dc4c",
+      "path": "~/.claude/plugins/cache/railly-skills/experimental/77fdde3e8d7e/skills/.experimental/work-intake/SKILL.md",
+      "status": "exact"
+    },
+    "solution-gate": {
+      "revision": "77fdde3e8d7e",
+      "digest": "sha256:9b107d97e248ef307d93d38eaac56cec3f4738aaa46d9714907586286ada3006",
+      "path": "~/.claude/plugins/cache/railly-skills/experimental/77fdde3e8d7e/skills/solution-gate/SKILL.md",
+      "status": "exact"
+    }
+  },
+  "orchestration": {
+    "execution_mode": "single_context",
+    "degraded_from": null,
+    "independence_gap": "No independent runtime has been selected for this work item.",
+    "schema_failures": 0,
+    "operations": []
+  },
+  "stages": {
+    "intake": {
+      "status": "pass",
+      "skill": "work-intake",
+      "skill_revision": "77fdde3e8d7e",
+      "head_sha": null,
+      "started_at": "2026-09-16T14:00:00.000Z",
+      "finished_at": "2026-09-16T14:12:00.000Z",
+      "duration_ms": 720000,
+      "evidence": [
+        "42.md#status: admitted as non-mechanical change by the maintainer"
+      ],
+      "reason": null,
+      "receipt_id": null,
+      "fingerprint": null
+    },
+    "solution": {
+      "status": "pass",
+      "skill": "solution-gate",
+      "skill_revision": "77fdde3e8d7e",
+      "head_sha": null,
+      "started_at": "2026-09-16T14:15:00.000Z",
+      "finished_at": "2026-09-16T14:48:00.000Z",
+      "duration_ms": 1980000,
+      "evidence": [
+        "42.md#shape: shape A accepted, one slice"
+      ],
+      "reason": null,
+      "receipt_id": null,
+      "fingerprint": null
+    },
+    "implementation": {
+      "status": "pending",
+      "skill": null,
+      "skill_revision": null,
+      "head_sha": null,
+      "started_at": null,
+      "finished_at": null,
+      "duration_ms": null,
+      "evidence": [],
+      "reason": null,
+      "receipt_id": null,
+      "fingerprint": null
+    },
+    "spec": {
+      "status": "pending",
+      "skill": null,
+      "skill_revision": null,
+      "head_sha": null,
+      "started_at": null,
+      "finished_at": null,
+      "duration_ms": null,
+      "evidence": [],
+      "reason": null,
+      "receipt_id": null,
+      "fingerprint": null
+    },
+    "test_strength": {
+      "status": "pending",
+      "skill": null,
+      "skill_revision": null,
+      "head_sha": null,
+      "started_at": null,
+      "finished_at": null,
+      "duration_ms": null,
+      "evidence": [],
+      "reason": null,
+      "receipt_id": null,
+      "fingerprint": null
+    },
+    "resilience": {
+      "status": "pending",
+      "skill": null,
+      "skill_revision": null,
+      "head_sha": null,
+      "started_at": null,
+      "finished_at": null,
+      "duration_ms": null,
+      "evidence": [],
+      "reason": null,
+      "receipt_id": null,
+      "fingerprint": null
+    },
+    "review": {
+      "status": "pending",
+      "skill": null,
+      "skill_revision": null,
+      "head_sha": null,
+      "started_at": null,
+      "finished_at": null,
+      "duration_ms": null,
+      "evidence": [],
+      "reason": null,
+      "receipt_id": null,
+      "fingerprint": null
+    },
+    "before_after": {
+      "status": "pending",
+      "skill": null,
+      "skill_revision": null,
+      "head_sha": null,
+      "started_at": null,
+      "finished_at": null,
+      "duration_ms": null,
+      "evidence": [],
+      "reason": null,
+      "receipt_id": null,
+      "fingerprint": null
+    },
+    "promotion": {
+      "status": "pending",
+      "skill": null,
+      "skill_revision": null,
+      "head_sha": null,
+      "started_at": null,
+      "finished_at": null,
+      "duration_ms": null,
+      "evidence": [],
+      "reason": null,
+      "receipt_id": null,
+      "fingerprint": null
+    },
+    "handoff": {
+      "status": "pending",
+      "skill": null,
+      "skill_revision": null,
+      "head_sha": null,
+      "started_at": null,
+      "finished_at": null,
+      "duration_ms": null,
+      "evidence": [],
+      "reason": null,
+      "receipt_id": null,
+      "fingerprint": null
+    },
+    "case": {
+      "status": "pending",
+      "skill": null,
+      "skill_revision": null,
+      "head_sha": null,
+      "started_at": null,
+      "finished_at": null,
+      "duration_ms": null,
+      "evidence": [],
+      "reason": null,
+      "receipt_id": null,
+      "fingerprint": null
+    }
+  },
+  "outcome": {
+    "status": "unknown",
+    "delivery": "unknown",
+    "external_findings": null,
+    "review_rounds": null,
+    "regression_7d": null,
+    "regression_30d": null,
+    "human_corrections": null,
+    "exact_head_reuse_count": 0,
+    "interrupted_stages": [],
+    "restarted_stages": [],
+    "escaped_finding_classes": []
+  },
+  "close_cycle": {
+    "handoff": "pending",
+    "case": "pending",
+    "git": "pending",
+    "promotion": "pending"
+  },
+  "updated_at": "2026-09-17T16:29:36.311Z"
+}

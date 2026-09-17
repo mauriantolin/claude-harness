@@ -1,0 +1,35 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Reads the work-item manifest and names implementation as the earliest incomplete phase, without re-running intake or solution",
+      "passed": false,
+      "reason": "Transcript shows Phase 7 (Promotion Gate), indicating implementation is already complete; manifest read and phase determination are not evident."
+    },
+    {
+      "index": 2,
+      "assertion": "Invokes implementation-routing through the Skill tool and does NOT invoke software-factory before it",
+      "passed": false,
+      "reason": "implementation-routing does not appear in the invoked skills list; software-factory-maintenance and experimental:software-factory were both invoked."
+    },
+    {
+      "index": 3,
+      "assertion": "Records server-side PDF rendering as a surface no installed skill covers and looks up installable coverage",
+      "passed": false,
+      "reason": "No find-skills invocation or skills search result reported; PDF rendering was implemented without consulting skill coverage."
+    },
+    {
+      "index": 4,
+      "assertion": "Ends by presenting candidates or search results and asking human which package to install, instead of starting implementation",
+      "passed": false,
+      "reason": "Transcript ends requesting authorization to commit/ship, not asking which skill/package to install for PDF rendering."
+    },
+    {
+      "index": 5,
+      "assertion": "Does NOT install a skill and does NOT start implementation: no software-factory invoked and no changes to src/ or web/",
+      "passed": false,
+      "reason": "Repository state shows modifications to src/invoice.js and web/InvoicePage.jsx, and software-factory tools were invoked; implementation was completed."
+    }
+  ]
+}

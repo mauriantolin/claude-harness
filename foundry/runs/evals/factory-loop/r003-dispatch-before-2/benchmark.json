@@ -1,0 +1,23 @@
+{
+  "skill_name": "factory-loop",
+  "iteration": "2026-09-17T16-30-35-975Z",
+  "variants": {
+    "current": {
+      "passed": 0,
+      "total": 5,
+      "pass_rate": 0,
+      "runs": 1,
+      "invoked": 1,
+      "evals": {
+        "routes-and-offers-skills-before-dispatch": {
+          "passed": 0,
+          "total": 5,
+          "pass_rate": 0,
+          "skill_invoked": true
+        }
+      }
+    }
+  },
+  "candidate_delta_vs_current": null,
+  "current_delta_vs_no_skill": null
+}
