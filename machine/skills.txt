@@ -1,0 +1,33 @@
+# Global skills this machine gets, one per line: <source> <skill>.
+# bootstrap-ubuntu.sh installs each with: npx skills add <source> -g -a claude-code -s <skill> -y
+aws/agent-toolkit-for-aws aws-billing-and-cost-management
+aws/agent-toolkit-for-aws aws-cdk
+aws/agent-toolkit-for-aws aws-iam
+aws/agent-toolkit-for-aws creating-data-lake-table
+aws/agent-toolkit-for-aws querying-aws-s3
+aws/agent-toolkit-for-aws querying-data-lake
+better-auth/skills better-auth-best-practices
+better-auth/skills better-auth-security-best-practices
+currents-dev/playwright-best-practices-skill playwright-best-practices
+duckdb/duckdb-skills query
+duckdb/duckdb-skills read-file
+Jakubantalik/transitions.dev transitions-dev
+Jakubantalik/transitions.dev transitions-polish
+shadcn/ui migrate-radix-to-base
+shadcn/ui shadcn
+supabase/agent-skills supabase-postgres-best-practices
+vercel-labs/agent-browser agent-browser
+vercel-labs/agent-skills deploy-to-vercel
+vercel-labs/agent-skills vercel-composition-patterns
+vercel-labs/agent-skills vercel-react-best-practices
+vercel-labs/agent-skills web-design-guidelines
+vercel-labs/autoship autoship
+vercel-labs/openreview next-best-practices
+vercel-labs/openreview next-cache-components
+vercel-labs/skills find-skills
+vercel/ai ai-sdk
+vercel/ai-elements ai-elements
+vercel/components.build building-components
+vercel/streamdown streamdown
+vercel/turborepo turborepo
+vercel/vercel vercel-cli

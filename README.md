@@ -8,7 +8,9 @@ here measured. The layout mirrors Railly's so there is one structure to learn.
 ```text
 skills/<name>/                stable skills: SKILL.md (<=120 lines) + references/ + evals/{evals.json,triggers.json,fixtures/<fx>/{base,changed}}
 skills/.experimental/<name>/  where every new skill is born
-hooks/<name>/                 hook.mjs + what it injects + evals/; runtime patches to skills this repo does not author
+hooks/<name>/                 hook.mjs or hook.sh (+ what it injects + evals/); hooks/events.json says which event each runs on
+bin/                          commands installed on the PATH (perfil)
+machine/                      a new machine: bootstrap, settings, global skills, the global CLAUDE.md template
 cases/<repo>/                 evidence from real work
 foundry/maturity.json         channel + maturity per skill (the registry)
 foundry/eval-protocol.md      the three-arm protocol and the promotion bar
@@ -42,11 +44,17 @@ the patch rides alongside at load time.
 
 | Hook | Event | What it does |
 |---|---|---|
+| `railly-root-worktree` | `SessionStart` | A worktree a tool created starts without `.claude/settings.local.json`; copies `RAILLY_SKILLS_REPO` from the main worktree, or scaffolds one. |
+| `restore-repo-skills` | `SessionStart` | Restores the skills a repository declares in `skills-lock.json`. Silent when there is nothing to do. |
+| `scan-secrets-pre` / `scan-secrets` | `PreToolUse` / `PostToolUse` on `Write|Edit` | Blocks a high-confidence secret before it lands, and again if one lands in a file git would commit. Gitignored files are left alone. |
+| `guard-immutable-docs` | `PreToolUse` on `Write|Edit` | Refuses edits under `archive/` and to an accepted ADR. |
+| `format-touched` | `PostToolUse` on `Write|Edit` | Formats the touched file with the repository's own prettier (or shfmt), honoring its ignore files. Never installs a formatter. |
 | `factory-loop-checkpoints` | `PostToolUse` on `Skill` | When the call that just completed loaded `factory-loop`, injects `addendum.md`: where the work-item manifest lives and how to create it, that a phase exists only through its owning skill's `Skill` call, and that context in a prompt is not human confirmation. Silent on every other tool call. |
 
-`./install.sh` links `hooks/<name>/hook.mjs` to `~/.claude/hooks/<name>.mjs`
-as a launcher. Registering it is a one-time edit to `~/.claude/settings.json`,
-which `npm run doctor` then checks:
+`./install.sh` links `hooks/<name>/hook.{mjs,sh}` to `~/.claude/hooks/<name>.{mjs,sh}`
+as a launcher. `node machine/settings.mjs` registers every hook in
+`hooks/events.json` in `~/.claude/settings.json` (or edit it by hand), and
+`npm run doctor` checks both:
 
 ```json
 { "hooks": { "PostToolUse": [ { "matcher": "Skill", "hooks": [
@@ -164,6 +172,39 @@ seeds `cases/<repo>/conventions.md`, and writes `RAILLY_SKILLS_REPO` into the
 project's `.claude/settings.local.json`. Railly's files are never modified;
 his resolver reads the variable before any default, and the scaffold proves
 it by running his unmodified resolver at the end.
+
+## A new machine
+
+```sh
+git clone https://github.com/mauriantolin/claude-harness ~/repos/claude-harness
+~/repos/claude-harness/machine/bootstrap-ubuntu.sh
+```
+
+The base and nothing else: Tailscale, Claude Code, Orca, Google Chrome (the
+`.deb`, which Claude in Chrome needs), the CLIs (gh, aws, gcloud, vercel, neon,
+supabase, node, pnpm, bun, uv), RDP through GNOME Remote Desktop, this
+repository's install, the hooks registered, the global skills in
+`machine/skills.txt`, the plugins, and `~/.claude/CLAUDE.md` from
+`machine/CLAUDE.global.md`. Every step checks before it installs, so it is safe to
+run again. Logins are not done for you; the script ends by listing them.
+
+## Profiles: `perfil`
+
+Every CLI session lives in a named profile under `~/.perfiles/<name>/`, never in
+the machine's global config, so two projects (or two agent sessions) on
+different accounts share the machine without stepping on each other.
+
+```sh
+perfil                          # list profiles
+perfil <name> estado            # which service has a session or a key
+perfil <name> login <service>   # gh, vercel, neon, aws, gcloud; or where a key goes
+perfil <name> -- <command...>   # run with the profile's sessions; child processes inherit them
+perfil <name> git               # this clone authenticates to GitHub with the profile's gh
+```
+
+Generalized from Nomenclator's `pnpm perfil`; the directory layout is the same,
+so pointing `NOMENCLATOR_PERFILES` at `~/.perfiles` makes both read one set of
+logins.
 
 ## Where the rest lives
 
