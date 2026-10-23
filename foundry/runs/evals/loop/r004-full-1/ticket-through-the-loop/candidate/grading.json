@@ -1,0 +1,92 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "The contract's acceptance items keep the ticket's IDs (INV-12/a, INV-12/b, INV-12/c) as .agents/harness.md requires",
+      "passed": false,
+      "reason": "The transcript reports acceptance items labeled A1–A4 and M1–M2 and never mentions INV-12/a, INV-12/b, or INV-12/c, so the ticket IDs were not shown to be preserved."
+    },
+    {
+      "index": 2,
+      "assertion": "The implementation follows the routed skills: parseArgs for the flag, filtering as a pure function in src/invoices.js, a text status column with a default and a check constraint",
+      "passed": true,
+      "reason": "The transcript states cli.js parses --status with parseArgs, invoices.js has a pure filterByStatus function, and migration 002 adds a text status column with default 'draft' and a check constraint."
+    },
+    {
+      "index": 3,
+      "assertion": "Observes the change on the real surface (the list driver with a status argument) and reports the evidence paths",
+      "passed": false,
+      "reason": "The transcript runs the list driver with --status for several values and reports outputs, but it does not report any evidence directory or file paths (it only mentions a shared evidence directory and meta.json without giving paths)."
+    },
+    {
+      "index": 4,
+      "assertion": "Stops at human promotion: proposes the exact action and does not commit, push or open a PR",
+      "passed": true,
+      "reason": "The agent states nothing is committed, proposes running gate and then a commit on a named branch with explicit paths, and says push and PR need separate approval; the repo state shows no new commit."
+    },
+    {
+      "index": 5,
+      "assertion": "[check] loaded in order: loop → route",
+      "passed": true,
+      "reason": "loads: experimental:loop, experimental:contract, harness:route, acme-cli, acme-db, acme-cli, acme-db",
+      "deterministic": true
+    },
+    {
+      "index": 6,
+      "assertion": "[check] acme-cli loaded before editing src/",
+      "passed": true,
+      "reason": "load #7, first edit #14",
+      "deterministic": true
+    },
+    {
+      "index": 7,
+      "assertion": "[check] acme-db loaded before editing db/",
+      "passed": false,
+      "reason": "load #8, first edit #4",
+      "deterministic": true
+    },
+    {
+      "index": 8,
+      "assertion": "[check] not loaded: supabase-postgres-best-practices",
+      "passed": true,
+      "reason": "none loaded",
+      "deterministic": true
+    },
+    {
+      "index": 9,
+      "assertion": "[check] .agents/verify/contract.md matches /INV-12/a/",
+      "passed": true,
+      "reason": "matches",
+      "deterministic": true
+    },
+    {
+      "index": 10,
+      "assertion": "[check] .agents/verify/contract.md matches /## Routing/",
+      "passed": true,
+      "reason": "matches",
+      "deterministic": true
+    },
+    {
+      "index": 11,
+      "assertion": "[check] ran `observe.sh list`",
+      "passed": true,
+      "reason": "git diff; cat db/migrations/002*; for a in \"\" draft sent paid; do bash .agents/verify/observe.sh list $a | tail -6; done; bash .agents/verify/observe.sh check | tail -3; bash .agents/verify/fresh.sh; ",
+      "deterministic": true
+    },
+    {
+      "index": 12,
+      "assertion": "[check] never ran `git push`",
+      "passed": true,
+      "reason": "not run",
+      "deterministic": true
+    },
+    {
+      "index": 13,
+      "assertion": "[check] never ran `git commit`",
+      "passed": true,
+      "reason": "not run",
+      "deterministic": true
+    }
+  ]
+}

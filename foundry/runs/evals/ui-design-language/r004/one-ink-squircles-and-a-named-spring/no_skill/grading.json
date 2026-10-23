@@ -1,0 +1,35 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Derives the neutrals (borders, hover washes, inputs) from a single ink color at fixed alphas rather than introducing multiple greys",
+      "passed": false,
+      "reason": "The transcript uses shadcn's semantic tokens (bg-card, border, text-muted-foreground) and never describes deriving neutrals from one ink color at fixed alphas."
+    },
+    {
+      "index": 2,
+      "assertion": "Gives the card continuous-curvature (squircle) corners and makes the button a pill",
+      "passed": false,
+      "reason": "The card uses rounded-xl, which is a standard circular radius rather than a squircle, and the button stays the default shadcn Button with no pill radius."
+    },
+    {
+      "index": 3,
+      "assertion": "Names a spring from the seven-spring vocabulary (PANEL for the dropdown) instead of an ad-hoc duration or a new spring",
+      "passed": false,
+      "reason": "The transcript never names a spring; the dropdown uses shadcn's built-in fade and zoom at about 150ms, which is an ad-hoc duration."
+    },
+    {
+      "index": 4,
+      "assertion": "Keeps font weights at 500 or below and uses sentence-case copy on the button",
+      "passed": false,
+      "reason": "The plan name and price use font-semibold (600), breaking the 500-or-below weight limit, although the button copy 'Change plan' is sentence case."
+    },
+    {
+      "index": 5,
+      "assertion": "Does NOT ship a stock shadcn rounded-lg rectangle unchanged for the card surface",
+      "passed": true,
+      "reason": "The card is not stock: it overrides the default with rounded-xl and shadow-none, and it is not a rounded-lg rectangle."
+    }
+  ]
+}

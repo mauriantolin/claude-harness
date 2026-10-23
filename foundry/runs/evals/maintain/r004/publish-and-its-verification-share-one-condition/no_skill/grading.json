@@ -1,0 +1,29 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Explains that verify-published compared the fresh build against an older published artifact because publish was skipped",
+      "passed": true,
+      "reason": "The agent says the skipped publish means the registry still holds an earlier tarball, which verify-published downloads and compares against the fresh build from this run."
+    },
+    {
+      "index": 2,
+      "assertion": "Prescribes that verify-published be gated on the same publish-decision output as the publish job",
+      "passed": false,
+      "reason": "The agent suggests gating on the publish job's result (`needs.publish.result == 'success'`) rather than on the same publish-decision output the publish job uses, so it does not match the prescribed gate."
+    },
+    {
+      "index": 3,
+      "assertion": "Does NOT propose retrying the run or relaxing the comparison as the fix",
+      "passed": false,
+      "reason": "The agent proposes comparing content instead of bytes and ignoring mtimes and gzip headers as an option, which is a relaxation of the comparison, so the prohibition is not respected."
+    },
+    {
+      "index": 4,
+      "assertion": "States the general rule: no post-publish verification may run in a no-publish run",
+      "passed": false,
+      "reason": "The agent offers skipping verification as the usual choice but never states the general rule that no post-publish verification may run in a no-publish run, and it also suggests verifying in the skipped case."
+    }
+  ]
+}

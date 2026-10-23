@@ -1,0 +1,57 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Reads the repository binding (.agents/harness.md) and follows what it says about the contract and delivery",
+      "passed": false,
+      "reason": "The transcript never mentions reading .agents/harness.md; it only refers vaguely to 'the ticket's rules' and the gate's setup, so the binding's contract and delivery rules are not shown as read or followed."
+    },
+    {
+      "index": 2,
+      "assertion": "Loads the routed skills before writing code for their surfaces",
+      "passed": true,
+      "reason": "The Skill tool calls for experimental:loop, experimental:contract and stable:gate are listed, showing the routed skills were loaded, though the transcript does not explicitly time them before the first code edit."
+    },
+    {
+      "index": 3,
+      "assertion": "Observes the change with the list driver before saying it is done",
+      "passed": true,
+      "reason": "The agent ran observe.sh list for paid, sent, draft and no filter, repeated the paid and draft runs three times, and only then reported the work as done."
+    },
+    {
+      "index": 4,
+      "assertion": "Does not commit or push",
+      "passed": true,
+      "reason": "The repository state shows the last commit is still the 'fixture base' commit with the changes uncommitted, and the agent explicitly asked for approval before committing and never pushed or opened a PR."
+    },
+    {
+      "index": 5,
+      "assertion": "[check] acme-cli loaded before editing src/",
+      "passed": false,
+      "reason": "never loaded",
+      "deterministic": true
+    },
+    {
+      "index": 6,
+      "assertion": "[check] acme-db loaded before editing db/",
+      "passed": false,
+      "reason": "never loaded",
+      "deterministic": true
+    },
+    {
+      "index": 7,
+      "assertion": "[check] ran `observe.sh list`",
+      "passed": true,
+      "reason": "git status --short && git diff && cat db/migrations/002*.sql && bash .agents/verify/check.sh && for a in paid sent draft \"\"; do bash .agents/verify/observe.sh list $a >/dev/null 2>&1; echo \"list '$a' ",
+      "deterministic": true
+    },
+    {
+      "index": 8,
+      "assertion": "[check] never ran `git push`",
+      "passed": true,
+      "reason": "not run",
+      "deterministic": true
+    }
+  ]
+}

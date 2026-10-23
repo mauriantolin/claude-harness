@@ -1,0 +1,35 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Derives the neutrals (borders, hover washes, inputs) from a single ink color at fixed alphas rather than introducing multiple greys",
+      "passed": true,
+      "reason": "Every neutral is `color-mix` of `--ink` at fixed alphas (12% line, 5% wash, 14% field, 62% secondary text), and the transcript states there is no second grey."
+    },
+    {
+      "index": 2,
+      "assertion": "Gives the card continuous-curvature (squircle) corners and makes the button a pill",
+      "passed": true,
+      "reason": "The card uses `corner-shape: squircle`, and the button has `rounded-full`, which is a pill."
+    },
+    {
+      "index": 3,
+      "assertion": "Names a spring from the seven-spring vocabulary (PANEL for the dropdown) instead of an ad-hoc duration or a new spring",
+      "passed": false,
+      "reason": "The transcript defines its own 'one spring' as a custom `linear()` curve at 420ms, never names PANEL or any vocabulary spring, and says the reference files were blocked, so it is the ad-hoc spring this expectation rules out."
+    },
+    {
+      "index": 4,
+      "assertion": "Keeps font weights at 500 or below and uses sentence-case copy on the button",
+      "passed": true,
+      "reason": "Weights used are 300, 400 and 500 (`font-light`, `font-normal`, `font-medium`), and the button reads 'Change plan' in sentence case."
+    },
+    {
+      "index": 5,
+      "assertion": "Does NOT ship a stock shadcn rounded-lg rectangle unchanged for the card surface",
+      "passed": true,
+      "reason": "The card surface is a custom `squircle` section with a 28px radius, a two-layer recessed layout and a custom ring shadow, not a default shadcn `rounded-lg` card."
+    }
+  ]
+}

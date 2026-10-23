@@ -1,0 +1,121 @@
+{
+  "skill": "maintain",
+  "model": "sonnet",
+  "total": 10,
+  "matched": 9,
+  "accuracy": 0.9,
+  "misses": 1,
+  "false_positives": 0,
+  "results": [
+    {
+      "id": "positive-three-prs-approved-green",
+      "skill": "maintain",
+      "query": "Three PRs are approved and green. Merge them and cut release 1.4.0.",
+      "should_trigger": true,
+      "triggered": true,
+      "invoked": [
+        "harness:maintain"
+      ],
+      "match": true,
+      "error": null
+    },
+    {
+      "id": "positive-bump-version-everywhere-write",
+      "skill": "maintain",
+      "query": "Bump the version everywhere, write the release notes with credits, and prepare the release PR.",
+      "should_trigger": true,
+      "triggered": true,
+      "invoked": [
+        "harness:maintain"
+      ],
+      "match": true,
+      "error": null
+    },
+    {
+      "id": "positive-clean-up-pr-queue",
+      "skill": "maintain",
+      "query": "Clean up the PR queue: which ones are stale, superseded or ready to merge?",
+      "should_trigger": true,
+      "triggered": true,
+      "invoked": [
+        "harness:maintain"
+      ],
+      "match": true,
+      "error": null
+    },
+    {
+      "id": "positive-verify-tarball-installs-cleanly",
+      "skill": "maintain",
+      "query": "Verify the 2.1.0 tarball installs cleanly and the CLI runs before we publish to npm.",
+      "should_trigger": true,
+      "triggered": false,
+      "invoked": [],
+      "match": false,
+      "error": null
+    },
+    {
+      "id": "negative-implement-feature-accepted-contract",
+      "skill": "maintain",
+      "query": "Implement the feature from the accepted contract and take it through the factory.",
+      "should_trigger": false,
+      "triggered": false,
+      "invoked": [],
+      "match": true,
+      "error": null
+    },
+    {
+      "id": "negative-commit-reviewed-change-branch",
+      "skill": "maintain",
+      "query": "Commit this reviewed change on a branch and take it to PR-ready.",
+      "should_trigger": false,
+      "triggered": false,
+      "invoked": [],
+      "match": true,
+      "error": null
+    },
+    {
+      "id": "negative-review-diff-correctness-security",
+      "skill": "maintain",
+      "query": "Review this diff for correctness and security.",
+      "should_trigger": false,
+      "triggered": false,
+      "invoked": [
+        "code-review"
+      ],
+      "match": true,
+      "error": null
+    },
+    {
+      "id": "negative-watch-ci-push-confirm",
+      "skill": "maintain",
+      "query": "Watch CI for this push and confirm the deployment is serving.",
+      "should_trigger": false,
+      "triggered": false,
+      "invoked": [
+        "harness:deploy-gate"
+      ],
+      "match": true,
+      "error": null
+    },
+    {
+      "id": "negative-open-issue-pick-up",
+      "skill": "maintain",
+      "query": "Which open issue should I pick up next?",
+      "should_trigger": false,
+      "triggered": false,
+      "invoked": [],
+      "match": true,
+      "error": null
+    },
+    {
+      "id": "negative-write-changelog-entry-bug",
+      "skill": "maintain",
+      "query": "Write a changelog entry for the bug I just fixed.",
+      "should_trigger": false,
+      "triggered": false,
+      "invoked": [],
+      "match": true,
+      "error": null
+    }
+  ]
+}

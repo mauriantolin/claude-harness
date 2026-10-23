@@ -10,6 +10,7 @@ Visibility: public
 Repository: mauriantolin/claude-harness
 Role: author
 Source: `skills/ship/evals/`, three evals run across `no_skill`, `current` and `candidate` on 2026-09-03
+Enforcer: none: `ship` was retired in round 004; the rule (an eval the baseline arm passes is not evidence) is the promotion bar in foundry/eval-protocol.md, read by a human at promotion
 
 > Self-validated. The numbers come from a three-arm run scored by Railly's
 > unmodified `aggregate-skill-eval.mjs`. Nothing here was reviewed by anyone else.

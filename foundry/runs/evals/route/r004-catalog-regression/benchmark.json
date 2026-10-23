@@ -1,0 +1,59 @@
+{
+  "skill_name": "route",
+  "iteration": "2026-10-23T21-22-57-344Z",
+  "variants": {
+    "candidate": {
+      "passed": 41,
+      "total": 42,
+      "pass_rate": 0.9761904761904762,
+      "runs": 7,
+      "invoked": 7,
+      "evals": {
+        "a-catalog-skill-no-table-names-is-routed": {
+          "passed": 7,
+          "total": 7,
+          "pass_rate": 1,
+          "skill_invoked": true
+        },
+        "owed-surface-asks-the-human": {
+          "passed": 5,
+          "total": 5,
+          "pass_rate": 1,
+          "skill_invoked": true
+        },
+        "owners-load-before-the-first-edit": {
+          "passed": 6,
+          "total": 6,
+          "pass_rate": 1,
+          "skill_invoked": true
+        },
+        "owners-load-when-only-the-table-says-so": {
+          "passed": 6,
+          "total": 6,
+          "pass_rate": 1,
+          "skill_invoked": true
+        },
+        "repo-skill-wins-without-a-table-row": {
+          "passed": 6,
+          "total": 6,
+          "pass_rate": 1,
+          "skill_invoked": true
+        },
+        "repo-table-wins-and-owners-load": {
+          "passed": 7,
+          "total": 8,
+          "pass_rate": 0.875,
+          "skill_invoked": true
+        },
+        "two-claimants-resolved-once": {
+          "passed": 4,
+          "total": 4,
+          "pass_rate": 1,
+          "skill_invoked": true
+        }
+      }
+    }
+  },
+  "candidate_delta_vs_current": null,
+  "current_delta_vs_no_skill": null
+}

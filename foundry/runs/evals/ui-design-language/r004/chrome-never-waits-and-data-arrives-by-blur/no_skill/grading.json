@@ -1,0 +1,29 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Renders the page chrome (layout, title, controls) immediately rather than waiting on the data",
+      "passed": true,
+      "reason": "The timeline's 0 ms row shows the page shell with title, date-range label, disabled filters and export controls, and the table's real header row before any data arrives."
+    },
+    {
+      "index": 2,
+      "assertion": "Uses a pixel-matched skeleton for the table rows, not a generic spinner or a blank area",
+      "passed": true,
+      "reason": "It specifies skeleton rows that match the real column widths, alignment and row height, with the real headers kept, and explicitly rejects a spinner."
+    },
+    {
+      "index": 3,
+      "assertion": "Transitions the loaded data in by blur (a short fade/blur arrival) instead of an abrupt pop",
+      "passed": false,
+      "reason": "The loaded state only proposes 'a short opacity fade (~150 ms)'; there is no blur, so the blur arrival the expectation requires is never specified."
+    },
+    {
+      "index": 4,
+      "assertion": "Respects prefers-reduced-motion and announces the loading state accessibly (role=status or equivalent)",
+      "passed": true,
+      "reason": "It says to respect prefers-reduced-motion with a static skeleton and no shimmer, and to use a polite live-region announcement for loading and loaded states, which is equivalent to role=status."
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Loads the owning skills before writing code for their surfaces",
+      "passed": false,
+      "reason": "The transcript's skills list shows no Skill tool invocations, and nothing in the transcript shows the agent loading the owning skills before writing code."
+    },
+    {
+      "index": 2,
+      "assertion": "The UI change uses FilterBar from @acme/ui rather than a raw select, as acme-ui requires",
+      "passed": true,
+      "reason": "The agent's summary says the page has a `<FilterBar.Select>` for the status filter, which is the FilterBar component rather than a raw select."
+    },
+    {
+      "index": 3,
+      "assertion": "The migration adds a text status column with a check constraint and a default, as acme-db requires",
+      "passed": true,
+      "reason": "The migration `002_invoice_status.sql` is described as adding `status` as `text not null default 'draft'` with a check constraint limiting it to draft, sent or paid."
+    },
+    {
+      "index": 4,
+      "assertion": "[check] acme-ui loaded before editing web/",
+      "passed": false,
+      "reason": "never loaded",
+      "deterministic": true
+    },
+    {
+      "index": 5,
+      "assertion": "[check] acme-db loaded before editing db/",
+      "passed": false,
+      "reason": "never loaded",
+      "deterministic": true
+    },
+    {
+      "index": 6,
+      "assertion": "[check] not loaded: ui-design-language",
+      "passed": true,
+      "reason": "none loaded",
+      "deterministic": true
+    }
+  ]
+}

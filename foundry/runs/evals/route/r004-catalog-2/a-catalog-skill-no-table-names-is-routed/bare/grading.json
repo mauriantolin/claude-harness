@@ -1,0 +1,50 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Names a surface for A3 (generating the summary with the Anthropic API) that no routing table covers",
+      "passed": true,
+      "reason": "The agent names the A3 Anthropic API call as its own surface (`src/*`) and states that `routing.md` has no Anthropic or LLM row, so the surface is uncovered by the table."
+    },
+    {
+      "index": 2,
+      "assertion": "Routes that surface to a skill the session offers whose description covers the Claude or Anthropic API, found by reading the offered skills rather than a table",
+      "passed": false,
+      "reason": "The agent picks `claude-api` for the call, but it attributes its surface table to `routing.md` and says that file has no LLM row, and the transcript never shows it reading the offered skill descriptions, so the provenance of the choice is unclear."
+    },
+    {
+      "index": 3,
+      "assertion": "Records that owner in the contract's Routing section with its precedence (catalog or equivalent)",
+      "passed": false,
+      "reason": "The agent explicitly did not edit `contract.md` or `routing.md` and instead asked whether to update them, so no owner was recorded in the contract."
+    },
+    {
+      "index": 4,
+      "assertion": "Does NOT implement anything",
+      "passed": true,
+      "reason": "The agent states it has not implemented anything, and the repository state shows only the untracked `.agents/verify/` directory with no code changes."
+    },
+    {
+      "index": 5,
+      "assertion": "[check] loaded in order: route → claude-api",
+      "passed": false,
+      "reason": "loads: (none)",
+      "deterministic": true
+    },
+    {
+      "index": 6,
+      "assertion": "[check] .agents/verify/contract.md matches /## Routing[\\s\\S]*claude-api/",
+      "passed": false,
+      "reason": "no match",
+      "deterministic": true
+    },
+    {
+      "index": 7,
+      "assertion": "[check] nothing under src/ was edited",
+      "passed": true,
+      "reason": "no edit",
+      "deterministic": true
+    }
+  ]
+}

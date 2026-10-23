@@ -1,14 +1,15 @@
 #!/usr/bin/env node
-// Checks the machine, not the repository: is everything factory-loop needs
-// installed, linked, enabled and unmodified? validate-skills.mjs covers the
-// repository's own content.
+// Checks the machine: are Railly's skills installed and identical to the
+// remote, is nothing of the harness global anymore, and do the hooks and
+// skill dependencies resolve? In a harnessed repository it also runs
+// `harness check`. validate-skills.mjs covers this repository's own content.
 //
 //   node scripts/doctor.mjs
 //
 // Exit 1 on any error. Warnings are printed and do not fail.
 
 import { spawnSync } from "node:child_process";
-import { existsSync, readFileSync, readdirSync, realpathSync } from "node:fs";
+import { existsSync, lstatSync, readFileSync, readdirSync, realpathSync } from "node:fs";
 import { homedir } from "node:os";
 import { basename, dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -21,6 +22,7 @@ const PLUGINS = join(CLAUDE_DIR, "plugins");
 const RAILLY_PLUGINS = ["stable@railly-skills", "experimental@railly-skills"];
 const IS_WINDOWS = process.platform === "win32";
 
+const skills = discoverSkills(REPO);
 const errors = [];
 const warnings = [];
 const ok = (m) => console.log(`  ✔ ${m}`);
@@ -94,9 +96,9 @@ if (claudeVersion) ok(`claude ${claudeVersion}`);
 else err("claude is not on PATH; nothing here can run evals without it");
 
 for (const [cmd, why, args] of [
-	["gh", "ship, deploy-gate and xref need an authenticated gh"],
-	["bun", "before-after and xref run on bun"],
-	["xref", "Gate 1 degrades to gh search without it", ["--help"]],
+	["gh", "deploy-gate and Railly's loop need an authenticated gh"],
+	["bun", "Railly's validate-skills and skills-doctor run on bun"],
+	["agent-browser", "verify kit web drivers observe pages with it", ["--help"]],
 ]) {
 	const v = which(cmd, args);
 	if (v) ok(`${cmd} ${v}`);
@@ -110,20 +112,16 @@ if (which("gh")) {
 
 // ----------------------------------------------------------------- plugins
 
-section("plugins");
+section("plugins (installed on the machine, enabled by each repository)");
 const settings = readJson(join(CLAUDE_DIR, "settings.json")) ?? {};
 const enabled = settings.enabledPlugins ?? {};
 const installed = readJson(join(PLUGINS, "installed_plugins.json"))?.plugins ?? {};
 for (const id of RAILLY_PLUGINS) {
 	if (!installed[id]) err(`${id} is not installed`);
-	else if (enabled[id] !== true) err(`${id} is installed but not enabled`);
-	else ok(`${id} enabled`);
+	else ok(`${id} installed`);
 }
-if (enabled["superpowers@superpowers-dev"] === true) {
-	warn("superpowers is enabled: it forces its own process skills on every message and competes with factory-loop");
-}
-if (enabled["skill-creator@claude-plugins-official"] !== true) {
-	warn("skill-creator is not enabled: its evals.json and grading.json shapes are the ones this harness reads");
+for (const [id, on] of Object.entries(enabled)) {
+	if (on === true) warn(`${id} is enabled globally: its skills compete in every repository; enable it in the repositories that use it`);
 }
 
 const clone = ["railly-skills", "Railly-skills"].map((n) => join(PLUGINS, "marketplaces", n)).find((p) => existsSync(p));
@@ -133,71 +131,56 @@ else {
 	if (status.status !== 0) warn("could not read the clone's git status");
 	else if (status.stdout.trim()) err(`the railly-skills clone has local modifications:\n${status.stdout.trimEnd()}`);
 	else ok("railly-skills clone is clean");
+	const head = spawnSync("git", ["rev-parse", "HEAD"], { cwd: clone, encoding: "utf8" }).stdout.trim();
+	// Claude Code clones marketplaces shallow; gate's own test-report-gate.sh needs HEAD~1 and
+	// fails there, while it passes on a full clone of the same revision.
+	if (spawnSync("git", ["rev-parse", "--is-shallow-repository"], { cwd: clone, encoding: "utf8" }).stdout.trim() === "true")
+		warn("the railly-skills clone is shallow: run Railly's own gate tests on a full clone (git clone https://github.com/Railly/skills)");
+	const remote = spawnSync("git", ["ls-remote", "https://github.com/Railly/skills.git", "HEAD"], { encoding: "utf8", timeout: 20_000 });
+	const remoteHead = remote.stdout.split(/\s/)[0];
+	if (!remoteHead) warn("could not read Railly's remote HEAD");
+	else if (remoteHead !== head) err(`railly-skills clone is at ${head.slice(0, 7)}, remote is ${remoteHead.slice(0, 7)}: claude plugin marketplace update railly-skills`);
+	else ok(`railly-skills is at the remote HEAD (${head.slice(0, 7)})`);
+	const cached = Object.values(installed).flat().filter((i) => i.installPath?.includes("railly-skills"));
+	for (const inst of cached) if (!inst.installPath.endsWith(head.slice(0, 12))) err(`installed Railly plugin ${inst.installPath} is not the clone's HEAD: claude plugin update`);
 }
-const patched = findFiles(PLUGINS, "resolve-source-root.mjs").filter((f) => readFileSync(f, "utf8").includes("[in-repo-patch]"));
-if (patched.length) err(`${patched.length} copy(ies) of resolve-source-root.mjs still carry the retired in-repo patch`);
-else ok("no patched resolve-source-root.mjs copies; RAILLY_SKILLS_REPO is the only redirection");
 
-// ------------------------------------------------------------------- links
+// ------------------------------------------------------- nothing global
 
-section("links into ~/.claude");
-const skills = discoverSkills(REPO);
-for (const skill of skills) {
-	const dest = join(CLAUDE_DIR, "skills", skill.name);
-	if (!existsSync(dest)) err(`${skill.name} is not linked (run ./install.sh)`);
-	else if (!samePath(dest, skill.root)) err(`${skill.name} in ~/.claude/skills is not this repository's copy`);
-	else ok(`${skill.name} → ${skill.catalog}`);
-}
-for (const script of readdirSync(join(REPO, "scripts")).filter((f) => f.endsWith(".mjs"))) {
-	const dest = join(CLAUDE_DIR, "scripts", script);
-	if (!existsSync(dest)) err(`scripts/${script} has no launcher in ~/.claude/scripts (run ./install.sh)`);
-	else {
-		const text = readFileSync(dest, "utf8");
-		if (!text.includes("claude-harness:launcher")) err(`~/.claude/scripts/${script} is not a launcher this repository generated`);
-		else if (!text.includes(basename(REPO))) warn(`~/.claude/scripts/${script} points somewhere other than ${REPO}`);
-		else ok(`scripts/${script} launcher`);
+// The harness lives in each repository. Anything of it still under the user
+// directory is visible in every repository and competes with their own.
+section("global (context only: no harness skills, scripts or hooks)");
+const pointsHere = (entry) => {
+	try {
+		return lstatSync(entry).isSymbolicLink() ? realpathSync(entry).startsWith(REPO) : readFileSync(entry, "utf8").includes("claude-harness:launcher");
+	} catch {
+		return false;
 	}
+};
+let globalHarness = 0;
+for (const d of ["skills", "scripts", "hooks"]) {
+	const dir = join(CLAUDE_DIR, d);
+	if (!existsSync(dir)) continue;
+	for (const name of readdirSync(dir)) if (pointsHere(join(dir, name)) && ++globalHarness) err(`~/.claude/${d}/${name} still points at this working copy: ./install.sh removes it`);
 }
+const hookCommands = Object.values(settings.hooks ?? {}).flat().flatMap((g) => g.hooks ?? []).map((h) => h.command ?? "");
+for (const name of Object.keys(JSON.parse(readFileSync(join(REPO, "hooks", "events.json"), "utf8")))) {
+	if (hookCommands.some((c) => c.includes(`/hooks/${name}.`))) err(`hook ${name} is registered globally: node machine/settings.mjs removes it`);
+}
+// `synced` is where Claude Code keeps skills synced from claude.ai; not ours.
+const globalSkills = existsSync(join(CLAUDE_DIR, "skills")) ? readdirSync(join(CLAUDE_DIR, "skills")).filter((n) => n !== "synced") : [];
+if (globalSkills.length) warn(`${globalSkills.length} global skill(s) in ~/.claude/skills are visible in every repository: ${globalSkills.join(", ")}`);
+else if (!globalHarness) ok("no global skills");
 
 // ------------------------------------------------------------------- hooks
 
-// A hook under hooks/<name>/ is live only when its launcher exists AND
-// settings.json runs it on the event it was written for. install.sh does the
-// first; the second is a manual edit, so this is the only place that notices
-// it was never made or was later removed.
-section("hooks (hooks/*/hook.{mjs,sh} registered in ~/.claude/settings.json)");
-// hooks/events.json is the one table of which event each hook runs on;
-// machine/settings.mjs writes the registrations from the same table.
-const hooksDir = join(REPO, "hooks");
-const HOOK_EVENTS = JSON.parse(readFileSync(join(hooksDir, "events.json"), "utf8"));
-const hookExt = (name) => ["mjs", "sh"].find((ext) => existsSync(join(hooksDir, name, `hook.${ext}`)));
-const hookNames = readdirSync(hooksDir, { withFileTypes: true })
-	.filter((d) => d.isDirectory() && hookExt(d.name))
-	.map((d) => d.name);
-for (const name of hookNames) {
-	const file = `${name}.${hookExt(name)}`;
-	const launcher = join(CLAUDE_DIR, "hooks", file);
-	if (!existsSync(launcher)) {
-		err(`hooks/${name} has no launcher in ~/.claude/hooks (run ./install.sh)`);
-		continue;
-	}
-	if (!readFileSync(launcher, "utf8").includes("claude-harness:launcher")) {
-		err(`~/.claude/hooks/${file} is not a launcher this repository generated`);
-		continue;
-	}
-	const want = HOOK_EVENTS[name];
-	if (!want) {
-		warn(`hooks/${name}: no event declared in doctor.mjs, cannot check registration`);
-		continue;
-	}
-	const groups = settings.hooks?.[want.event] ?? [];
-	const registered = groups.some(
-		(g) =>
-			want.matcher.split("|").every((m) => (g.matcher ?? "").split("|").includes(m)) &&
-			(g.hooks ?? []).some((h) => h.type === "command" && typeof h.command === "string" && h.command.replace(/\\\\/g, "\\").includes(file)),
-	);
-	if (registered) ok(`${name} → ${want.event}(${want.matcher})`);
-	else err(`${name} is linked but not registered: run node machine/settings.mjs, or add a ${want.event} hook with matcher "${want.matcher}" running ~/.claude/hooks/${file}`);
+section("hooks (served by the harness plugin from hooks/core.json)");
+const built = spawnSync(process.execPath, [join(REPO, "scripts", "build-hooks.mjs"), "--check"], { encoding: "utf8" });
+if (built.status === 0) ok("hooks/core.json matches hooks/events.json");
+else err(built.stderr.trim());
+for (const name of Object.keys(JSON.parse(readFileSync(join(REPO, "hooks", "events.json"), "utf8")))) {
+	if (["mjs", "sh"].some((ext) => existsSync(join(REPO, "hooks", name, `hook.${ext}`)))) ok(`${name}`);
+	else err(`hooks/events.json lists ${name}, which has no hook.mjs or hook.sh`);
 }
 
 // ------------------------------------------------------ skill dependencies
@@ -209,7 +192,7 @@ section("skill dependencies (allowed-tools Skill(...))");
 // that is missing is an error, because a delegate that does not exist gets
 // re-invented by the agent, which is exactly what the skills forbid.
 const OPTIONAL_DEPS = {
-	herdr: "optional runtime adapter; factory-loop and solution-gate run without Herdr",
+	herdr: "optional runtime adapter; Railly's gate falls back to a native subagent without it",
 };
 
 function railllyPluginRoots() {
@@ -236,17 +219,15 @@ function resolveSkill(ref) {
 	);
 }
 
-// Every installed Railly skill, not only the orchestrators: solution-gate
-// delegates to an external `shaping` skill, and a dependency two hops down
-// is still a dependency factory-loop cannot run without.
+// Every installed Railly skill and every skill here: a delegate that does
+// not exist gets re-invented by the agent.
 const railllySkillMds = railllyPluginRoots().flatMap((r) => findFiles(join(r, "skills"), "SKILL.md"));
 const seen = new Set();
 const toCheck = [
 	...railllySkillMds.map((f) => ({ name: basename(dirname(f)), file: f })).filter((s) => !seen.has(s.name) && seen.add(s.name)),
 	...skills.map((s) => ({ name: s.name, file: join(s.root, "SKILL.md") })),
 ];
-// Railly renamed factory-loop to loop; either name satisfies the orchestrator.
-if (!seen.has("factory-loop") && !seen.has("loop")) err("loop (formerly factory-loop) SKILL.md not found in the installed railly-skills plugins");
+for (const name of ["contract", "verify-setup", "loop", "gate", "correct"]) if (!seen.has(name)) err(`Railly's ${name} SKILL.md not found in the installed railly-skills plugins`);
 for (const { name, file } of toCheck) {
 	const fm = parseFrontmatter(readFileSync(file, "utf8"));
 	for (const dep of skillTools(fm)) {
@@ -261,18 +242,12 @@ for (const { name, file } of toCheck) {
 
 // ------------------------------------------------------------- source root
 
-section("in-repo knowledge (RAILLY_SKILLS_REPO)");
-const local = readJson(join(process.cwd(), ".claude", "settings.local.json"));
-const target = local?.env?.RAILLY_SKILLS_REPO;
-if (!target) {
-	console.log("  – no .claude/settings.local.json with RAILLY_SKILLS_REPO in the current directory (scaffold with railly-inrepo.mjs)");
-} else if (clone) {
-	const r = spawnSync(process.execPath, [join(clone, "scripts", "resolve-source-root.mjs")], {
-		encoding: "utf8",
-		env: { ...process.env, RAILLY_SKILLS_REPO: target },
-	});
-	if (r.status === 0) ok(`resolves to ${r.stdout.trim()}`);
-	else err(`RAILLY_SKILLS_REPO=${target} does not resolve: ${r.stderr.trim()}`);
+section("this repository (harness check)");
+if (!existsSync(join(process.cwd(), ".agents"))) console.log("  – the current directory is not a harnessed repository (harness init)");
+else {
+	const r = spawnSync(process.execPath, [join(REPO, "bin", "harness.mjs"), "check", process.cwd()], { encoding: "utf8" });
+	for (const line of r.stdout.trim().split("\n")) console.log(line);
+	if (r.status !== 0) err("harness check failed");
 }
 
 // ----------------------------------------------------------------- verdict

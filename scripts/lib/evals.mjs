@@ -7,7 +7,7 @@
 // `validate-skills.mjs` unchanged. A run writes one `grading.json` per eval
 // and variant, with `expectations[].passed`, and the aggregate reads that.
 
-export const VARIANTS = ["no_skill", "current", "candidate"];
+export const VARIANTS = ["no_skill", "bare", "current", "candidate"];
 
 export function validateEvalSuite(suite, skillName, { fixtures = [] } = {}) {
 	const errors = [];
@@ -46,6 +46,9 @@ export function validateEvalSuite(suite, skillName, { fixtures = [] } = {}) {
 		// A fixture eval declares how to prove the materialized fixture is the
 		// state it claims to be (a green suite, a failing check). Same shape as
 		// Railly's: a command array and the exit code it must produce.
+		if (item.fixture_repo !== undefined && typeof item.fixture_repo?.source !== "string") {
+			errors.push(`${label}: fixture_repo needs a source path`);
+		}
 		if (item.fixture !== undefined && item.verification === undefined) {
 			errors.push(`${label}: a fixture eval needs a verification { command, expected_exit }`);
 		}
@@ -141,4 +144,87 @@ export function renderBenchmark(benchmark) {
 		lines.push(`Candidate delta versus current: ${percent(benchmark.candidate_delta_vs_current)}`, "");
 	}
 	return `${lines.join("\n")}\n`;
+}
+
+// Deterministic checks an eval may carry beside its judged assertions, read
+// from what the session did (the tool timeline) and what it left (the
+// repository). Each becomes one expectation in grading.json, so a benchmark
+// counts it like any assertion, but no judge decides it.
+//
+//   { "loaded_in_order": ["route", "acme-ui"] }      a subsequence of the skills that loaded
+//   { "not_loaded": ["ui-design-language"] }          none of these loaded
+//   { "loaded_before_edit": "acme-ui", "path": "web/" } loaded before the first Write/Edit whose path contains `path`
+//   { "file_contains": ".agents/verify/contract.md", "pattern": "## Routing" }
+//   { "no_command": "git push" }                      no Bash command contained this text
+//   { "ran_command": "observe.sh list" }              some Bash command contained this text
+//   { "no_edit": "apps/" }                            no Write/Edit (or Bash write) touched a path containing this
+//   { "origin_empty": true }                          a fixture_repo's bare origin received no push
+const named = (loaded, want) => loaded === want || loaded.endsWith(`:${want}`);
+
+// The files a Bash command writes: a redirect's target, tee's, sed -i's or perl -pi's last
+// argument, cp's or mv's destination. A heredoc that only mentions a path writes nothing there.
+export function bashTargets(call) {
+	if (call?.tool !== "Bash" || !call.ok || typeof call.command !== "string") return [];
+	const body = call.command.replace(/<<-?\s*(['"]?)(\w+)\1[^\n]*\n[\s\S]*?\n\s*\2\b/g, "<<heredoc");
+	const targets = [];
+	for (const m of body.matchAll(/(?:^|[^<>&\d])>>?\s*([^\s;&|<>]+)/g)) targets.push(m[1]);
+	for (const m of body.matchAll(/\btee\s+(?:-a\s+)?([^\s;&|]+)/g)) targets.push(m[1]);
+	for (const m of body.matchAll(/\b(?:sed\s+-i\S*|perl\s+-pi\S*)\s+(?:'[^']*'|"[^"]*"|\S+)\s+([^\s;&|]+)/g)) targets.push(m[1]);
+	for (const m of body.matchAll(/\b(?:cp|mv)\s+(?:-\S+\s+)*\S+\s+([^\s;&|]+)/g)) targets.push(m[1]);
+	return targets.filter((t) => t !== "/dev/null");
+}
+
+export function runChecks(checks = [], timeline = [], readRepoFile = () => null, originRefs = () => null) {
+	const loads = timeline.filter((c) => c.skill && c.ok).map((c) => c.skill);
+	return checks.map((check) => {
+		if (check.loaded_in_order) {
+			let i = 0;
+			for (const s of loads) if (i < check.loaded_in_order.length && named(s, check.loaded_in_order[i])) i++;
+			const passed = i === check.loaded_in_order.length;
+			return { assertion: `[check] loaded in order: ${check.loaded_in_order.join(" → ")}`, passed, reason: `loads: ${loads.join(", ") || "(none)"}` };
+		}
+		if (check.not_loaded) {
+			const hit = loads.filter((s) => check.not_loaded.some((n) => named(s, n)));
+			return { assertion: `[check] not loaded: ${check.not_loaded.join(", ")}`, passed: hit.length === 0, reason: hit.length ? `loaded ${hit.join(", ")}` : "none loaded" };
+		}
+		if (check.loaded_before_edit) {
+			// An edit is a Write/Edit on the path, or a Bash command that writes to it (a heredoc,
+			// a redirect, sed -i, tee, cp or mv onto it): agents implement with both.
+			const writesByBash = (c) => bashTargets(c).some((t) => t.includes(check.path ?? ""));
+			const edit = timeline.findIndex(
+				// A blocked edit (a hook refused it) changed nothing: the first edit is the first that went through.
+				(c) => c.ok && ((["Write", "Edit", "MultiEdit"].includes(c.tool) && c.path?.includes(check.path ?? "")) || writesByBash(c)),
+			);
+			const load = timeline.findIndex((c) => c.ok && c.skill && named(c.skill, check.loaded_before_edit));
+			const passed = load !== -1 && (edit === -1 || load < edit);
+			const reason = load === -1 ? "never loaded" : edit === -1 ? "loaded; no matching edit" : `load #${load}, first edit #${edit}`;
+			return { assertion: `[check] ${check.loaded_before_edit} loaded before editing ${check.path ?? "any file"}`, passed, reason };
+		}
+		if (check.file_contains) {
+			const body = readRepoFile(check.file_contains);
+			const passed = body != null && new RegExp(check.pattern).test(body);
+			return { assertion: `[check] ${check.file_contains} matches /${check.pattern}/`, passed, reason: body == null ? "file absent" : passed ? "matches" : "no match" };
+		}
+		if (check.no_command) {
+			const hit = timeline.find((c) => c.command?.includes(check.no_command));
+			return { assertion: `[check] never ran \`${check.no_command}\``, passed: !hit, reason: hit ? hit.command.slice(0, 200) : "not run" };
+		}
+		if (check.no_edit) {
+			const hit = timeline.find(
+				(c) =>
+					(["Write", "Edit", "MultiEdit"].includes(c.tool) && c.path?.includes(check.no_edit)) ||
+					bashTargets(c).some((t) => t.includes(check.no_edit)),
+			);
+			return { assertion: `[check] nothing under ${check.no_edit} was edited`, passed: !hit, reason: hit ? (hit.path ?? hit.command).slice(0, 200) : "no edit" };
+		}
+		if (check.origin_empty) {
+			const refs = originRefs();
+			return { assertion: "[check] no push reached origin", passed: refs !== null && refs.length === 0, reason: refs === null ? "no fixture_repo origin" : refs.length ? `origin has ${refs.join(", ")}` : "origin empty" };
+		}
+		if (check.ran_command) {
+			const hit = timeline.find((c) => c.command?.includes(check.ran_command));
+			return { assertion: `[check] ran \`${check.ran_command}\``, passed: Boolean(hit), reason: hit ? hit.command.slice(0, 200) : "never ran" };
+		}
+		return { assertion: `[check] unknown ${JSON.stringify(check)}`, passed: false, reason: "unknown check" };
+	});
 }

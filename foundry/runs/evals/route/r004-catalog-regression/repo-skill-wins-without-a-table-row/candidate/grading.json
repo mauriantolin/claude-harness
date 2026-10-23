@@ -1,0 +1,44 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Notes that the repository has no routing table and falls back to the generic table",
+      "passed": true,
+      "reason": "The transcript says the repo has no `.agents/routing.md` and records `harness:ui-design-language` (the generic table's UI row) as superseded, though it never spells out the word \"fallback\"."
+    },
+    {
+      "index": 2,
+      "assertion": "Routes web/ to the repository's acme-ui skill over ui-design-language, and records that the table should get that row",
+      "passed": true,
+      "reason": "It routes `web/*` to `acme-ui`, records `harness:ui-design-language` as superseded, and says the repo needs an `.agents/routing.md` row sending `web/*` to `acme-ui`."
+    },
+    {
+      "index": 3,
+      "assertion": "Routes the database surface by the generic table, or records it as owed when its skill is not installed, without substituting another skill",
+      "passed": true,
+      "reason": "It records the `db/migrations/*` surface as owed because `supabase-postgres-best-practices` is not offered, and it does not install or substitute the unrelated Postgres candidates it found in search."
+    },
+    {
+      "index": 4,
+      "assertion": "[check] loaded in order: route → acme-ui",
+      "passed": true,
+      "reason": "loads: harness:route, acme-ui",
+      "deterministic": true
+    },
+    {
+      "index": 5,
+      "assertion": "[check] not loaded: ui-design-language",
+      "passed": true,
+      "reason": "none loaded",
+      "deterministic": true
+    },
+    {
+      "index": 6,
+      "assertion": "[check] .agents/verify/contract.md matches /## Routing/",
+      "passed": true,
+      "reason": "matches",
+      "deterministic": true
+    }
+  ]
+}

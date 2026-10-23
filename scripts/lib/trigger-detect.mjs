@@ -82,3 +82,32 @@ export function skillLoads(streamText) {
 export function judgeTrigger(invocations, skillName) {
 	return invocations.some((n) => n === skillName || n.endsWith(`:${skillName}`));
 }
+
+// Every tool call in order, with the skill a Skill call loaded (or null when
+// its result was an error) and the path a Write or Edit touched. Subagent
+// calls are in the same stream, so a skill a dispatched implementer loaded
+// counts where it happened.
+export function toolTimeline(streamText) {
+	const calls = [];
+	const byId = new Map();
+	for (const event of events(streamText)) {
+		const blocks = event?.message?.content;
+		if (!Array.isArray(blocks)) continue;
+		for (const block of blocks) {
+			if (block?.type === "tool_use") {
+				const call = {
+					tool: block.name,
+					skill: block.name === "Skill" && typeof block.input?.skill === "string" ? block.input.skill : null,
+					path: typeof block.input?.file_path === "string" ? block.input.file_path : null,
+					command: typeof block.input?.command === "string" ? block.input.command : null,
+					ok: true,
+				};
+				calls.push(call);
+				byId.set(block.id, call);
+			} else if (block?.type === "tool_result" && block.is_error === true && byId.has(block.tool_use_id)) {
+				byId.get(block.tool_use_id).ok = false;
+			}
+		}
+	}
+	return calls;
+}

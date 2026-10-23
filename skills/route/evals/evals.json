@@ -1,0 +1,244 @@
+{
+  "skill_name": "route",
+  "evals": [
+    {
+      "id": 1,
+      "name": "repo-table-wins-and-owners-load",
+      "prompt": "The contract in .agents/verify/contract.md is accepted. Route it: decide which skills own each surface and get them ready for implementation. Do not implement yet.",
+      "expected_output": "Reads the contract and .agents/routing.md, names the surfaces (the rendered filter in web/, the migration, the query in src/), routes the UI to acme-ui and the database work to acme-db from the repository table, loads both with the Skill tool, does not load ui-design-language or supabase-postgres-best-practices (superseded), and writes a ## Routing section into the contract.",
+      "assertions": [
+        "Names the surfaces from the contract (a rendered filter under web/, a status column migration, the list query) before naming skills",
+        "Routes the web/ surface to acme-ui and the migration and query to acme-db, citing the repository's routing table as the source",
+        "Records ui-design-language and supabase-postgres-best-practices as superseded rather than loading them",
+        "Does NOT add implementation advice of its own beyond restating what the routed skills say"
+      ],
+      "checks": [
+        {
+          "loaded_in_order": [
+            "route",
+            "acme-ui"
+          ]
+        },
+        {
+          "loaded_in_order": [
+            "route",
+            "acme-db"
+          ]
+        },
+        {
+          "not_loaded": [
+            "ui-design-language",
+            "supabase-postgres-best-practices"
+          ]
+        },
+        {
+          "file_contains": ".agents/verify/contract.md",
+          "pattern": "## Routing[\\s\\S]*acme-ui[\\s\\S]*acme-db|## Routing[\\s\\S]*acme-db[\\s\\S]*acme-ui"
+        }
+      ],
+      "fixture": "acme-invoices",
+      "verification": {
+        "command": [
+          "test",
+          "-f",
+          ".agents/routing.md"
+        ],
+        "expected_exit": 0
+      },
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "owners-load-before-the-first-edit",
+      "prompt": "Implement the accepted contract in .agents/verify/contract.md: the status filter on the invoices page and the status column. Keep it small.",
+      "expected_output": "Routes first, loads acme-ui before touching web/ and acme-db before writing the migration, then implements following them (FilterBar, copy in web/copy.js, text column with a check constraint).",
+      "assertions": [
+        "Loads the owning skills before writing code for their surfaces",
+        "The UI change uses FilterBar from @acme/ui rather than a raw select, as acme-ui requires",
+        "The migration adds a text status column with a check constraint and a default, as acme-db requires"
+      ],
+      "checks": [
+        {
+          "loaded_before_edit": "acme-ui",
+          "path": "web/"
+        },
+        {
+          "loaded_before_edit": "acme-db",
+          "path": "db/"
+        },
+        {
+          "not_loaded": [
+            "ui-design-language"
+          ]
+        }
+      ],
+      "fixture": "acme-invoices",
+      "verification": {
+        "command": [
+          "test",
+          "-f",
+          ".agents/verify/contract.md"
+        ],
+        "expected_exit": 0
+      },
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "repo-skill-wins-without-a-table-row",
+      "prompt": "Route the accepted contract in .agents/verify/contract.md before we implement it.",
+      "expected_output": "There is no .agents/routing.md. The repository's own acme-ui skill covers web/ and wins over the plugin's ui-design-language; the gap (no routing table, no row) is recorded. The database surface has no repository skill: it falls to the generic table (supabase-postgres-best-practices), or is owed if that skill is not installed.",
+      "assertions": [
+        "Notes that the repository has no routing table and falls back to the generic table",
+        "Routes web/ to the repository's acme-ui skill over ui-design-language, and records that the table should get that row",
+        "Routes the database surface by the generic table, or records it as owed when its skill is not installed, without substituting another skill"
+      ],
+      "checks": [
+        {
+          "loaded_in_order": [
+            "route",
+            "acme-ui"
+          ]
+        },
+        {
+          "not_loaded": [
+            "ui-design-language"
+          ]
+        },
+        {
+          "file_contains": ".agents/verify/contract.md",
+          "pattern": "## Routing"
+        }
+      ],
+      "fixture": "acme-no-table",
+      "verification": {
+        "command": [
+          "test",
+          "!",
+          "-f",
+          ".agents/routing.md"
+        ],
+        "expected_exit": 0
+      },
+      "files": []
+    },
+    {
+      "id": 4,
+      "name": "owed-surface-asks-the-human",
+      "prompt": "The accepted contract also needs a PDF export of each invoice (acceptance A3: 'Download PDF' on the invoice row). Route the change, including A3, before we implement.",
+      "expected_output": "acme-ui and acme-db are routed from the table. PDF generation has no owner in the table or the generic routing: it is owed. find-skills is used read-only to search for candidates and the turn ends asking the human which one, if any, to install. Nothing is installed.",
+      "assertions": [
+        "Records PDF generation as an owed surface with no owning skill",
+        "Searches for candidates read-only (find-skills or npx skills find) or records the search as not run with its command",
+        "Ends by asking the human whether to install a candidate, and installs nothing"
+      ],
+      "checks": [
+        {
+          "no_command": "skills add"
+        },
+        {
+          "loaded_in_order": [
+            "route",
+            "acme-ui"
+          ]
+        }
+      ],
+      "fixture": "acme-invoices",
+      "verification": {
+        "command": [
+          "test",
+          "-f",
+          ".agents/routing.md"
+        ],
+        "expected_exit": 0
+      },
+      "files": []
+    },
+    {
+      "id": 5,
+      "name": "two-claimants-resolved-once",
+      "prompt": "Two installed skills claim React component structure: vercel-composition-patterns and a newer react-architecture skill a teammate added last month through the repo's skills-lock.json. They disagree on compound components. The change touches our component library. How do you route it?",
+      "expected_output": "Neither skill wins by precedence (both are external, no table row). The surface is routed to neither and the human is asked which one stays. Since the repository controls the install (skills-lock.json), the fix proposed is removing the loser there, and the routing table gets the winner. Loading both is a defect.",
+      "assertions": [
+        "Does NOT load both skills, and does not pick one silently when nothing in the repository decides",
+        "Asks the human which skill stays, as the one open question",
+        "Proposes removing the loser through the repository's install (skills-lock.json)",
+        "Says the routing table records the decision once made"
+      ],
+      "files": []
+    },
+    {
+      "id": 6,
+      "name": "owners-load-when-only-the-table-says-so",
+      "prompt": "Implement the accepted contract in .agents/verify/contract.md: the status filter on the invoices page and the status column. Keep it small.",
+      "expected_output": "The repository skills describe themselves only as house conventions; only .agents/routing.md says acme-ui owns web/ and acme-db owns db/. Routing loads both before their edits, and the implementation follows them (FilterBar, copy in web/copy.js, text status column with a check constraint).",
+      "assertions": [
+        "Loads the owning skills before writing code for their surfaces",
+        "The UI change uses FilterBar from @acme/ui rather than a raw select, as acme-ui requires",
+        "The migration adds a text status column with a check constraint and a default, as acme-db requires"
+      ],
+      "checks": [
+        {
+          "loaded_before_edit": "acme-ui",
+          "path": "web/"
+        },
+        {
+          "loaded_before_edit": "acme-db",
+          "path": "db/"
+        },
+        {
+          "not_loaded": [
+            "ui-design-language"
+          ]
+        }
+      ],
+      "fixture": "acme-vague",
+      "verification": {
+        "command": [
+          "test",
+          "-f",
+          ".agents/routing.md"
+        ],
+        "expected_exit": 0
+      },
+      "files": []
+    },
+    {
+      "id": 7,
+      "name": "a-catalog-skill-no-table-names-is-routed",
+      "prompt": "The accepted contract in .agents/verify/contract.md gains acceptance A3: 'each invoice gets a one-line summary of its notes, generated with the Anthropic API (a Claude model) when the invoice is saved'. Route the change, including A3, before we implement. Do not implement.",
+      "expected_output": "acme-ui and acme-db come from the repository table. A3 has no row anywhere, but the session offers a skill whose description covers building with the Claude API (claude-api, built into Claude Code): route reads the offered skills against the contract, loads it as the owner of A3's surface, and records it with precedence catalog.",
+      "assertions": [
+        "Names a surface for A3 (generating the summary with the Anthropic API) that no routing table covers",
+        "Routes that surface to a skill the session offers whose description covers the Claude or Anthropic API, found by reading the offered skills rather than a table",
+        "Records that owner in the contract's Routing section with its precedence (catalog or equivalent)",
+        "Does NOT implement anything"
+      ],
+      "checks": [
+        {
+          "loaded_in_order": [
+            "route",
+            "claude-api"
+          ]
+        },
+        {
+          "file_contains": ".agents/verify/contract.md",
+          "pattern": "## Routing[\\s\\S]*claude-api"
+        },
+        {
+          "no_edit": "src/"
+        }
+      ],
+      "fixture": "acme-invoices",
+      "verification": {
+        "command": [
+          "test",
+          "-f",
+          ".agents/routing.md"
+        ],
+        "expected_exit": 0
+      },
+      "files": []
+    }
+  ]
+}

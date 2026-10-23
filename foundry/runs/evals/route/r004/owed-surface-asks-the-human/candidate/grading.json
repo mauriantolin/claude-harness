@@ -1,0 +1,37 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Records PDF generation as an owed surface with no owning skill",
+      "passed": true,
+      "reason": "The transcript has an explicit \"Owed: PDF generation\" section stating that no row in the repo or generic routing table covers it and that neither acme-ui nor acme-db owns it."
+    },
+    {
+      "index": 2,
+      "assertion": "Searches for candidates read-only (find-skills or npx skills find) or records the search as not run with its command",
+      "passed": true,
+      "reason": "The transcript states \"I did not run the `find-skills` search\" and explains why, so it records the search as not run and names the command, though it gives no full invocation."
+    },
+    {
+      "index": 3,
+      "assertion": "Ends by asking the human whether to install a candidate, and installs nothing",
+      "passed": true,
+      "reason": "The final message closes with a decision for the user (option 2 would approve a find-skills search), the skill tool calls were only route/acme-ui/acme-db with no installation, and the repo status shows only the untracked .agents/verify/ directory."
+    },
+    {
+      "index": 4,
+      "assertion": "[check] never ran `skills add`",
+      "passed": true,
+      "reason": "not run",
+      "deterministic": true
+    },
+    {
+      "index": 5,
+      "assertion": "[check] loaded in order: route → acme-ui",
+      "passed": true,
+      "reason": "loads: harness:route, acme-ui, acme-db",
+      "deterministic": true
+    }
+  ]
+}

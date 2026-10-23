@@ -1,0 +1,52 @@
+{
+  "skill_name": "loop",
+  "evals": [
+    {
+      "id": 1,
+      "name": "ticket-through-the-loop",
+      "prompt": "Take tickets/INV-12.md through the loop in this repository.",
+      "expected_output": "Reads .agents/harness.md, writes the contract with the ticket's IDs (INV-12/a, b, c) and observe lines, routes (acme-cli for src/, acme-db for db/, supabase-postgres-best-practices superseded), loads the owners before editing, implements, observes check and the list driver with a status, runs the gate, and stops at human promotion without committing or pushing.",
+      "assertions": [
+        "The contract's acceptance items keep the ticket's IDs (INV-12/a, INV-12/b, INV-12/c) as .agents/harness.md requires",
+        "The implementation follows the routed skills: parseArgs for the flag, filtering as a pure function in src/invoices.js, a text status column with a default and a check constraint",
+        "Observes the change on the real surface (the list driver with a status argument) and reports the evidence paths",
+        "Stops at human promotion: proposes the exact action and does not commit, push or open a PR"
+      ],
+      "checks": [
+        { "loaded_in_order": ["loop", "route"] },
+        { "loaded_before_edit": "acme-cli", "path": "src/" },
+        { "loaded_before_edit": "acme-db", "path": "db/" },
+        { "not_loaded": ["supabase-postgres-best-practices"] },
+        { "file_contains": ".agents/verify/contract.md", "pattern": "INV-12/a" },
+        { "file_contains": ".agents/verify/contract.md", "pattern": "## Routing" },
+        { "ran_command": "observe.sh list" },
+        { "no_command": "git push" },
+        { "no_command": "git commit" }
+      ],
+      "fixture": "acme-cli",
+      "verification": { "command": ["bash", ".agents/verify/check.sh"], "expected_exit": 0 },
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "plain-request-gets-the-binding",
+      "prompt": "Support asked for `list --status paid` in the CLI, plus the status column in the schema. Implement it.",
+      "expected_output": "Same path as a ticket: the binding is read, the contract cites INV-12 when it finds the ticket (or records that the request has no ticket), routing loads acme-cli and acme-db before their edits, and the change is observed before claiming done.",
+      "assertions": [
+        "Reads the repository binding (.agents/harness.md) and follows what it says about the contract and delivery",
+        "Loads the routed skills before writing code for their surfaces",
+        "Observes the change with the list driver before saying it is done",
+        "Does not commit or push"
+      ],
+      "checks": [
+        { "loaded_before_edit": "acme-cli", "path": "src/" },
+        { "loaded_before_edit": "acme-db", "path": "db/" },
+        { "ran_command": "observe.sh list" },
+        { "no_command": "git push" }
+      ],
+      "fixture": "acme-cli",
+      "verification": { "command": ["bash", ".agents/verify/check.sh"], "expected_exit": 0 },
+      "files": []
+    }
+  ]
+}

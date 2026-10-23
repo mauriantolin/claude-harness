@@ -4,6 +4,7 @@ node_modules/
 # repositories, raw outputs and transcripts they were computed from do not
 # belong in git.
 foundry/runs/evals/**/repo/
+foundry/runs/evals/**/repo-origin.git/
 foundry/runs/evals/**/stream.jsonl
 foundry/runs/evals/**/output.txt
 foundry/runs/evals/**/transcript.txt
@@ -18,7 +19,8 @@ foundry/runs/triggers/**/stream/
 **/foundry/runs/spec/
 /cases/*
 !/cases/claude-harness/
-/.claude/knowledge/cases/
+/.agents/knowledge/
 /.claude/settings.local.json
-# An eval fixture's knowledge root is invented for the eval, not a record.
-!/hooks/*/evals/fixtures/**/foundry/missions/
+# Runs over a real project (its own .agents/evals suites) quote that project: they stay here.
+foundry/runs/evals/nomenclator/
+foundry/runs/triggers/nomenclator/

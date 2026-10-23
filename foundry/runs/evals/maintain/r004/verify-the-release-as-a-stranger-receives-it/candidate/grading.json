@@ -1,0 +1,35 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Requires a clean install from the produced tarball in an environment that does not have the development toolchain on PATH",
+      "passed": false,
+      "reason": "The agent never got to a clean install; it stopped because no tarball was found and Bash was unavailable, and it only listed the install as a requirement for the user to supply."
+    },
+    {
+      "index": 2,
+      "assertion": "Inspects the package contents (what is actually inside the tarball)",
+      "passed": false,
+      "reason": "The agent did not inspect any tarball; it reported that dist/ was missing and asked the user for a `tar tzf` listing instead."
+    },
+    {
+      "index": 3,
+      "assertion": "Runs a smoke test of the primary command from that clean install",
+      "passed": false,
+      "reason": "No smoke test was run; the agent stated it had no shell and no artifact to test."
+    },
+    {
+      "index": 4,
+      "assertion": "States suite results as numbers (passed / skipped), not as the word green",
+      "passed": false,
+      "reason": "The agent gave no suite counts at all; it only said the user's claim that the suite passed does not count as verification and asked for the numbers."
+    },
+    {
+      "index": 5,
+      "assertion": "Names in the affirmative what was not done (not published, not tagged, not pushed)",
+      "passed": true,
+      "reason": "The agent affirmatively stated that nothing has been published, installed or run, though it did not mention tagging or pushing specifically."
+    }
+  ]
+}

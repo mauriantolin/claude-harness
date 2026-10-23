@@ -149,22 +149,9 @@ if [[ ! -f "$HOME/.claude/CLAUDE.md" ]]; then
 	own="$DATA_MOUNT/_migracion/claude-config/CLAUDE.linux.md"
 	if [[ -f "$own" ]]; then cp "$own" "$HOME/.claude/CLAUDE.md"; else cp "$REPO/machine/CLAUDE.global.md" "$HOME/.claude/CLAUDE.md"; fi
 fi
-shaping="$HOME/.local/share/shaping-skills"
-[[ -d "$shaping/.git" ]] || git clone -q https://github.com/rjs/shaping-skills "$shaping"
-for s in shaping breadboarding; do
-	[[ -e "$HOME/.claude/skills/$s" ]] || ln -s "$shaping/$s" "$HOME/.claude/skills/$s"
-done
-grep -v '^#' "$REPO/machine/skills.txt" | while read -r source skill; do
-	[[ -n "$skill" && ! -e "$HOME/.claude/skills/$skill" ]] || continue
-	npx --yes skills add "$source" -g -a claude-code -s "$skill" -y </dev/null >/dev/null 2>&1 ||
-		echo "  could not install $skill from $source"
-done
-for m in anthropics/claude-plugins-official Railly/skills typesafe-ai/skills; do
+# Known marketplaces, nothing enabled: each repository enables its plugins (harness init).
+for m in anthropics/claude-plugins-official Railly/skills mauriantolin/claude-harness; do
 	claude plugin marketplace add "$m" >/dev/null 2>&1 || true
-done
-node -e 'for (const [id, on] of Object.entries(require(process.argv[1]).enabledPlugins ?? {})) if (on) console.log(id)' \
-	"$HOME/.claude/settings.json" | while read -r id; do
-	claude plugin install "$id" >/dev/null 2>&1 || echo "  could not install plugin $id"
 done
 
 step "pending (run these yourself)"

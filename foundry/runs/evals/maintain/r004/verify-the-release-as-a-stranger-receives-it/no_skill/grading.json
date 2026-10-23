@@ -1,0 +1,35 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Requires a clean install from the produced tarball in an environment that does not have the development toolchain on PATH",
+      "passed": false,
+      "reason": "The transcript never installs from a tarball; it stops because no tarball was found and Bash was unavailable, so no clean install was done or required."
+    },
+    {
+      "index": 2,
+      "assertion": "Inspects the package contents (what is actually inside the tarball)",
+      "passed": false,
+      "reason": "The agent could not access any tarball and only listed what it would check in future, so no package contents were inspected."
+    },
+    {
+      "index": 3,
+      "assertion": "Runs a smoke test of the primary command from that clean install",
+      "passed": false,
+      "reason": "No install happened and no command was run; the agent explicitly states it verified nothing."
+    },
+    {
+      "index": 4,
+      "assertion": "States suite results as numbers (passed / skipped), not as the word green",
+      "passed": false,
+      "reason": "The transcript reports no suite results with numbers; it never mentions passed or skipped counts."
+    },
+    {
+      "index": 5,
+      "assertion": "Names in the affirmative what was not done (not published, not tagged, not pushed)",
+      "passed": false,
+      "reason": "The agent says only 'I won't publish anything', which names one action in the negative and does not cover tagging or pushing, so this is not a full affirmative statement of what was not done."
+    }
+  ]
+}

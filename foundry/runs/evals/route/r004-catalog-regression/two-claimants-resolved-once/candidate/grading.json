@@ -1,0 +1,29 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Does NOT load both skills, and does not pick one silently when nothing in the repository decides",
+      "passed": true,
+      "reason": "The agent loaded neither skill, only invoked harness:route, stated that no repo file decides the conflict, and asked the user to choose."
+    },
+    {
+      "index": 2,
+      "assertion": "Asks the human which skill stays, as the one open question",
+      "passed": true,
+      "reason": "The agent asks which skill should own compound-component structure, though it adds a second question about removal that depends on that answer."
+    },
+    {
+      "index": 3,
+      "assertion": "Proposes removing the loser through the repository's install (skills-lock.json)",
+      "passed": true,
+      "reason": "The agent offers to propose removing the other skill from skills-lock.json so the conflict does not come back."
+    },
+    {
+      "index": 4,
+      "assertion": "Says the routing table records the decision once made",
+      "passed": true,
+      "reason": "The agent says it would add a \"Supersedes\" row naming the winner to .agents/routing.md once the choice is made."
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "States that a created deployment is not the same as a serving one",
+      "passed": true,
+      "reason": "The transcript says \"'Deployment created' means the platform accepted the deploy, not that it's serving.\""
+    },
+    {
+      "index": 2,
+      "assertion": "Does NOT report the 401 as a deployment failure",
+      "passed": true,
+      "reason": "The transcript says \"The 401 isn't a deployment failure\" and explains that a login wall answers 401 to anonymous requests."
+    },
+    {
+      "index": 3,
+      "assertion": "Proposes using the platform's own authenticated access path to reach the protected deployment",
+      "passed": true,
+      "reason": "It proposes requesting the preview \"through the platform's authenticated path, such as a protection-bypass token or an authenticated CLI session.\""
+    },
+    {
+      "index": 4,
+      "assertion": "Requires confirming the served artifact corresponds to this exact commit (version endpoint, build id, or a marker the change introduced)",
+      "passed": true,
+      "reason": "It requires checking \"that its build id or commit SHA matches the PR head\" and lists confirming the served build against the commit as an open gap."
+    },
+    {
+      "index": 5,
+      "assertion": "Does NOT declare the change deployed on the basis of the green build alone",
+      "passed": true,
+      "reason": "The transcript opens with \"Not verified. I can't yet say the change is deployed\" and does not rely on the green CI."
+    }
+  ]
+}

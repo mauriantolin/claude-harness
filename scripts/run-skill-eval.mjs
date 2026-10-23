@@ -12,15 +12,22 @@
 //     --model <model>    agent model            (default: the CLI default)
 //     --judge <model>    grader model           (default: haiku)
 //     --parallel <n>     runs in flight         (default: 1)
-//     --candidate-dir <d> plugin dir for the candidate arm (default: this repo)
+//     --candidate-dir <d> plugin dir for the candidate arm (default: this working
+//                        copy as the `harness` plugin, skills and hooks)
 //     --evals <file>     evals.json to run instead of the skill's own, for a
 //                        skill this repository does not author (Railly's
-//                        factory-loop, measured under hooks/*/evals/)
+//                        loop, measured under hooks/*/evals/ or a repository's .agents/evals/)
 //     --env K=V          set a variable for the agent runs (repeatable); how a
 //                        hook is switched off for a baseline arm
 //     --deny <rule>      add a permission rule the agent may not use
 //                        (repeatable), e.g. "Bash(npx skills add:*)"; holds
 //                        in fixture runs too, where permissions are skipped
+//     --with-plugin <d>  load this plugin dir in every arm (repeatable); how a
+//                        hook or skill under test rides along in a run whose
+//                        nudged skill comes from another plugin
+//     --nudge <ref|none> skill the skill arms are told to load (default: the
+//                        skill under test); `none` runs the prompt as a user
+//                        would type it, to measure the whole flow unprompted
 //     --dry-run          print the plan, run nothing
 //     --regrade <ws>     re-run only the judge over an existing workspace, for
 //                        gradings that failed (add --regrade-all for every run)
@@ -36,9 +43,11 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { runClaude, runWithLimit } from "./lib/claude-cli.mjs";
 import { diffSnapshots, snapshotDirs } from "./lib/environment-guard.mjs";
-import { aggregate, renderBenchmark } from "./lib/evals.mjs";
+import { devPluginDir } from "./lib/dev-plugin.mjs";
+import { repoFixture } from "./lib/repo-fixture.mjs";
+import { aggregate, renderBenchmark, runChecks } from "./lib/evals.mjs";
 import { skillDir } from "./lib/skills.mjs";
-import { finalResult, isCompleteRun, judgeTrigger, skillInvocations, skillLoads } from "./lib/trigger-detect.mjs";
+import { finalResult, isCompleteRun, judgeTrigger, skillInvocations, skillLoads, toolTimeline } from "./lib/trigger-detect.mjs";
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -51,14 +60,19 @@ const loadNudge = (ref) =>
 
 // Each arm differs only in which skills the run can see. A skill that scores
 // the same as `no_skill` is not earning its tokens.
+const nudge = (ref) => (ref === "none" ? [] : ["--append-system-prompt", loadNudge(ref)]);
 const VARIANT_ARGS = {
 	no_skill: () => ["--disable-slash-commands"],
-	current: (_dir, skill) => ["--append-system-prompt", loadNudge(skill)],
+	// Everything the cwd offers (its own skills, plugins and hooks), no
+	// harness plugin and no nudge: the baseline for a skill that routes to
+	// others, which no_skill cannot measure because it disables every skill.
+	bare: () => [],
+	current: (_dir, skill, ref) => nudge(ref ?? skill),
 	// A --plugin-dir skill is addressed as <plugin>:<skill>; the plugin name
 	// comes from the working copy's plugin.json.
-	candidate: (dir, skill) => {
+	candidate: (dir, skill, ref) => {
 		const plugin = JSON.parse(readFileSync(join(dir, ".claude-plugin", "plugin.json"), "utf8")).name;
-		return ["--plugin-dir", dir, "--append-system-prompt", loadNudge(`${plugin}:${skill}`)];
+		return ["--plugin-dir", dir, ...nudge(ref ?? `${plugin}:${skill}`)];
 	},
 };
 
@@ -71,10 +85,12 @@ function parseArgs(argv) {
 		model: null,
 		judge: "haiku",
 		parallel: 1,
-		candidateDir: REPO,
+		candidateDir: null,
 		evals: null,
 		env: {},
 		deny: [],
+		plugins: [],
+		nudge: null,
 		dryRun: false,
 		regrade: null,
 		regradeAll: false,
@@ -93,6 +109,8 @@ function parseArgs(argv) {
 			const [k, ...v] = argv[++i].split("=");
 			opts.env[k] = v.join("=");
 		} else if (a === "--deny") opts.deny.push(argv[++i]);
+		else if (a === "--with-plugin") opts.plugins.push(resolve(argv[++i]));
+		else if (a === "--nudge") opts.nudge = argv[++i];
 		else if (a === "--dry-run") opts.dryRun = true;
 		else if (a === "--regrade") opts.regrade = resolve(argv[++i]);
 		else if (a === "--regrade-all") opts.regradeAll = true;
@@ -214,7 +232,7 @@ async function regrade(workspace, opts) {
 	const suite = JSON.parse(readFileSync(evalsPath(opts), "utf8"));
 	const tasks = [];
 	for (const item of suite.evals) {
-		for (const variant of ["no_skill", "current", "candidate"]) {
+		for (const variant of ["no_skill", "bare", "current", "candidate"]) {
 			const dir = join(workspace, item.name, variant);
 			const gradingFile = join(dir, "grading.json");
 			if (!existsSync(gradingFile)) continue;
@@ -279,7 +297,13 @@ async function runOne({ item, variant, dir, opts }) {
 	// CLAUDE.md or skills can leak into the measurement.
 	let cwd;
 	let repo = null;
-	if (item.fixture) {
+	if (item.fixture_repo) {
+		// A real repository (the suite names it relative to its own file): its working state in a
+		// local clone whose origin is an empty bare repository.
+		repo = join(dir, "repo");
+		repoFixture({ ...item.fixture_repo, source: resolve(dirname(opts.evals ?? "."), item.fixture_repo.source) }, repo, writeFileSync);
+		cwd = repo;
+	} else if (item.fixture) {
 		repo = join(dir, "repo");
 		// A suite passed with --evals keeps its fixtures beside it.
 		const fixturesRoot = opts.evals ? [join(dirname(opts.evals), "fixtures")] : [];
@@ -294,7 +318,12 @@ async function runOne({ item, variant, dir, opts }) {
 	const before = snapshotDirs();
 	const run = await runClaude({
 		prompt: item.prompt,
-		args: agentArgs(VARIANT_ARGS[variant](opts.candidateDir, opts.skill), opts.model, Boolean(repo), opts.deny),
+		args: agentArgs(
+			[...opts.plugins.flatMap((d) => ["--plugin-dir", d]), ...VARIANT_ARGS[variant](opts.candidateDir, opts.skill, opts.nudge)],
+			opts.model,
+			Boolean(repo),
+			opts.deny,
+		),
 		cwd,
 		env: Object.keys(opts.env).length ? opts.env : undefined,
 	});
@@ -337,6 +366,19 @@ async function runOne({ item, variant, dir, opts }) {
 	writeFileSync(join(dir, "transcript.txt"), transcript);
 
 	const grading = { skill_invoked: skillInvoked, ...(await grade(item, transcript, opts.judge)) };
+	// Deterministic checks are appended after the judged ones, so a judge
+	// failure still leaves what the stream and the repository prove.
+	const readRepoFile = (p) => {
+		const f = repo ? join(repo, p) : null;
+		return f && existsSync(f) ? readFileSync(f, "utf8") : null;
+	};
+	const originRefs = () => {
+		if (!repo || !existsSync(`${repo}-origin.git`)) return null;
+		const out = execFileSync("git", ["for-each-ref", "--format=%(refname)"], { cwd: `${repo}-origin.git`, encoding: "utf8" }).trim();
+		return out ? out.split("\n") : [];
+	};
+	const checked = runChecks(item.checks, toolTimeline(stream), readRepoFile, originRefs);
+	grading.expectations = [...(grading.expectations || []), ...checked.map((c, i) => ({ index: item.assertions.length + i + 1, ...c, deterministic: true }))];
 	writeFileSync(join(dir, "grading.json"), `${JSON.stringify(grading, null, 2)}\n`);
 	const passed = (grading.expectations || []).filter((e) => e.passed).length;
 	const total = grading.expectations?.length || 0;
@@ -352,6 +394,7 @@ async function main() {
 		);
 		process.exit(1);
 	}
+	opts.candidateDir ??= devPluginDir(REPO);
 	const suitePath = evalsPath(opts);
 	if (!suitePath) {
 		console.error(`no skill named "${opts.skill}" under skills/ or skills/.experimental/ (pass --evals <file> for a skill this repository does not author)`);

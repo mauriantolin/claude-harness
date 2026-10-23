@@ -1,0 +1,74 @@
+{
+  "skill_name": "maintain",
+  "iteration": "2026-10-23T19-25-37-081Z",
+  "variants": {
+    "no_skill": {
+      "passed": 7,
+      "total": 20,
+      "pass_rate": 0.35,
+      "runs": 4,
+      "invoked": 0,
+      "evals": {
+        "a-moved-head-is-unreviewed": {
+          "passed": 2,
+          "total": 5,
+          "pass_rate": 0.4,
+          "skill_invoked": false
+        },
+        "publish-and-its-verification-share-one-condition": {
+          "passed": 1,
+          "total": 4,
+          "pass_rate": 0.25,
+          "skill_invoked": false
+        },
+        "release-is-a-reviewed-change-with-version-sync": {
+          "passed": 4,
+          "total": 6,
+          "pass_rate": 0.6666666666666666,
+          "skill_invoked": false
+        },
+        "verify-the-release-as-a-stranger-receives-it": {
+          "passed": 0,
+          "total": 5,
+          "pass_rate": 0,
+          "skill_invoked": false
+        }
+      }
+    },
+    "candidate": {
+      "passed": 15,
+      "total": 20,
+      "pass_rate": 0.75,
+      "runs": 4,
+      "invoked": 4,
+      "evals": {
+        "a-moved-head-is-unreviewed": {
+          "passed": 4,
+          "total": 5,
+          "pass_rate": 0.8,
+          "skill_invoked": true
+        },
+        "publish-and-its-verification-share-one-condition": {
+          "passed": 4,
+          "total": 4,
+          "pass_rate": 1,
+          "skill_invoked": true
+        },
+        "release-is-a-reviewed-change-with-version-sync": {
+          "passed": 6,
+          "total": 6,
+          "pass_rate": 1,
+          "skill_invoked": true
+        },
+        "verify-the-release-as-a-stranger-receives-it": {
+          "passed": 1,
+          "total": 5,
+          "pass_rate": 0.2,
+          "skill_invoked": true
+        }
+      }
+    }
+  },
+  "candidate_delta_vs_current": null,
+  "current_delta_vs_no_skill": null
+}

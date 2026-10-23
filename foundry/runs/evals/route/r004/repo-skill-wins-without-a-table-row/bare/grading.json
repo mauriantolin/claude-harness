@@ -1,0 +1,44 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Notes that the repository has no routing table and falls back to the generic table",
+      "passed": false,
+      "reason": "The transcript says the repo has no routing table but never mentions falling back to the generic table; it only says the acme-ui skill applies without a table row."
+    },
+    {
+      "index": 2,
+      "assertion": "Routes web/ to the repository's acme-ui skill over ui-design-language, and records that the table should get that row",
+      "passed": false,
+      "reason": "The transcript routes web/ to acme-ui but never mentions ui-design-language and never records that the routing table should get a row for it."
+    },
+    {
+      "index": 3,
+      "assertion": "Routes the database surface by the generic table, or records it as owed when its skill is not installed, without substituting another skill",
+      "passed": false,
+      "reason": "The db/migrations row gives no skill and never says it is routed by the generic table or recorded as owed, so the positive part is unaddressed, though no other skill is substituted."
+    },
+    {
+      "index": 4,
+      "assertion": "[check] loaded in order: route → acme-ui",
+      "passed": false,
+      "reason": "loads: (none)",
+      "deterministic": true
+    },
+    {
+      "index": 5,
+      "assertion": "[check] not loaded: ui-design-language",
+      "passed": true,
+      "reason": "none loaded",
+      "deterministic": true
+    },
+    {
+      "index": 6,
+      "assertion": "[check] .agents/verify/contract.md matches /## Routing/",
+      "passed": false,
+      "reason": "no match",
+      "deterministic": true
+    }
+  ]
+}

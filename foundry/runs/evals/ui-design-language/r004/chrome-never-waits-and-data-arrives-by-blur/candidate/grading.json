@@ -1,0 +1,29 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Renders the page chrome (layout, title, controls) immediately rather than waiting on the data",
+      "passed": true,
+      "reason": "The answer says the title, the \"Last 30 days\" label, filters and the table plate \"render at once and never wait on the endpoint.\""
+    },
+    {
+      "index": 2,
+      "assertion": "Uses a pixel-matched skeleton for the table rows, not a generic spinner or a blank area",
+      "passed": true,
+      "reason": "The answer specifies a skeleton that \"matches the table pixel for pixel,\" using the real column template and row height, with per-column bar widths, and explicitly excludes a spinner."
+    },
+    {
+      "index": 3,
+      "assertion": "Transitions the loaded data in by blur (a short fade/blur arrival) instead of an abrupt pop",
+      "passed": true,
+      "reason": "The answer says rows move from skeleton to content \"with a short blur-and-fade crossfade\" and not by popping in."
+    },
+    {
+      "index": 4,
+      "assertion": "Respects prefers-reduced-motion and announces the loading state accessibly (role=status or equivalent)",
+      "passed": true,
+      "reason": "The answer makes the shimmer \"a static fill\" under prefers-reduced-motion and adds a visually hidden role=\"status\" line reading \"Loading API calls\" plus aria-busy, though it does not say the blur transition is also disabled under reduced motion."
+    }
+  ]
+}

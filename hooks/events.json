@@ -1,9 +1,52 @@
 {
-	"factory-loop-checkpoints": { "event": "PostToolUse", "matcher": "Skill" },
-	"railly-root-worktree": { "event": "SessionStart", "matcher": "" },
-	"restore-repo-skills": { "event": "SessionStart", "matcher": "" },
-	"scan-secrets-pre": { "event": "PreToolUse", "matcher": "Write|Edit" },
-	"guard-immutable-docs": { "event": "PreToolUse", "matcher": "Write|Edit" },
-	"scan-secrets": { "event": "PostToolUse", "matcher": "Write|Edit" },
-	"format-touched": { "event": "PostToolUse", "matcher": "Write|Edit" }
+	"knowledge-root": {
+		"event": "SessionStart",
+		"matcher": "",
+		"timeout": 10
+	},
+	"restore-repo-skills": {
+		"event": "SessionStart",
+		"matcher": "",
+		"timeout": 120
+	},
+	"loop-entry": {
+		"event": "UserPromptSubmit",
+		"matcher": "",
+		"timeout": 10
+	},
+	"scan-secrets-pre": {
+		"event": "PreToolUse",
+		"matcher": "Write|Edit",
+		"timeout": 30
+	},
+	"guard-immutable-docs": {
+		"event": "PreToolUse",
+		"matcher": "Write|Edit",
+		"timeout": 30
+	},
+	"route-guard": {
+		"event": "PreToolUse",
+		"matcher": "Write|Edit|MultiEdit",
+		"timeout": 10
+	},
+	"loop-bindings": {
+		"event": "PostToolUse",
+		"matcher": "Skill",
+		"timeout": 10
+	},
+	"scan-secrets": {
+		"event": "PostToolUse",
+		"matcher": "Write|Edit",
+		"timeout": 30
+	},
+	"format-touched": {
+		"event": "PostToolUse",
+		"matcher": "Write|Edit",
+		"timeout": 30
+	},
+	"verify-before-done": {
+		"event": "Stop",
+		"matcher": "",
+		"timeout": 90
+	}
 }

@@ -1,0 +1,29 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Ends with exactly one owner for the component-structure surface",
+      "passed": false,
+      "reason": "The agent stopped without assigning an owner, asking the user which skill should own component architecture and explicitly leaving the choice open."
+    },
+    {
+      "index": 2,
+      "assertion": "Proposes removing one through the repository's install (skills-lock.json) because the repository controls it",
+      "passed": true,
+      "reason": "The agent says that because the repo controls the install it would propose removing the loser from skills-lock.json, though it frames this as the user's call."
+    },
+    {
+      "index": 3,
+      "assertion": "Says the routing table records the winner while both remain installed",
+      "passed": false,
+      "reason": "The agent mentions adding a row to .agents/routing.md for the surface but never states that the table records the winner while both skills stay installed."
+    },
+    {
+      "index": 4,
+      "assertion": "Does NOT load both skills for the same surface",
+      "passed": true,
+      "reason": "The agent invoked only harness:route and explicitly said it would never load both skills, so it avoided loading both."
+    }
+  ]
+}

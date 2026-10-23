@@ -1,15 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Links this repository's skills, scripts, hooks and commands into the Claude Code user
-# directory, matching how the ~/.agents/skills entries are already wired.
-# Re-runnable: an existing correct link is left alone, a wrong one is replaced,
-# and a real directory is refused rather than silently destroyed.
-#
-# Both catalogs are linked: skills/<name> (stable) and
-# skills/.experimental/<name> (candidates under evaluation). Development
-# installs are links to the working copy, so an edit is live in the next
-# session and an eval always measures what is in git.
+# Installs this repository's commands (bin/<name>.mjs) on the PATH as launchers.
+# Skills and hooks are not installed here: a repository enables them through
+# the marketplace plugins (`harness init`), so nothing of the harness is global.
+# Re-runnable. It also removes what earlier versions linked into the Claude Code
+# user directory (skills, scripts and hook launchers pointing at this working
+# copy), and refuses to touch anything it did not create.
 
 readonly REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 readonly CLAUDE_DIR="${CLAUDE_CONFIG_DIR:-$HOME/.claude}"
@@ -116,37 +113,29 @@ link_one() {
   printf '  linked   %s\n' "$name"
 }
 
+# Earlier versions linked every skill, script and hook into the user directory,
+# which made them global to every repository. Remove only what points here.
+unlink_global() {
+  local dir="$1" entry removed=0
+  [[ -d "$dir" ]] || return 0
+  for entry in "$dir"/*; do
+    [[ -e "$entry" || -L "$entry" ]] || continue
+    if [[ -L "$entry" && "$(readlink "$entry")" == "$REPO_ROOT"/* ]] || is_our_launcher "$entry"; then
+      rm -f "$entry"
+      printf '  removed  %s\n' "${entry#"$CLAUDE_DIR"/}"
+      removed=1
+    fi
+  done
+  return 0
+}
+
 main() {
   local failed=0
 
-  printf 'skills -> %s/skills\n' "$CLAUDE_DIR"
-  mkdir -p "$CLAUDE_DIR/skills"
-  for skill in "$REPO_ROOT"/skills/*/ "$REPO_ROOT"/skills/.experimental/*/; do
-    [[ -d "$skill" && -f "$skill/SKILL.md" ]] || continue
-    skill="${skill%/}"
-    link_one "$skill" "$CLAUDE_DIR/skills/$(basename "$skill")" || failed=1
-  done
+  printf 'global harness links under %s (removed: repositories enable the plugins)\n' "$CLAUDE_DIR"
+  for d in skills scripts hooks; do unlink_global "$CLAUDE_DIR/$d"; done
 
-  printf 'scripts -> %s/scripts\n' "$CLAUDE_DIR"
-  mkdir -p "$CLAUDE_DIR/scripts"
-  for script in "$REPO_ROOT"/scripts/*.mjs; do
-    [[ -f "$script" ]] || continue
-    link_one "$script" "$CLAUDE_DIR/scripts/$(basename "$script")" || failed=1
-  done
-
-  # hooks/<name>/hook.mjs becomes ~/.claude/hooks/<name>.mjs, a launcher like
-  # the scripts, so settings.json points at a stable path while the hook body
-  # and its addendum stay in the working copy. Registering the hook in
-  # settings.json is a one-time manual step; `npm run doctor` checks it.
-  printf 'hooks -> %s/hooks\n' "$CLAUDE_DIR"
-  mkdir -p "$CLAUDE_DIR/hooks"
-  for hook in "$REPO_ROOT"/hooks/*/hook.mjs "$REPO_ROOT"/hooks/*/hook.sh; do
-    [[ -f "$hook" ]] || continue
-    link_one "$hook" "$CLAUDE_DIR/hooks/$(basename "$(dirname "$hook")").${hook##*.}" || failed=1
-  done
-
-  # bin/<name>.mjs is a command on the PATH: ~/.local/bin/<name>, a launcher
-  # like the others. perfil is the one there today.
+  # bin/<name>.mjs is a command on the PATH: ~/.local/bin/<name>, a launcher.
   printf 'bin -> %s\n' "$BIN_DIR"
   mkdir -p "$BIN_DIR"
   for cmd in "$REPO_ROOT"/bin/*.mjs; do
@@ -158,7 +147,7 @@ main() {
     printf '\nSome links were refused. Nothing was destroyed.\n' >&2
     return 1
   fi
-  printf '\nDone. Next: npm run doctor\n'
+  printf '\nDone. Next: harness init <repository>, then npm run doctor\n'
 }
 
 main "$@"

@@ -1,12 +1,12 @@
 ---
 name: deploy-gate
-description: "Confirm that a pushed branch or merged change actually builds, deploys, and serves — by running the repository's own pre-push gate, watching remote CI to completion, verifying the deployment where one exists, and repairing what fails until it is green or an attempt cap is reached. Use after ship, or after a merge, whenever the repository deploys. Reports red honestly rather than declaring a success it did not observe."
+description: "Confirm that a pushed branch or merged change actually builds, deploys, and serves — by running the repository's own pre-push gate, watching remote CI to completion, verifying the deployment where one exists, and repairing what fails until it is green or an attempt cap is reached. Use after the loop delivers (an approved push, PR or merge) whenever the repository deploys. Reports red honestly rather than declaring a success it did not observe."
 compatibility: Requires an authenticated `gh`, the repository's CI configuration, and its deployment CLI when one exists. Degrade explicitly when a surface is unavailable; never substitute a local build for an observed deployment.
 ---
 
 # Deploy gate
 
-Railly Skills stops at promotion. This gate covers what happens after: the
+Railly's loop stops at delivery and correct. This gate covers what happens after: the
 change is pushed, and the question is whether it works where users meet it.
 
 The failure this gate exists to prevent is the confident green report about a

@@ -1,0 +1,35 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Identifies that the head moved after review and treats the PR as unreviewed",
+      "passed": false,
+      "reason": "The agent noted the approval predates the two new commits but then said the merge 'would go through' and framed the new commits as merely needing a look, not treating the PR as unreviewed."
+    },
+    {
+      "index": 2,
+      "assertion": "Refuses to merge until the gates pass at the current exact head",
+      "passed": false,
+      "reason": "The agent did not merge because it could not reach GitHub, not because it refused on gate grounds; it instead offered a merge command and asked to re-enable Bash."
+    },
+    {
+      "index": 3,
+      "assertion": "Names the missing gate(s) explicitly (a gate pass and fresh observations at the new head)",
+      "passed": false,
+      "reason": "The agent never mentions a gate pass or fresh observations at the new head; it only suggests reviewing the diff or getting a re-approval."
+    },
+    {
+      "index": 4,
+      "assertion": "Does NOT count green checks as a substitute for review at the exact head",
+      "passed": true,
+      "reason": "The transcript never cites green checks as sufficient, so it avoided that substitution."
+    },
+    {
+      "index": 5,
+      "assertion": "Does NOT rebase the contributor's branch; if the default branch must be brought in, merges it into the branch instead",
+      "passed": true,
+      "reason": "The agent did not rebase anything and did not touch the branch at all."
+    }
+  ]
+}

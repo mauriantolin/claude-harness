@@ -1,0 +1,57 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Names the surfaces from the contract (a rendered filter under web/, a status column migration, the list query) before naming skills",
+      "passed": true,
+      "reason": "The routing table's first column lists the surfaces (web/*, db/migrations/*, src/*, with A1/A2/M1 items) and the skill owners appear only in the adjacent column, so surfaces are named first, though the opening sentence mentions the owner skills in passing."
+    },
+    {
+      "index": 2,
+      "assertion": "Routes the web/ surface to acme-ui and the migration and query to acme-db, citing the repository's routing table as the source",
+      "passed": true,
+      "reason": "The agent states that .agents/routing.md's table sends web/* to acme-ui and db/migrations/* and the src/ SQL query to acme-db, and it cites that file as the source."
+    },
+    {
+      "index": 3,
+      "assertion": "Records ui-design-language and supabase-postgres-best-practices as superseded rather than loading them",
+      "passed": true,
+      "reason": "The agent says the routing file's supersede table retires both skills, will not load them, and the Skill-tool invocation list contains only acme-db and acme-ui."
+    },
+    {
+      "index": 4,
+      "assertion": "Does NOT give implementation guidance of its own (component structure, SQL, styling)",
+      "passed": false,
+      "reason": "Beyond relaying skill rules, the agent offers its own design advice ('I'd filter in the query, keep ordering there, and pass the selected status in from the page') and spells out the exact SQL column definition and FilterBar component structure, which goes past routing."
+    },
+    {
+      "index": 5,
+      "assertion": "[check] loaded in order: route → acme-ui",
+      "passed": false,
+      "reason": "loads: acme-db, acme-ui",
+      "deterministic": true
+    },
+    {
+      "index": 6,
+      "assertion": "[check] loaded in order: route → acme-db",
+      "passed": false,
+      "reason": "loads: acme-db, acme-ui",
+      "deterministic": true
+    },
+    {
+      "index": 7,
+      "assertion": "[check] not loaded: ui-design-language, supabase-postgres-best-practices",
+      "passed": true,
+      "reason": "none loaded",
+      "deterministic": true
+    },
+    {
+      "index": 8,
+      "assertion": "[check] .agents/verify/contract.md matches /## Routing[\\s\\S]*acme-ui[\\s\\S]*acme-db|## Routing[\\s\\S]*acme-db[\\s\\S]*acme-ui/",
+      "passed": false,
+      "reason": "no match",
+      "deterministic": true
+    }
+  ]
+}

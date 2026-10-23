@@ -1,0 +1,37 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Records PDF generation as an owed surface with no owning skill",
+      "passed": true,
+      "reason": "The routing table lists 'A3 PDF generation and endpoint in src/' with owner 'No owner', and states that neither project skill covers non-SQL API code."
+    },
+    {
+      "index": 2,
+      "assertion": "Searches for candidates read-only (find-skills or npx skills find) or records the search as not run with its command",
+      "passed": false,
+      "reason": "The transcript never runs or mentions find-skills or 'npx skills find', and does not record the search as not run with a command; it only notes the built-in pdf skill is unsuitable."
+    },
+    {
+      "index": 3,
+      "assertion": "Ends by asking the human whether to install a candidate, and installs nothing",
+      "passed": false,
+      "reason": "The transcript ends by asking about PDF contents, library, server/client, and non-goals, not whether to install a candidate skill; it does install nothing, but the install-question part is absent."
+    },
+    {
+      "index": 4,
+      "assertion": "[check] never ran `skills add`",
+      "passed": true,
+      "reason": "not run",
+      "deterministic": true
+    },
+    {
+      "index": 5,
+      "assertion": "[check] loaded in order: route → acme-ui",
+      "passed": false,
+      "reason": "loads: (none)",
+      "deterministic": true
+    }
+  ]
+}

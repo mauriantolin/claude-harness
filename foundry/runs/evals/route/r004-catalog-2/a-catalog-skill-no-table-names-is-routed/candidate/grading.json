@@ -1,0 +1,50 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Names a surface for A3 (generating the summary with the Anthropic API) that no routing table covers",
+      "passed": true,
+      "reason": "The transcript names the 'Anthropic API call on invoice save (src/*)' surface and states that no repo table row names it, with .agents/routing.md having no row for claude-api."
+    },
+    {
+      "index": 2,
+      "assertion": "Routes that surface to a skill the session offers whose description covers the Claude or Anthropic API, found by reading the offered skills rather than a table",
+      "passed": true,
+      "reason": "The transcript routes the Anthropic call to claude-api, explicitly picked from the session's skill list since no table row names it, and it was invoked via the Skill tool."
+    },
+    {
+      "index": 3,
+      "assertion": "Records that owner in the contract's Routing section with its precedence (catalog or equivalent)",
+      "passed": false,
+      "reason": "The transcript says it appended a ## Routing section to contract.md with claude-api, but it describes the owner as 'complements acme-db and does not replace it' without any explicit precedence ordering recorded in the contract, and the repository state shows the contract files are untracked so the recorded content cannot be verified beyond the summary."
+    },
+    {
+      "index": 4,
+      "assertion": "Does NOT implement anything",
+      "passed": true,
+      "reason": "The transcript states it implemented nothing, and the repository state shows only untracked .agents directories with no code changes in src or web."
+    },
+    {
+      "index": 5,
+      "assertion": "[check] loaded in order: route → claude-api",
+      "passed": true,
+      "reason": "loads: harness:route, acme-db, acme-ui, claude-api",
+      "deterministic": true
+    },
+    {
+      "index": 6,
+      "assertion": "[check] .agents/verify/contract.md matches /## Routing[\\s\\S]*claude-api/",
+      "passed": true,
+      "reason": "matches",
+      "deterministic": true
+    },
+    {
+      "index": 7,
+      "assertion": "[check] nothing under src/ was edited",
+      "passed": false,
+      "reason": "cat >> .agents/verify/contract.md <<'EOF'\n\n## Routing\n- web/* (invoices page, status filter): acme-ui (repo) loaded\n- db/migrations/* and SQL in src/ (status column, summary storage): acme-db (repo) l",
+      "deterministic": true
+    }
+  ]
+}

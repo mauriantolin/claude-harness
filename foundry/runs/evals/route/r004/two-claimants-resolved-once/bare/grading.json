@@ -1,0 +1,29 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Ends with exactly one owner for the component-structure surface",
+      "passed": false,
+      "reason": "The answer defers the decision: it says to check the repo and then stop and ask the user if the repo is silent, and never names a single owner for the component-structure surface."
+    },
+    {
+      "index": 2,
+      "assertion": "Proposes removing one through the repository's install (skills-lock.json) because the repository controls it",
+      "passed": false,
+      "reason": "It only mentions that someone should 'drop one, or add a repo note' in a later step and never proposes removing a skill through skills-lock.json or ties removal to repo control."
+    },
+    {
+      "index": 3,
+      "assertion": "Says the routing table records the winner while both remain installed",
+      "passed": false,
+      "reason": "The transcript never mentions a routing table or says that a winner is recorded while both skills stay installed."
+    },
+    {
+      "index": 4,
+      "assertion": "Does NOT load both skills for the same surface",
+      "passed": true,
+      "reason": "The transcript invoked no skills via the Skill tool, so it did not load both skills for the same surface."
+    }
+  ]
+}

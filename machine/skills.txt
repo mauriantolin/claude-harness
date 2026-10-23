@@ -1,5 +1,6 @@
-# Global skills this machine gets, one per line: <source> <skill>.
-# bootstrap-ubuntu.sh installs each with: npx skills add <source> -g -a claude-code -s <skill> -y
+# The catalog of external skills a repository may lock, one per line: <source> <skill>.
+# In the repository: npx skills add <source> -a claude-code -s <skill> (writes skills-lock.json;
+# restore-repo-skills restores it for whoever clones). Nothing here is installed globally.
 aws/agent-toolkit-for-aws aws-billing-and-cost-management
 aws/agent-toolkit-for-aws aws-cdk
 aws/agent-toolkit-for-aws aws-iam

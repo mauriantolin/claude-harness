@@ -1,0 +1,29 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Reads and follows the repository's tokens, corner treatment and typography instead of applying the ink/squircle/500-weight system",
+      "passed": false,
+      "reason": "The agent found the working directory empty, never read any tokens or components, and made no changes, so it followed none of the project's tokens, corners or typography."
+    },
+    {
+      "index": 2,
+      "assertion": "Does NOT replace the project's serif headings, hard corners or bold weights with the design language's rules",
+      "passed": true,
+      "reason": "The agent made no edits, so it did not replace the project's serif headings, hard corners or bold weights with the design language's rules."
+    },
+    {
+      "index": 3,
+      "assertion": "Uses the design language only for gaps the project does not define, and says which",
+      "passed": false,
+      "reason": "The agent never identified any gaps or said which parts it would take from the design language; it only described the skill's defaults in general terms."
+    },
+    {
+      "index": 4,
+      "assertion": "States that the project's own design system takes precedence",
+      "passed": true,
+      "reason": "The agent states that the project's look wins over the skill's defaults and that it would build from the project's tokens.css and components/ rather than the skill's recipes."
+    }
+  ]
+}

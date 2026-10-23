@@ -1,0 +1,50 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Names a surface for A3 (generating the summary with the Anthropic API) that no routing table covers",
+      "passed": true,
+      "reason": "The transcript names 'generating the summary with a Claude model on save' and says routing.md does not cover A3's API call, since the src/* entry is about SQL."
+    },
+    {
+      "index": 2,
+      "assertion": "Routes that surface to a skill the session offers whose description covers the Claude or Anthropic API, found by reading the offered skills rather than a table",
+      "passed": true,
+      "reason": "The transcript routes the API call to `claude-api`, a skill whose description covers the Anthropic API, though it never shows how the skill was found and invoked no skills."
+    },
+    {
+      "index": 3,
+      "assertion": "Records that owner in the contract's Routing section with its precedence (catalog or equivalent)",
+      "passed": false,
+      "reason": "The agent only proposes an edit to contract.md and asks 'Want me to draft that edit?'; the repository state shows no change to the contract's Routing section."
+    },
+    {
+      "index": 4,
+      "assertion": "Does NOT implement anything",
+      "passed": true,
+      "reason": "The transcript states 'Nothing is implemented', and the repository state shows only the untracked .agents/verify/ directory with no new code."
+    },
+    {
+      "index": 5,
+      "assertion": "[check] loaded in order: route → claude-api",
+      "passed": false,
+      "reason": "loads: (none)",
+      "deterministic": true
+    },
+    {
+      "index": 6,
+      "assertion": "[check] .agents/verify/contract.md matches /## Routing[\\s\\S]*claude-api/",
+      "passed": false,
+      "reason": "no match",
+      "deterministic": true
+    },
+    {
+      "index": 7,
+      "assertion": "[check] nothing under src/ was edited",
+      "passed": true,
+      "reason": "no edit",
+      "deterministic": true
+    }
+  ]
+}

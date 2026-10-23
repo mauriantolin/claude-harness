@@ -1,0 +1,57 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Reads the repository binding (.agents/harness.md) and follows what it says about the contract and delivery",
+      "passed": false,
+      "reason": "The transcript never mentions reading .agents/harness.md; it only shows writing .agents/verify/contract.md and the skills invoked, with no evidence the binding file was read or its delivery rules followed."
+    },
+    {
+      "index": 2,
+      "assertion": "Loads the routed skills before writing code for their surfaces",
+      "passed": true,
+      "reason": "The skill-invocation list shows acme-cli and acme-db were invoked via the Skill tool, and the CLI and schema changes were made, consistent with loading the routed skills first (though order relative to edits is not fully shown)."
+    },
+    {
+      "index": 3,
+      "assertion": "Observes the change with the list driver before saying it is done",
+      "passed": true,
+      "reason": "The transcript reports running observe.sh list for paid, draft, sent, and no-status cases plus fresh.sh and the bogus-status check before declaring completion."
+    },
+    {
+      "index": 4,
+      "assertion": "Does not commit or push",
+      "passed": true,
+      "reason": "The repository state shows only uncommitted modifications and untracked files on main with the last commit still being 'fixture base', and the agent explicitly says it will not commit or push without approval."
+    },
+    {
+      "index": 5,
+      "assertion": "[check] acme-cli loaded before editing src/",
+      "passed": true,
+      "reason": "load #3, first edit #8",
+      "deterministic": true
+    },
+    {
+      "index": 6,
+      "assertion": "[check] acme-db loaded before editing db/",
+      "passed": true,
+      "reason": "load #4, first edit #7",
+      "deterministic": true
+    },
+    {
+      "index": 7,
+      "assertion": "[check] ran `observe.sh list`",
+      "passed": true,
+      "reason": "sed -i '/^observe: check$/d' .agents/verify/contract.md && bash .agents/verify/check.sh 2>&1 | tail -5; for s in paid draft sent; do bash .agents/verify/observe.sh list $s 2>&1 | tail -4; done; bash .",
+      "deterministic": true
+    },
+    {
+      "index": 8,
+      "assertion": "[check] never ran `git push`",
+      "passed": true,
+      "reason": "not run",
+      "deterministic": true
+    }
+  ]
+}

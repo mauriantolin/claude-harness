@@ -1,0 +1,128 @@
+{
+  "skill": "route",
+  "model": "sonnet",
+  "total": 10,
+  "matched": 10,
+  "accuracy": 1,
+  "misses": 0,
+  "false_positives": 0,
+  "results": [
+    {
+      "id": "positive-contract-accepted-which-skills",
+      "skill": "route",
+      "query": "The contract is accepted and we are about to implement. Which skills own the surfaces this change touches?",
+      "should_trigger": true,
+      "triggered": true,
+      "invoked": [
+        "harness:route"
+      ],
+      "match": true,
+      "error": null
+    },
+    {
+      "id": "positive-before-dispatch",
+      "skill": "route",
+      "query": "Before I dispatch the implementer subagent, tell me which skills it has to load for this change.",
+      "should_trigger": true,
+      "triggered": true,
+      "invoked": [
+        "harness:route"
+      ],
+      "match": true,
+      "error": null
+    },
+    {
+      "id": "positive-settings-and-migration",
+      "skill": "route",
+      "query": "This change touches a settings page and a Postgres migration. Decide who owns what before implementation.",
+      "should_trigger": true,
+      "triggered": true,
+      "invoked": [
+        "harness:route",
+        "harness:route"
+      ],
+      "match": true,
+      "error": null
+    },
+    {
+      "id": "positive-two-skills-claim",
+      "skill": "route",
+      "query": "Two skills claim the same surface in this repo. Route the implementation pass.",
+      "should_trigger": true,
+      "triggered": true,
+      "invoked": [
+        "harness:route"
+      ],
+      "match": true,
+      "error": null
+    },
+    {
+      "id": "positive-routing-table",
+      "skill": "route",
+      "query": "Check .agents/routing.md and load the skills this contract needs before we start coding.",
+      "should_trigger": true,
+      "triggered": true,
+      "invoked": [
+        "harness:route"
+      ],
+      "match": true,
+      "error": null
+    },
+    {
+      "id": "negative-review-diff",
+      "skill": "route",
+      "query": "Review this finished diff before I push it.",
+      "should_trigger": false,
+      "triggered": false,
+      "invoked": [
+        "code-review"
+      ],
+      "match": true,
+      "error": null
+    },
+    {
+      "id": "negative-write-contract",
+      "skill": "route",
+      "query": "Write the done criteria for this issue before anyone touches code.",
+      "should_trigger": false,
+      "triggered": false,
+      "invoked": [],
+      "match": true,
+      "error": null
+    },
+    {
+      "id": "negative-css-question",
+      "skill": "route",
+      "query": "How do I center a div with flexbox?",
+      "should_trigger": false,
+      "triggered": false,
+      "invoked": [],
+      "match": true,
+      "error": null
+    },
+    {
+      "id": "negative-deploy",
+      "skill": "route",
+      "query": "The PR merged. Is it actually deployed and serving?",
+      "should_trigger": false,
+      "triggered": false,
+      "invoked": [
+        "harness:deploy-gate"
+      ],
+      "match": true,
+      "error": null
+    },
+    {
+      "id": "negative-release",
+      "skill": "route",
+      "query": "Cut the 1.4.0 release and publish it to npm.",
+      "should_trigger": false,
+      "triggered": false,
+      "invoked": [
+        "harness:maintain"
+      ],
+      "match": true,
+      "error": null
+    }
+  ]
+}

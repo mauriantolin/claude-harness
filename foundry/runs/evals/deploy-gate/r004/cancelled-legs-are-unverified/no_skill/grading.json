@@ -1,0 +1,35 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Lists each check with its own conclusion rather than a summary count alone",
+      "passed": true,
+      "reason": "The table lists each job row (3 jobs as a group, lint, e2e) with its own result, though the 3 passing jobs are grouped rather than named individually."
+    },
+    {
+      "index": 2,
+      "assertion": "Treats the cancelled e2e job as unverified, neither pass nor fail",
+      "passed": true,
+      "reason": "The report labels e2e as 'Cancelled', 'Not a pass', and 'e2e is unknown, not green', which matches treating it as unverified rather than failed or passed."
+    },
+    {
+      "index": 3,
+      "assertion": "Asks for or cites the failing lint job's log excerpt that names the cause, not the summary line",
+      "passed": false,
+      "reason": "The agent says it has not seen the lint output and offers to pull the log, but it does not cite any log excerpt naming the cause and does not explicitly ask the user for the excerpt."
+    },
+    {
+      "index": 4,
+      "assertion": "Does NOT declare the run green or the deployment safe",
+      "passed": true,
+      "reason": "The report declares the deploy BLOCKED and states that deploying is not safe until all five jobs are green with e2e completed."
+    },
+    {
+      "index": 5,
+      "assertion": "States that the e2e leg still needs to be observed to a terminal state after lint is fixed",
+      "passed": true,
+      "reason": "The unblock steps say that after re-push or re-run 'the e2e job should then run instead of being cancelled' and that deploy requires 'e2e actually completed'."
+    }
+  ]
+}

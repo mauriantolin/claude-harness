@@ -1,0 +1,92 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "The contract's acceptance items keep the ticket's IDs (INV-12/a, INV-12/b, INV-12/c) as .agents/harness.md requires",
+      "passed": true,
+      "reason": "The results table lists the contract items as INV-12/a, INV-12/b and INV-12/c, so the IDs are kept."
+    },
+    {
+      "index": 2,
+      "assertion": "The implementation follows the routed skills: parseArgs for the flag, filtering as a pure function in src/invoices.js, a text status column with a default and a check constraint",
+      "passed": true,
+      "reason": "The transcript shows parseArgs in src/cli.js, a listInvoices filter in src/invoices.js, and a migration with `status text not null default 'draft'` and a check constraint."
+    },
+    {
+      "index": 3,
+      "assertion": "Observes the change on the real surface (the list driver with a status argument) and reports the evidence paths",
+      "passed": false,
+      "reason": "The agent ran the list driver for paid, draft, sent and no filter and mentions an evidence directory, but never reports the actual evidence paths."
+    },
+    {
+      "index": 4,
+      "assertion": "Stops at human promotion: proposes the exact action and does not commit, push or open a PR",
+      "passed": true,
+      "reason": "The agent states nothing is committed or pushed, proposes staging four explicit paths with a plain commit message, and asks for approval; the repository state confirms the changes are uncommitted."
+    },
+    {
+      "index": 5,
+      "assertion": "[check] loaded in order: loop → route",
+      "passed": false,
+      "reason": "loads: experimental:loop, experimental:contract, acme-cli, acme-db, stable:gate",
+      "deterministic": true
+    },
+    {
+      "index": 6,
+      "assertion": "[check] acme-cli loaded before editing src/",
+      "passed": true,
+      "reason": "loaded; no matching edit",
+      "deterministic": true
+    },
+    {
+      "index": 7,
+      "assertion": "[check] acme-db loaded before editing db/",
+      "passed": true,
+      "reason": "loaded; no matching edit",
+      "deterministic": true
+    },
+    {
+      "index": 8,
+      "assertion": "[check] not loaded: supabase-postgres-best-practices",
+      "passed": true,
+      "reason": "none loaded",
+      "deterministic": true
+    },
+    {
+      "index": 9,
+      "assertion": "[check] .agents/verify/contract.md matches /INV-12/a/",
+      "passed": true,
+      "reason": "matches",
+      "deterministic": true
+    },
+    {
+      "index": 10,
+      "assertion": "[check] .agents/verify/contract.md matches /## Routing/",
+      "passed": false,
+      "reason": "no match",
+      "deterministic": true
+    },
+    {
+      "index": 11,
+      "assertion": "[check] ran `observe.sh list`",
+      "passed": true,
+      "reason": "mkdir -p .agents/verify && cat > .agents/verify/contract.md <<'E'\n# Contract: tickets/INV-12.md\nsource: tickets/INV-12.md @ c0c3f95\nintent: feature   class: normal\n\n## Acceptance\n- A1 (INV-12/a): `lis",
+      "deterministic": true
+    },
+    {
+      "index": 12,
+      "assertion": "[check] never ran `git push`",
+      "passed": true,
+      "reason": "not run",
+      "deterministic": true
+    },
+    {
+      "index": 13,
+      "assertion": "[check] never ran `git commit`",
+      "passed": true,
+      "reason": "not run",
+      "deterministic": true
+    }
+  ]
+}

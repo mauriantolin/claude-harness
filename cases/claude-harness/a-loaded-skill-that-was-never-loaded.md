@@ -10,6 +10,7 @@ Visibility: public
 Repository: mauriantolin/claude-harness
 Role: author
 Source: the first two `factory-loop` eval workspaces of 2026-09-07 (discarded), their `stream.jsonl`, and [round 002](../../foundry/rounds/002-factory-loop-checkpoints/decision.md)
+Enforcer: check: `skillLoads` in scripts/lib/trigger-detect.mjs counts only loads whose tool_result is not an error (scripts/lib/trigger-detect.test.mjs), and every eval grades on loads, not invocations
 
 > Self-validated. The streams were read by the author; nothing here was
 > reviewed by anyone else.

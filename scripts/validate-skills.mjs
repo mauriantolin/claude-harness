@@ -7,6 +7,7 @@
 //
 // Exit 1 with one line per defect, or 0 with a summary.
 
+import { spawnSync } from "node:child_process";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -31,6 +32,8 @@ const CASE_FIELDS = [
 	"Repository",
 	"Source",
 	"Upstream status checked",
+	// Railly's correct: every case names the check that now fails on its mistake, or why none can.
+	"Enforcer",
 ];
 
 const errors = [];
@@ -50,7 +53,9 @@ function markdownFiles(root) {
 	if (!existsSync(root)) return [];
 	return readdirSync(root, { withFileTypes: true }).flatMap((entry) => {
 		const path = join(root, entry.name);
-		if (entry.isDirectory()) return markdownFiles(path);
+		// Eval workspaces hold materialized fixtures and whole cloned repositories: run evidence,
+		// not authored content.
+		if (entry.isDirectory()) return ["repo", "node_modules", "repo-origin.git"].includes(entry.name) ? [] : markdownFiles(path);
 		return entry.name.endsWith(".md") ? [path] : [];
 	});
 }
@@ -145,27 +150,29 @@ function checkMaturity(skills) {
 	}
 }
 
-// The marketplace is the installable surface. Each catalog maps to exactly one
-// plugin listing exactly its skills, so nothing ships unlisted or unbuilt.
+// The marketplace is the installable surface. Every skill is listed by exactly
+// one plugin, every listed path is a skill, and a plugin's hook file exists
+// and is the one scripts/build-hooks.mjs generates from hooks/events.json.
 function checkMarketplace(skills) {
 	const file = join(REPO, ".claude-plugin", "marketplace.json");
 	if (!existsSync(file)) return fail(file, "missing");
 	const manifest = readJson(file);
 	if (!Array.isArray(manifest?.plugins)) return fail(file, "has no plugins list");
-	for (const { catalog, dir } of CATALOGS) {
-		const expected = skills
-			.filter((s) => s.catalog === catalog)
-			.map((s) => `./${dir.replace(/\\/g, "/")}/${s.name}`)
-			.sort();
-		const plugin = manifest.plugins.find((p) => p.name === catalog);
-		if (!plugin) {
-			if (expected.length) fail(file, `no "${catalog}" plugin, but ${expected.length} ${catalog} skill(s) exist`);
-			continue;
+	const paths = new Map(
+		skills.map((s) => [`./${(CATALOGS.find((c) => c.catalog === s.catalog)?.dir ?? "skills").replace(/\\/g, "/")}/${s.name}`, s.name]),
+	);
+	const owners = new Map();
+	for (const plugin of manifest.plugins) {
+		for (const p of plugin.skills ?? []) {
+			if (!paths.has(p)) fail(file, `"${plugin.name}" lists ${p}, which is not a skill`);
+			if (owners.has(p)) fail(file, `${p} is listed by "${owners.get(p)}" and "${plugin.name}"`);
+			owners.set(p, plugin.name);
 		}
-		const listed = [...(plugin.skills ?? [])].sort();
-		for (const p of expected) if (!listed.includes(p)) fail(file, `"${catalog}" plugin does not list ${p}`);
-		for (const p of listed) if (!expected.includes(p)) fail(file, `"${catalog}" plugin lists ${p}, which is not a ${catalog} skill`);
+		if (plugin.hooks && !existsSync(join(REPO, plugin.hooks))) fail(file, `"${plugin.name}" hooks ${plugin.hooks} does not exist`);
 	}
+	for (const [p] of paths) if (!owners.has(p)) fail(file, `no plugin lists ${p}`);
+	const built = spawnSync(process.execPath, [join(REPO, "scripts", "build-hooks.mjs"), "--check"], { encoding: "utf8" });
+	if (built.status !== 0) fail(join(REPO, "hooks", "core.json"), built.stderr.trim());
 }
 
 function checkCases() {

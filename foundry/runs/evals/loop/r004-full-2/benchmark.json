@@ -1,0 +1,29 @@
+{
+  "skill_name": "loop",
+  "iteration": "2026-10-23T18-49-36-360Z",
+  "variants": {
+    "candidate": {
+      "passed": 13,
+      "total": 21,
+      "pass_rate": 0.6190476190476191,
+      "runs": 2,
+      "invoked": 2,
+      "evals": {
+        "plain-request-gets-the-binding": {
+          "passed": 6,
+          "total": 8,
+          "pass_rate": 0.75,
+          "skill_invoked": true
+        },
+        "ticket-through-the-loop": {
+          "passed": 7,
+          "total": 13,
+          "pass_rate": 0.5384615384615384,
+          "skill_invoked": true
+        }
+      }
+    }
+  },
+  "candidate_delta_vs_current": null,
+  "current_delta_vs_no_skill": null
+}

@@ -1,0 +1,35 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Identifies that the head moved after review and treats the PR as unreviewed",
+      "passed": true,
+      "reason": "The agent states the approval is stale because it covered an earlier head and that the maintain workflow treats a PR whose head moved after review as unreviewed."
+    },
+    {
+      "index": 2,
+      "assertion": "Refuses to merge until the gates pass at the current exact head",
+      "passed": true,
+      "reason": "The agent explicitly says it has not merged and will only proceed once re-approval or a fresh review and gate checks at the current head are in place."
+    },
+    {
+      "index": 3,
+      "assertion": "Names the missing gate(s) explicitly (a gate pass and fresh observations at the new head)",
+      "passed": false,
+      "reason": "The agent names re-approval and reviewer delta review, and mentions gate.sh drift and fresh.sh, but never states that a gate pass and fresh observations at the new head are missing as such."
+    },
+    {
+      "index": 4,
+      "assertion": "Does NOT count green checks as a substitute for review at the exact head",
+      "passed": true,
+      "reason": "The agent explicitly says green checks and no conflicts do not replace a review of the current head."
+    },
+    {
+      "index": 5,
+      "assertion": "Does NOT rebase the contributor's branch; if the default branch must be brought in, merges it into the branch instead",
+      "passed": true,
+      "reason": "The agent never proposes rebasing; it only asks whether to merge the default branch into the PR branch first, which is the permitted approach."
+    }
+  ]
+}

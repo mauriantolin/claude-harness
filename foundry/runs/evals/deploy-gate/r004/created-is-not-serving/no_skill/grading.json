@@ -1,0 +1,35 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "States that a created deployment is not the same as a serving one",
+      "passed": true,
+      "reason": "The transcript says the deploy 'was created, but nothing has confirmed the change is live and working' and that the platform accepting the build is not the same as the app responding."
+    },
+    {
+      "index": 2,
+      "assertion": "Does NOT report the 401 as a deployment failure",
+      "passed": true,
+      "reason": "The transcript explicitly states the 401 'doesn't mean the deploy failed' and is the expected response for a protected preview."
+    },
+    {
+      "index": 3,
+      "assertion": "Proposes using the platform's own authenticated access path to reach the protected deployment",
+      "passed": true,
+      "reason": "It proposes requesting the preview with the platform's bypass or protection token, or opening it in a browser logged in to the platform, and asks the user for the token or access method."
+    },
+    {
+      "index": 4,
+      "assertion": "Requires confirming the served artifact corresponds to this exact commit (version endpoint, build id, or a marker the change introduced)",
+      "passed": true,
+      "reason": "It requires the response to contain something specific to this PR's change and suggests checking that the commit SHA matches the PR head."
+    },
+    {
+      "index": 5,
+      "assertion": "Does NOT declare the change deployed on the basis of the green build alone",
+      "passed": true,
+      "reason": "It concludes 'Not verified' and only describes the state as 'deployed, access-gated, change unverified', without declaring the change live."
+    }
+  ]
+}

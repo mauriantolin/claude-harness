@@ -7,10 +7,10 @@
     "node": ">=20"
   },
   "scripts": {
-    "test": "node --test \"scripts/lib/*.test.mjs\" \"hooks/*/*.test.mjs\" \"bin/*.test.mjs\"",
+    "test": "node --test \"scripts/lib/*.test.mjs\" \"hooks/*.test.mjs\" \"hooks/*/*.test.mjs\" \"bin/*.test.mjs\"",
     "validate": "node scripts/validate-skills.mjs",
     "doctor": "node scripts/doctor.mjs",
-    "check": "npm test && npm run validate && npm run verify-fixtures && claude plugin validate .",
+    "check": "npm test && npm run validate && npm run verify-fixtures && node scripts/build-hooks.mjs --check && claude plugin validate .",
     "new-skill": "node scripts/new-skill.mjs",
     "eval": "node scripts/run-skill-eval.mjs",
     "triggers": "node scripts/run-trigger-eval.mjs",

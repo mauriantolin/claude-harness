@@ -1,34 +1,52 @@
 {
   "$schema": "https://code.claude.com/schema/marketplace.json",
   "name": "mauri-harness",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "owner": {
     "name": "Mauricio Antolín",
     "url": "https://github.com/mauriantolin"
   },
-  "description": "The authored half of an engineering harness built on Railly Skills: the delivery path factory-loop references, the routing that decides which skills own which surface, and the design language they route to.",
+  "description": "What a repository enables beside Railly Skills: the route step between contract and implementation, the deploy gate after delivery, and the hooks that bind Railly's loop to the repository (its binding file, the verify-before-done Stop hook, the canonical root, secret scanning, formatting).",
   "plugins": [
     {
-      "name": "stable",
-      "displayName": "Harness stable skills",
-      "description": "Skills factory-loop references by name or routes to. Installed by default; maturity is tracked separately in foundry/maturity.json.",
+      "name": "harness",
+      "displayName": "Harness",
+      "description": "route, deploy-gate and the core hooks. Every harnessed repository enables this one.",
       "source": "./",
-      "version": "0.2.0",
-      "author": {
-        "name": "Mauricio Antolín"
-      },
+      "version": "0.3.0",
+      "author": { "name": "Mauricio Antolín" },
       "license": "MIT",
       "category": "engineering",
-      "keywords": ["ship", "spec", "release", "deploy", "routing", "design"],
-      "skills": [
-        "./skills/deploy-gate",
-        "./skills/frontend-stack",
-        "./skills/implementation-routing",
-        "./skills/ship",
-        "./skills/software-factory-maintenance",
-        "./skills/spec-gate",
-        "./skills/ui-design-language"
-      ]
+      "keywords": ["routing", "deploy", "hooks", "railly"],
+      "strict": false,
+      "skills": ["./skills/route", "./skills/deploy-gate"],
+      "hooks": "./hooks/core.json"
+    },
+    {
+      "name": "harness-design",
+      "displayName": "Harness design language",
+      "description": "ui-design-language, for repositories without a design system of their own. A repository with one does not enable it.",
+      "source": "./",
+      "version": "0.3.0",
+      "author": { "name": "Mauricio Antolín" },
+      "license": "MIT",
+      "category": "design",
+      "keywords": ["design", "ui"],
+      "strict": false,
+      "skills": ["./skills/ui-design-language"]
+    },
+    {
+      "name": "harness-maintainer",
+      "displayName": "Harness maintainer workflow",
+      "description": "maintain: queue cleanup, merge, release and published-artifact verification, for repositories that publish packages.",
+      "source": "./",
+      "version": "0.3.0",
+      "author": { "name": "Mauricio Antolín" },
+      "license": "MIT",
+      "category": "engineering",
+      "keywords": ["release", "merge", "publish"],
+      "strict": false,
+      "skills": ["./skills/maintain"]
     }
   ]
 }

@@ -31,6 +31,10 @@ This machine holds several accounts (GitHub, Vercel, Neon, AWS, Google Cloud, Su
 |---|---|---|
 | _name_ | _gh account, vercel team, aws account…_ | _repos or folders_ |
 
+## Harness: per repository, never global
+
+Skills, hooks and plugins live in each repository, not in `~/.claude`: the global level holds only this file and the profiles. A repository brings Railly's loop and this machine's harness plugin with `harness init` (from `~/repos/claude-harness`), which writes its `.claude/settings.json`, Railly's kit in `.agents/verify/`, and `.agents/harness.md` and `.agents/routing.md`. Where a plugin skill and a repository skill claim the same surface, the repository's `routing.md` decides.
+
 ## Testing
 
 - Never write unit tests after you write code.

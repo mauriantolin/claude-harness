@@ -1,0 +1,57 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Reads the repository binding (.agents/harness.md) and follows what it says about the contract and delivery",
+      "passed": true,
+      "reason": "The transcript never shows the file being read, but the agent cites 'the harness notes' for the branch name and says it won't commit, which implies it read the binding and followed its delivery rules."
+    },
+    {
+      "index": 2,
+      "assertion": "Loads the routed skills before writing code for their surfaces",
+      "passed": true,
+      "reason": "The agent invoked the acme-cli and acme-db skills through the Skill tool, and its summary cites the acme-db rules for the migration, so the skills were loaded for the CLI and schema surfaces."
+    },
+    {
+      "index": 3,
+      "assertion": "Observes the change with the list driver before saying it is done",
+      "passed": true,
+      "reason": "The agent ran `observe.sh list` for paid, draft and sent and reported the results before declaring the work finished."
+    },
+    {
+      "index": 4,
+      "assertion": "Does not commit or push",
+      "passed": true,
+      "reason": "The final repository state shows only uncommitted working-tree changes with the last commit still 'fixture base', and the agent states it committed nothing."
+    },
+    {
+      "index": 5,
+      "assertion": "[check] acme-cli loaded before editing src/",
+      "passed": true,
+      "reason": "load #0, first edit #4",
+      "deterministic": true
+    },
+    {
+      "index": 6,
+      "assertion": "[check] acme-db loaded before editing db/",
+      "passed": true,
+      "reason": "load #1, first edit #4",
+      "deterministic": true
+    },
+    {
+      "index": 7,
+      "assertion": "[check] ran `observe.sh list`",
+      "passed": true,
+      "reason": "for s in paid draft sent; do .agents/verify/observe.sh list $s 2>&1 | tail -3; done; git status --short",
+      "deterministic": true
+    },
+    {
+      "index": 8,
+      "assertion": "[check] never ran `git push`",
+      "passed": true,
+      "reason": "not run",
+      "deterministic": true
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Reads the repository binding (.agents/harness.md) and follows what it says about the contract and delivery",
+      "passed": true,
+      "reason": "The transcript never shows .agents/harness.md being read, but the agent invoked harness:route and experimental:contract, wrote .agents/verify/contract.md, and referred to the loop's subagent rule and the gate step, which is indirect evidence of following the binding's contract and delivery steps."
+    },
+    {
+      "index": 2,
+      "assertion": "Loads the routed skills before writing code for their surfaces",
+      "passed": true,
+      "reason": "The Skill tool calls for acme-cli and acme-db are listed in the session stream ahead of the CLI and migration changes they govern, and the agent cites acme-db's migration rule."
+    },
+    {
+      "index": 3,
+      "assertion": "Observes the change with the list driver before saying it is done",
+      "passed": true,
+      "reason": "The transcript states the agent ran the list driver for paid, draft, sent and no filter, plus npm test and fresh.sh, before reporting the work as done."
+    },
+    {
+      "index": 4,
+      "assertion": "Does not commit or push",
+      "passed": true,
+      "reason": "The repository state shows the last commit is still 'fixture base' with only uncommitted modifications and an untracked migration, and the agent asks before committing."
+    },
+    {
+      "index": 5,
+      "assertion": "[check] acme-cli loaded before editing src/",
+      "passed": true,
+      "reason": "load #5, first edit #7",
+      "deterministic": true
+    },
+    {
+      "index": 6,
+      "assertion": "[check] acme-db loaded before editing db/",
+      "passed": true,
+      "reason": "load #6, first edit #7",
+      "deterministic": true
+    },
+    {
+      "index": 7,
+      "assertion": "[check] ran `observe.sh list`",
+      "passed": true,
+      "reason": "cat > .agents/verify/contract.md <<'EOF'\n# Contract: tickets/INV-12.md\nsource: tickets/INV-12.md @ fixture base 921fd2b\nintent: feature   class: normal\n\n## Acceptance\n- A1: INV-12/a: `list --status <s",
+      "deterministic": true
+    },
+    {
+      "index": 8,
+      "assertion": "[check] never ran `git push`",
+      "passed": true,
+      "reason": "not run",
+      "deterministic": true
+    }
+  ]
+}

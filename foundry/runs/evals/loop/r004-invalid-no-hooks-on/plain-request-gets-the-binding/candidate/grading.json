@@ -1,0 +1,57 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Reads the repository binding (.agents/harness.md) and follows what it says about the contract and delivery",
+      "passed": false,
+      "reason": "The transcript never shows reading .agents/harness.md; it only mentions a contract.md it wrote and a gate review step, which hints at the binding but does not evidence reading it."
+    },
+    {
+      "index": 2,
+      "assertion": "Loads the routed skills before writing code for their surfaces",
+      "passed": true,
+      "reason": "The Skill tool was invoked for acme-cli and acme-db (plus experimental:loop) before the implementation was reported, covering the CLI and schema surfaces."
+    },
+    {
+      "index": 3,
+      "assertion": "Observes the change with the list driver before saying it is done",
+      "passed": true,
+      "reason": "The transcript states the list driver passed for paid, draft and sent, that the agent reran every driver itself, and that npm test and fresh.sh pass."
+    },
+    {
+      "index": 4,
+      "assertion": "Does not commit or push",
+      "passed": true,
+      "reason": "The repository state shows the last commit is still the fixture base with only uncommitted modifications and an untracked migration, and the agent offers a commit only if asked."
+    },
+    {
+      "index": 5,
+      "assertion": "[check] acme-cli loaded before editing src/",
+      "passed": true,
+      "reason": "load #2, first edit #12",
+      "deterministic": true
+    },
+    {
+      "index": 6,
+      "assertion": "[check] acme-db loaded before editing db/",
+      "passed": true,
+      "reason": "load #3, first edit #11",
+      "deterministic": true
+    },
+    {
+      "index": 7,
+      "assertion": "[check] ran `observe.sh list`",
+      "passed": true,
+      "reason": "git status --short && git diff && cat db/migrations/002_invoice_status.sql && bash .agents/verify/check.sh && for s in sent draft paid; do bash .agents/verify/observe.sh list $s; done; node src/cli.js",
+      "deterministic": true
+    },
+    {
+      "index": 8,
+      "assertion": "[check] never ran `git push`",
+      "passed": true,
+      "reason": "not run",
+      "deterministic": true
+    }
+  ]
+}

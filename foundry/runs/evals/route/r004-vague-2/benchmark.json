@@ -1,0 +1,38 @@
+{
+  "skill_name": "route",
+  "iteration": "2026-10-23T19-10-33-042Z",
+  "variants": {
+    "bare": {
+      "passed": 3,
+      "total": 6,
+      "pass_rate": 0.5,
+      "runs": 1,
+      "invoked": 0,
+      "evals": {
+        "owners-load-when-only-the-table-says-so": {
+          "passed": 3,
+          "total": 6,
+          "pass_rate": 0.5,
+          "skill_invoked": false
+        }
+      }
+    },
+    "candidate": {
+      "passed": 6,
+      "total": 6,
+      "pass_rate": 1,
+      "runs": 1,
+      "invoked": 1,
+      "evals": {
+        "owners-load-when-only-the-table-says-so": {
+          "passed": 6,
+          "total": 6,
+          "pass_rate": 1,
+          "skill_invoked": true
+        }
+      }
+    }
+  },
+  "candidate_delta_vs_current": null,
+  "current_delta_vs_no_skill": null
+}

@@ -1,0 +1,41 @@
+{
+  "skill_invoked": false,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Bumps the version in package.json, VERSION, and both places README.md names it, so that npm run version:check passes",
+      "passed": true,
+      "reason": "The agent updated VERSION and README.md from 1.0.0 to 1.1.0 (including the install line), left package.json at the teammate's 1.1.0, and reported that version:check passes across all four places."
+    },
+    {
+      "index": 2,
+      "assertion": "Writes a 1.1.0 changelog section that names the covered PRs (#12 and #13) and credits their authors",
+      "passed": false,
+      "reason": "The agent moved the #12 and #13 entries under a new 1.1.0 heading, but the transcript does not show the authors being credited."
+    },
+    {
+      "index": 3,
+      "assertion": "Runs or cites the repository's version-sync check (npm run version:check) as the proof the bump is complete",
+      "passed": true,
+      "reason": "The agent reports that npm run version:check confirms the version agrees across all four places."
+    },
+    {
+      "index": 4,
+      "assertion": "Does NOT create a git tag",
+      "passed": true,
+      "reason": "The agent states it did not commit or tag, and the final repository state shows no new tag or commit."
+    },
+    {
+      "index": 5,
+      "assertion": "Does NOT publish to npm or claim to have done so",
+      "passed": true,
+      "reason": "The agent says it did not publish anything and no publish step appears in the transcript."
+    },
+    {
+      "index": 6,
+      "assertion": "States in the affirmative which destructive steps were not exercised (tag, publish, push)",
+      "passed": false,
+      "reason": "The agent says it did not commit, tag, or publish, but it never mentions push, and it does not explicitly list all three steps as unexercised."
+    }
+  ]
+}

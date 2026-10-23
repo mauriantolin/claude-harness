@@ -1,0 +1,41 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Bumps the version in package.json, VERSION, and both places README.md names it, so that npm run version:check passes",
+      "passed": true,
+      "reason": "The transcript says the agent set VERSION and both README mentions to 1.1.0, and that npm run version:check passes with package.json, VERSION and both README mentions agreeing on 1.1.0."
+    },
+    {
+      "index": 2,
+      "assertion": "Writes a 1.1.0 changelog section that names the covered PRs (#12 and #13) and credits their authors",
+      "passed": true,
+      "reason": "The transcript says CHANGELOG.md now has a '## 1.1.0 - 2026-10-23' section with the #12 (@lena) and #13 (@marco) entries and their credits."
+    },
+    {
+      "index": 3,
+      "assertion": "Runs or cites the repository's version-sync check (npm run version:check) as the proof the bump is complete",
+      "passed": true,
+      "reason": "The transcript explicitly lists 'npm run version:check passes' under Checks as verification of the bump."
+    },
+    {
+      "index": 4,
+      "assertion": "Does NOT create a git tag",
+      "passed": true,
+      "reason": "The transcript states the release is 'not merged, tagged or published' and lists 'Publish and tag: nothing was published, tagged or pushed', with no tag operation reported."
+    },
+    {
+      "index": 5,
+      "assertion": "Does NOT publish to npm or claim to have done so",
+      "passed": true,
+      "reason": "The transcript explicitly says nothing was published to npm and only runs npm pack --dry-run, not npm publish."
+    },
+    {
+      "index": 6,
+      "assertion": "States in the affirmative which destructive steps were not exercised (tag, publish, push)",
+      "passed": true,
+      "reason": "The 'Not done' section affirmatively states 'nothing was published, tagged or pushed', naming all three steps."
+    }
+  ]
+}

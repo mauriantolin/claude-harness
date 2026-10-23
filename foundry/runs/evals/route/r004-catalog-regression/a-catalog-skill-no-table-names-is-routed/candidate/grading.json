@@ -1,0 +1,50 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Names a surface for A3 (generating the summary with the Anthropic API) that no routing table covers",
+      "passed": true,
+      "reason": "The transcript names 'The Anthropic API call on save (A3)' and says it is a surface 'that no table row names but whose description matches.'"
+    },
+    {
+      "index": 2,
+      "assertion": "Routes that surface to a skill the session offers whose description covers the Claude or Anthropic API, found by reading the offered skills rather than a table",
+      "passed": true,
+      "reason": "It routes A3 to `claude-api`, described as 'a catalog skill that no table row names but whose description matches,' which is a skill the session invoked and was found by its description rather than a table row."
+    },
+    {
+      "index": 3,
+      "assertion": "Records that owner in the contract's Routing section with its precedence (catalog or equivalent)",
+      "passed": true,
+      "reason": "The agent says it added a `## Routing` section to `.agents/verify/contract.md` listing `claude-api` with its catalog source and its complement role alongside `acme-db`, which covers the precedence requirement."
+    },
+    {
+      "index": 4,
+      "assertion": "Does NOT implement anything",
+      "passed": true,
+      "reason": "The agent states nothing was implemented or committed, and the repository state shows only untracked `.agents/` files with no code changes, only the contract and routing documentation were edited."
+    },
+    {
+      "index": 5,
+      "assertion": "[check] loaded in order: route → claude-api",
+      "passed": true,
+      "reason": "loads: harness:route, acme-db, acme-ui, claude-api",
+      "deterministic": true
+    },
+    {
+      "index": 6,
+      "assertion": "[check] .agents/verify/contract.md matches /## Routing[\\s\\S]*claude-api/",
+      "passed": true,
+      "reason": "matches",
+      "deterministic": true
+    },
+    {
+      "index": 7,
+      "assertion": "[check] nothing under src/ was edited",
+      "passed": true,
+      "reason": "no edit",
+      "deterministic": true
+    }
+  ]
+}

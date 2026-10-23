@@ -1,0 +1,57 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Reads the repository binding (.agents/harness.md) and follows what it says about the contract and delivery",
+      "passed": false,
+      "reason": "The transcript never mentions reading .agents/harness.md; it only refers to the contract at .agents/verify/contract.md, so the binding file's guidance is not shown being read or followed."
+    },
+    {
+      "index": 2,
+      "assertion": "Loads the routed skills before writing code for their surfaces",
+      "passed": true,
+      "reason": "The Skill tool invocations for acme-cli and acme-db (plus experimental:contract and experimental:loop) are listed in order, and the code changes to src/cli.js, src/invoices.js and the migration follow them."
+    },
+    {
+      "index": 3,
+      "assertion": "Observes the change with the list driver before saying it is done",
+      "passed": true,
+      "reason": "The agent ran the list driver for paid, sent, draft and unfiltered output, all passed, before reporting completion."
+    },
+    {
+      "index": 4,
+      "assertion": "Does not commit or push",
+      "passed": true,
+      "reason": "The repository state shows only uncommitted modifications and an untracked migration file on main, with the last commit still being the fixture base, and the agent asked before committing."
+    },
+    {
+      "index": 5,
+      "assertion": "[check] acme-cli loaded before editing src/",
+      "passed": true,
+      "reason": "load #2, first edit #9",
+      "deterministic": true
+    },
+    {
+      "index": 6,
+      "assertion": "[check] acme-db loaded before editing db/",
+      "passed": true,
+      "reason": "load #3, first edit #9",
+      "deterministic": true
+    },
+    {
+      "index": 7,
+      "assertion": "[check] ran `observe.sh list`",
+      "passed": true,
+      "reason": "cat > src/invoices.js <<'EOF'\nimport { readFileSync } from \"node:fs\";\n\nexport const STATUSES = [\"draft\", \"sent\", \"paid\"];\n\nexport function loadInvoices(path = new URL(\"../data/invoices.json\", import.m",
+      "deterministic": true
+    },
+    {
+      "index": 8,
+      "assertion": "[check] never ran `git push`",
+      "passed": true,
+      "reason": "not run",
+      "deterministic": true
+    }
+  ]
+}

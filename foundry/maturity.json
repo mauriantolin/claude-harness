@@ -5,49 +5,28 @@
       "type": "gate",
       "channel": "stable",
       "maturity": "evaluated",
-      "summary": "Rewritten from the retired cicd-deploy-verifier; Railly covers no deploy surface. Round 001 (haiku): 28.6% → 81.0%, strongest on created-is-not-serving; triggers 8/10.",
-      "decision": "rounds/001-align-to-railly-foundry/decision.md"
-    },
-    "frontend-stack": {
-      "type": "routing",
-      "channel": "stable",
-      "maturity": "evaluated",
-      "summary": "Indexes and orders the installed frontend skills for software-factory's implementation stage. Round 001 (haiku): 22.2% → 16.7% and 0/10 positive triggers; description and eval design owed a look. The index itself is unmeasured.",
-      "decision": "rounds/001-align-to-railly-foundry/decision.md"
-    },
-    "implementation-routing": {
-      "type": "routing",
-      "channel": "stable",
-      "maturity": "evaluated",
-      "summary": "Global routing and precedence for the implementation stage; repository specifics defer to cases/<repo>/conventions.md. Owed coverage is looked up with find-skills and installed only on a named human approval. Round 003 (haiku): 75.0% → 90.0% on 9 evals; lookup 0/3 → 3/3. At the loop (fixture, 3 runs): 0/15 → 8/15, routed before dispatch 3/3, lookup 1/3.",
-      "decision": "rounds/003-owed-coverage-lookup/decision.md"
-    },
-    "ship": {
-      "type": "delivery",
-      "channel": "stable",
-      "maturity": "evaluated",
-      "summary": "Recreated from sunat-cli#103, agent-browser's absorption conventions and 29 pull requests. Round 001 (haiku): 17.6% → 64.7%, gain concentrated on the ledger body; triggers 8/10.",
-      "decision": "rounds/001-align-to-railly-foundry/decision.md"
-    },
-    "software-factory-maintenance": {
-      "type": "delivery",
-      "channel": "stable",
-      "maturity": "evaluated",
-      "summary": "Maintainer merge, release and publish workflow recreated from the chore(release) pull requests. Round 001 (haiku): 25.0% → 50.0%; one trigger false positive on a factory-loop prompt. Description edit is a round 002 candidate.",
-      "decision": "rounds/001-align-to-railly-foundry/decision.md"
-    },
-    "spec-gate": {
-      "type": "gate",
-      "channel": "stable",
-      "maturity": "evaluated",
-      "summary": "Recreated from the three published runs under Railly's foundry/runs/spec/. Round 001 (haiku): 65.0% → 55.0%; with the skill loaded the agent stops to ask for SHAs on a contract given by description. Round 002 candidate.",
+      "summary": "Rewritten from the retired cicd-deploy-verifier; Railly covers no deploy surface. Round 001 (haiku): 28.6% → 81.0%, strongest on created-is-not-serving; triggers 8/10. Round 004: superseded by probar-y-promover in Nomenclator's routing. Round 004 triggers (sonnet): 10/10. Round 004 method (sonnet): 85.7% → 90.5%: the base model already does most of it; the skill earns little on sonnet.",
       "decision": "rounds/001-align-to-railly-foundry/decision.md"
     },
     "ui-design-language": {
       "type": "content",
       "channel": "stable",
       "maturity": "evaluated",
-      "summary": "Opinionated design language frontend-stack routes to. Lived unversioned in ~/.claude/skills until 2026-09-03. Round 001 (haiku): 15.4% → 23.1%; triggers 6/10.",
+      "summary": "Opinionated design language frontend-stack routes to. Lived unversioned in ~/.claude/skills until 2026-09-03. Round 001 (haiku): 15.4% → 23.1%; triggers 6/10. Round 004 method (sonnet): 38.5% → 76.9%; plugin harness-design, for repositories without a design system.",
+      "decision": "rounds/001-align-to-railly-foundry/decision.md"
+    },
+    "route": {
+      "type": "routing",
+      "channel": "stable",
+      "maturity": "evaluated",
+      "summary": "Between Railly's contract and loop implement: owners from the repository's .agents/routing.md (which wins), loaded before the first edit, recorded in the contract; route-guard enforces the load. Round 004 (sonnet): repo table 4/8 → 7/8, owed coverage 2/5 → 5/5, owners known only from the table 3/6 → 6/6 (two runs each); a skill no table names, read from the session's catalog: loaded 3/3 with route, 0/2 without; triggers 10/10 in a scratch repo, dormant on a direct question inside Nomenclator.",
+      "decision": "rounds/004-railly-core/decision.md"
+    },
+    "maintain": {
+      "type": "delivery",
+      "channel": "stable",
+      "maturity": "evaluated",
+      "summary": "Maintainer merge, release and publish workflow recreated from the chore(release) pull requests. Round 001 (haiku): 25.0% → 50.0%; one trigger false positive on a factory-loop prompt. Description edit is a round 002 candidate. Renamed from software-factory-maintenance in round 004. Round 004 triggers (sonnet): 9/10, misses a pre-publish tarball check. Round 004 method (sonnet): 35.0% → 75.0%.",
       "decision": "rounds/001-align-to-railly-foundry/decision.md"
     }
   }

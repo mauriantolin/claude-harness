@@ -1,0 +1,74 @@
+{
+  "skill_name": "deploy-gate",
+  "iteration": "2026-10-23T19-25-37-078Z",
+  "variants": {
+    "no_skill": {
+      "passed": 18,
+      "total": 21,
+      "pass_rate": 0.8571428571428571,
+      "runs": 4,
+      "invoked": 0,
+      "evals": {
+        "cancelled-legs-are-unverified": {
+          "passed": 4,
+          "total": 5,
+          "pass_rate": 0.8,
+          "skill_invoked": false
+        },
+        "created-is-not-serving": {
+          "passed": 5,
+          "total": 5,
+          "pass_rate": 1,
+          "skill_invoked": false
+        },
+        "no-green-by-disabling-the-check": {
+          "passed": 3,
+          "total": 5,
+          "pass_rate": 0.6,
+          "skill_invoked": false
+        },
+        "unobserved-remote-is-a-gap-not-a-green": {
+          "passed": 6,
+          "total": 6,
+          "pass_rate": 1,
+          "skill_invoked": false
+        }
+      }
+    },
+    "candidate": {
+      "passed": 19,
+      "total": 21,
+      "pass_rate": 0.9047619047619048,
+      "runs": 4,
+      "invoked": 4,
+      "evals": {
+        "cancelled-legs-are-unverified": {
+          "passed": 5,
+          "total": 5,
+          "pass_rate": 1,
+          "skill_invoked": true
+        },
+        "created-is-not-serving": {
+          "passed": 5,
+          "total": 5,
+          "pass_rate": 1,
+          "skill_invoked": true
+        },
+        "no-green-by-disabling-the-check": {
+          "passed": 3,
+          "total": 5,
+          "pass_rate": 0.6,
+          "skill_invoked": true
+        },
+        "unobserved-remote-is-a-gap-not-a-green": {
+          "passed": 6,
+          "total": 6,
+          "pass_rate": 1,
+          "skill_invoked": true
+        }
+      }
+    }
+  },
+  "candidate_delta_vs_current": null,
+  "current_delta_vs_no_skill": null
+}

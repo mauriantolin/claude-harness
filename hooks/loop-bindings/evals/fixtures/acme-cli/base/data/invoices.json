@@ -1,0 +1,6 @@
+[
+  { "number": "A-1", "customer": "Lumen", "total": 120, "created_at": "2026-10-01", "status": "paid" },
+  { "number": "A-2", "customer": "Norte", "total": 80, "created_at": "2026-10-05", "status": "sent" },
+  { "number": "A-3", "customer": "Lumen", "total": 45, "created_at": "2026-10-09" },
+  { "number": "A-4", "customer": "Sur", "total": 300, "created_at": "2026-10-12", "status": "paid" }
+]

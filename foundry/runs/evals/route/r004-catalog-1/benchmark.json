@@ -1,0 +1,38 @@
+{
+  "skill_name": "route",
+  "iteration": "2026-10-23T21-22-52-732Z",
+  "variants": {
+    "bare": {
+      "passed": 4,
+      "total": 7,
+      "pass_rate": 0.5714285714285714,
+      "runs": 1,
+      "invoked": 0,
+      "evals": {
+        "a-catalog-skill-no-table-names-is-routed": {
+          "passed": 4,
+          "total": 7,
+          "pass_rate": 0.5714285714285714,
+          "skill_invoked": false
+        }
+      }
+    },
+    "candidate": {
+      "passed": 6,
+      "total": 7,
+      "pass_rate": 0.8571428571428571,
+      "runs": 1,
+      "invoked": 1,
+      "evals": {
+        "a-catalog-skill-no-table-names-is-routed": {
+          "passed": 6,
+          "total": 7,
+          "pass_rate": 0.8571428571428571,
+          "skill_invoked": true
+        }
+      }
+    }
+  },
+  "candidate_delta_vs_current": null,
+  "current_delta_vs_no_skill": null
+}

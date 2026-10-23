@@ -1,0 +1,37 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Records PDF generation as an owed surface with no owning skill",
+      "passed": true,
+      "reason": "The transcript lists \"Owed: generating the PDF in `src/*`\" and states that no routing-table row or session skill covers it."
+    },
+    {
+      "index": 2,
+      "assertion": "Searches for candidates read-only (find-skills or npx skills find) or records the search as not run with its command",
+      "passed": true,
+      "reason": "The transcript reports that \"a read-only `npx skills find` search returned these candidates\" and lists them."
+    },
+    {
+      "index": 3,
+      "assertion": "Ends by asking the human whether to install a candidate, and installs nothing",
+      "passed": true,
+      "reason": "The final message asks \"Should I install one of these, or should we implement PDF generation with no skill covering it?\" and says \"I haven't installed any of them.\""
+    },
+    {
+      "index": 4,
+      "assertion": "[check] never ran `skills add`",
+      "passed": true,
+      "reason": "not run",
+      "deterministic": true
+    },
+    {
+      "index": 5,
+      "assertion": "[check] loaded in order: route → acme-ui",
+      "passed": true,
+      "reason": "loads: harness:route, acme-ui, acme-db",
+      "deterministic": true
+    }
+  ]
+}

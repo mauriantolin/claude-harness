@@ -1,177 +1,123 @@
 # claude-harness
 
-The authored half of a Claude Code engineering harness. Railly Skills is the
-method layer and comes from its own marketplace; this repository holds what
-that marketplace does not publish, plus the machinery that keeps every skill
-here measured. The layout mirrors Railly's so there is one structure to learn.
+The authored half of a Claude Code engineering harness. [Railly Skills](https://github.com/Railly/skills)
+is the method (`contract` → `loop` → `verify-setup` → `gate` → `correct`) and comes from its own
+marketplace, unmodified. This repository is a marketplace too: the plugins a repository enables
+beside Railly's, the command that brings both into a repository, and the eval machinery that keeps
+every skill and hook here measured.
+
+Nothing of the harness is global. A machine keeps only context (`~/.claude/CLAUDE.md`, the
+profiles); each repository declares its plugins in `.claude/settings.json`, so whoever clones it
+gets the same harness, and two repositories never compete with each other's skills or hooks.
 
 ```text
-skills/<name>/                stable skills: SKILL.md (<=120 lines) + references/ + evals/{evals.json,triggers.json,fixtures/<fx>/{base,changed}}
-skills/.experimental/<name>/  where every new skill is born
-hooks/<name>/                 hook.mjs or hook.sh (+ what it injects + evals/); hooks/events.json says which event each runs on
-bin/                          commands installed on the PATH (perfil)
-machine/                      a new machine: bootstrap, settings, global skills, the global CLAUDE.md template
-cases/<repo>/                 evidence from real work
-foundry/maturity.json         channel + maturity per skill (the registry)
-foundry/eval-protocol.md      the three-arm protocol and the promotion bar
-foundry/rounds/NNN-*/         decisions, one directory per round
-foundry/runs/{evals,triggers} run evidence (gradings and benchmarks are versioned)
-scripts/                      validate, doctor, scaffold, eval and trigger runners; scripts/lib is tested
+skills/<name>/          SKILL.md (<=120 lines) + references/ + evals/{evals.json,triggers.json,fixtures/<fx>/{base,changed}}
+hooks/<name>/           hook.mjs or hook.sh (+ what it injects + evals/); hooks/events.json says which event each runs on
+hooks/core.json         the harness plugin's hook config, generated from events.json (scripts/build-hooks.mjs)
+templates/              .agents/harness.md and .agents/routing.md for a repository's first `harness init`
+bin/                    commands on the PATH: harness, perfil
+machine/                a new machine: bootstrap, global settings (context only), the global CLAUDE.md template
+cases/<repo>/           evidence from real work
+foundry/                maturity.json, eval-protocol.md, rounds/NNN-*/ (decisions), runs/ (evidence)
+scripts/                validate, doctor, eval and trigger runners; scripts/lib is tested
 ```
 
-## Skills
+## Plugins
 
-| Skill | Role in factory-loop | Origin |
+| Plugin | Holds | Enabled by |
 |---|---|---|
-| `ship` | promotion → commit, push, PR with the evidence ledger | recreated from sunat-cli#103, agent-browser conventions, 29 PRs |
-| `spec-gate` | independent Spec check between software-factory and review-gate | recreated from Railly's three published spec runs |
-| `software-factory-maintenance` | maintainer workflow after the loop: queue, merge, release, publish | recreated from the `chore(release)` PRs |
-| `deploy-gate` | after ship: watch CI, verify the deployment serves this commit | ours; Railly covers no deploy surface |
-| `implementation-routing` | software-factory stage 1: which skill owns which surface, and a lookup for what is owed | ours |
-| `frontend-stack` | the frontend index that routing delegates to | ours |
-| `ui-design-language` | the design language frontend-stack routes to | derived from `oa-design` (MIT) |
+| `harness` | `route`, `deploy-gate`, and the hooks below | every harnessed repository |
+| `harness-design` | `ui-design-language` | a repository without a design system of its own |
+| `harness-maintainer` | `maintain` (merge, release, publish) | a repository that publishes packages |
 
-The recreated skills are reconstructed from Railly's observable pull requests,
-not from his private originals. Nothing may assume they are equivalent.
-Maturity is tracked in `foundry/maturity.json`; being stable means
-factory-loop needs it installed, not that it is validated.
-
-## Hooks
-
-A hook is how this repository changes the behavior of a skill it does not
-author without touching its files. Railly's marketplace clone stays clean;
-the patch rides alongside at load time.
-
-| Hook | Event | What it does |
-|---|---|---|
-| `railly-root-worktree` | `SessionStart` | A worktree a tool created starts without `.claude/settings.local.json`; copies `RAILLY_SKILLS_REPO` from the main worktree, or scaffolds one. |
-| `restore-repo-skills` | `SessionStart` | Restores the skills a repository declares in `skills-lock.json`. Silent when there is nothing to do. |
-| `scan-secrets-pre` / `scan-secrets` | `PreToolUse` / `PostToolUse` on `Write|Edit` | Blocks a high-confidence secret before it lands, and again if one lands in a file git would commit. Gitignored files are left alone. |
-| `guard-immutable-docs` | `PreToolUse` on `Write|Edit` | Refuses edits under `archive/` and to an accepted ADR. |
-| `format-touched` | `PostToolUse` on `Write|Edit` | Formats the touched file with the repository's own prettier (or shfmt), honoring its ignore files. Never installs a formatter. |
-| `factory-loop-checkpoints` | `PostToolUse` on `Skill` | When the call that just completed loaded `factory-loop`, injects `addendum.md`: where the work-item manifest lives and how to create it, that a phase exists only through its owning skill's `Skill` call, and that context in a prompt is not human confirmation. Silent on every other tool call. |
-
-`./install.sh` links `hooks/<name>/hook.{mjs,sh}` to `~/.claude/hooks/<name>.{mjs,sh}`
-as a launcher. `node machine/settings.mjs` registers every hook in
-`hooks/events.json` in `~/.claude/settings.json` (or edit it by hand), and
-`npm run doctor` checks both:
-
-```json
-{ "hooks": { "PostToolUse": [ { "matcher": "Skill", "hooks": [
-  { "type": "command", "command": "node \"C:\\Users\\<you>\\.claude\\hooks\\factory-loop-checkpoints.mjs\"", "timeout": 10 }
-] } ] } }
+```text
+/plugin install harness --marketplace mauriantolin/claude-harness
+/plugin install harness-design --marketplace mauriantolin/claude-harness
+/plugin install harness-maintainer --marketplace mauriantolin/claude-harness
 ```
 
-A hook is measured against the skill it patches, with the same runner. The
-hook is global once registered, so the "skill without its hook" arm is the
-same suite with the hook switched off by the variable it honors:
+## Where it plugs into Railly's loop
+
+```text
+contract ──► [loop-bindings: read .agents/harness.md] ──► route ──► implement ──► observe ──► gate ──► human ──► deliver ──► deploy-gate ──► correct
+                                                          │ route-guard blocks an edit     │ verify-before-done blocks a stop
+                                                          │ until its owner skill loaded   │ until fresh.sh passes
+```
+
+| Piece | Kind | What it does |
+|---|---|---|
+| `loop-bindings` | PostToolUse(Skill) hook | When `loop` or `contract` loads, injects [bindings.md](hooks/loop-bindings/bindings.md): read the repository's `.agents/harness.md`, route before implementing, observe the deployment after delivery. |
+| `route` | skill | Names each surface's owner from `.agents/routing.md` (which wins over its generic table), loads the owners before the first edit, records them in the contract. |
+| `route-guard` | PreToolUse(Write\|Edit) hook | Blocks an edit to a path in the `routes` block of `.agents/routing.md` until the agent making it, a subagent included, has loaded every owner of that path. |
+| `verify-before-done` | Stop hook | While `.agents/verify/contract.md` exists, a session cannot stop until Railly's `fresh.sh` passes for the exact tree. Railly's kit is built for this hook and Railly does not publish it. |
+| `knowledge-root` | SessionStart hook | Points Railly's canonical root (`RAILLY_SKILLS_REPO`) at `.agents/knowledge`, ignored, through `CLAUDE_ENV_FILE`: no `settings.local.json`, any clone or worktree. |
+| `deploy-gate` | skill | After delivery: CI to a terminal state and the deployment serving that commit. |
+| `restore-repo-skills` | SessionStart hook | Restores the skills a repository locks in `skills-lock.json`. |
+| `scan-secrets-pre`, `scan-secrets` | Pre/PostToolUse(Write\|Edit) hooks | Block a high-confidence secret before and after it lands in a file git would commit. |
+| `guard-immutable-docs` | PreToolUse(Write\|Edit) hook | Refuses edits under `archive/` and to an accepted ADR. |
+| `format-touched` | PostToolUse(Write\|Edit) hook | Formats the touched file with the repository's own prettier (or shfmt), honoring its ignore files. |
+
+Every hook honors an off switch (`HARNESS_<NAME>=off`), which is how an eval measures it against
+the same suite without it.
+
+## A repository
 
 ```sh
-E=hooks/factory-loop-checkpoints/evals/evals.json
-npm run eval -- factory-loop --evals $E --model haiku --judge haiku --parallel 3 --env FACTORY_LOOP_CHECKPOINTS=off
-npm run eval -- factory-loop --evals $E --model haiku --judge haiku --parallel 3
+harness init [repo] [--design] [--maintainer] [--local]   # once; never overwrites
+harness check [repo]                                      # what is missing or still a stub
 ```
 
-The judge sees the `Skill` calls the session stream recorded, and whether each
-one actually loaded, so an assertion that a delegate was *invoked* is
-observable, not taken from prose. Why this hook exists, and the runner defect
-its first run exposed, are in
-[round 002](foundry/rounds/002-factory-loop-checkpoints/decision.md).
+`init` writes `.claude/settings.json` (both marketplaces, Railly's two plugins and `harness`),
+scaffolds Railly's kit into `.agents/verify/`, seeds `.agents/harness.md` and `.agents/routing.md`
+from `templates/`, and ignores `.agents/knowledge/` and the per-change contract. `--local` keeps
+all of it out of git, for a repository you do not own. Then, in a session there: fill `doctor.sh`,
+`check.sh` and the drivers (Railly's `verify-setup`), and write in `harness.md` and `routing.md`
+only what is true in that repository. Where a plugin skill and a repository skill claim the same
+surface, the repository's `routing.md` names the winner under "Supersedes".
 
 ## Daily commands
 
 ```sh
-npm test                      # scripts/lib unit tests (node:test, no dependencies)
-npm run validate              # repository content: frontmatter, links, evals, triggers, maturity, marketplace, cases
-npm run verify-fixtures       # materialize every fixture and run its declared verification command
-npm run audit                 # skillkit audit, as Railly's CI runs it (needs bun; network on first run)
-npm run doctor                # the machine: binaries, plugins, links, factory-loop dependencies, clean Railly clone
-npm run check                 # test + validate + verify-fixtures + claude plugin validate
-./install.sh                  # link skills and script launchers into ~/.claude (re-runnable)
+npm test                 # scripts/lib, hooks (end to end over the real hook files) and bin
+npm run validate         # skills, evals, maturity, marketplace (every skill in exactly one plugin), hooks/core.json fresh
+npm run verify-fixtures  # materialize every fixture and run its declared verification command
+npm run audit            # skillkit audit, as Railly's CI runs it
+npm run doctor           # the machine: Railly at its remote HEAD, nothing of the harness global, hooks and dependencies
+npm run check            # test + validate + verify-fixtures + build-hooks --check + claude plugin validate
+./install.sh             # bin/ on the PATH; removes what earlier versions linked into ~/.claude
 ```
-
-## Adding a skill
-
-```sh
-npm run new-skill -- <name>   # scaffolds skills/.experimental/<name>, registers it
-# author SKILL.md, evals/evals.json, evals/triggers.json; remove every TODO
-npm run validate
-./install.sh
-npm run triggers -- <name>                       # loads when it should, and only then
-npm run eval -- <name> --model haiku --judge haiku --parallel 4    # cheap first baseline
-npm run eval -- <name>                           # no_skill vs current on the default model
-```
-
-Promote by moving the directory to `skills/`, setting `channel: "stable"` in
-`foundry/maturity.json`, moving its path in `.claude-plugin/marketplace.json`,
-and recording the run in a new `foundry/rounds/` entry. The bar is in
-`foundry/eval-protocol.md`: an eval the `no_skill` arm passes is not evidence
-the skill works.
 
 ## Evals
 
-`run-skill-eval.mjs` runs each eval in each arm (`no_skill`, `current`,
-`candidate`), grades every assertion with an independent judge that reads the
-answer and, for fixture runs, the repository state after the run, then
-aggregates into `benchmark.json` and `benchmark.md`. `run-trigger-eval.mjs`
-sends each query from an empty directory and reads the stream for `Skill`
-invocations. Both need the skill linked into `~/.claude/skills`, which is what
-`install.sh` does.
+`run-skill-eval.mjs` runs each eval in each arm and grades it twice: an independent judge reads the
+answer and the Skill calls the session stream recorded, and deterministic `checks` read what the
+session did (the tool timeline, subagents included) and what it left (the repository):
+`loaded_in_order`, `not_loaded`, `loaded_before_edit`, `file_contains`, `ran_command`,
+`no_command`, `no_edit`, `origin_empty`. A check no judge can talk around is the evidence that a
+step was taken.
 
-`claude plugin eval` is early-access on this account; when it opens up, the
-suites here are close enough to its shape to port.
+| Arm | Sees |
+|---|---|
+| `no_skill` | no skills at all |
+| `bare` | what the working directory offers (its skills, plugins, hooks), without this repository's plugin |
+| `current` | the same, told to load the skill (`--nudge`, or `--nudge none` for the prompt as a person types it) |
+| `candidate` | this working copy as the `harness` plugin (skills and hooks, copied: a linked plugin loses its hooks) |
 
-### Progressive disclosure
-
-`SKILL.md` is the method and stays under 120 lines, as Railly's validator
-requires. Anything a reader needs only sometimes (report shapes, index tables,
-recipes, catalogs) lives in `references/` behind a link whose sentence says
-when to read it ("read X when Y"). `npm run validate` enforces the line cap
-and the links; `npm run audit` enforces that every reference is linked and
-gated.
-
-### Compatibility with Railly's tooling
-
-`evals.json`, `triggers.json` (with a unique `id` per case) and the
-`fixtures/<name>/{base,changed}` layout with a `verification` command per
-fixture eval are the shapes Railly's `validate-skills.mjs` accepts, and it
-passes over this repository when pointed at it with `RAILLY_SKILLS_REPO`.
-His scripts themselves are Linux tooling (bun, `import.meta.dir`, forward-slash
-paths, CI on ubuntu) and his eval scripts only look at his own checkout; this
-repository carries node ports of the pieces that matter for testing skills,
-and the runners he does not have. Details in
-`foundry/rounds/001-align-to-railly-foundry/decision.md`.
-
-## External dependencies factory-loop needs
-
-`solution-gate` delegates to Ryan Singer's `shaping` skill (and resumes it
-for breadboarding after a pass), and says not to recreate it locally. It is
-not part of Railly's marketplace, so it is installed the way its README says:
+A fixture is `fixtures/<name>/{base,changed}`, or `fixture_repo`: a real repository's working state
+in a local clone whose origin is an empty bare repository, so a push that escapes every guard never
+reaches its remote. That is how a repository measures its own harness end to end, with its suite
+in its own tree:
 
 ```sh
-git clone https://github.com/rjs/shaping-skills.git ~/.local/share/shaping-skills
-# then link shaping/ and breadboarding/ into ~/.claude/skills (junctions on Windows)
+npm run eval -- route --variants bare,candidate --model sonnet --parallel 4
+npm run eval -- loop --evals hooks/loop-bindings/evals/evals.json --variants candidate --nudge experimental:loop
+npm run eval -- loop --evals hooks/loop-bindings/evals/evals.json --variants candidate --nudge experimental:loop --env HARNESS_LOOP_BINDINGS=off --env HARNESS_ROUTE_GUARD=off
+npm run eval -- loop --evals <repo>/.agents/evals/loop.json --variants bare,candidate --nudge none
+npm run triggers -- <skill> [--cwd <repo>] [--triggers <file>]   # loads when it should; --cwd finds a repository's dormant skills
 ```
 
-`npm run doctor` checks every installed Railly skill's `Skill(...)` list, so a
-missing delegate shows up as an error before an agent has to report it as a
-gap. `herdr` is the one dependency Railly's own text calls optional; the
-doctor warns instead of failing.
-
-## Working in a project
-
-Railly's skills write contracts, cases and gate runs to a canonical source
-root. To keep that inside the project instead of a global checkout:
-
-```sh
-node scripts/railly-inrepo.mjs scaffold [project]   # once per repository
-```
-
-It creates `.claude/knowledge/` with the markers Railly's resolver validates,
-seeds `cases/<repo>/conventions.md`, and writes `RAILLY_SKILLS_REPO` into the
-project's `.claude/settings.local.json`. Railly's files are never modified;
-his resolver reads the variable before any default, and the scaffold proves
-it by running his unmodified resolver at the end.
+The bar for a skill is in `foundry/eval-protocol.md`: an eval the baseline arm passes is not
+evidence the skill works. Each round's decision and numbers are in `foundry/rounds/`.
 
 ## A new machine
 
@@ -180,13 +126,12 @@ git clone https://github.com/mauriantolin/claude-harness ~/repos/claude-harness
 ~/repos/claude-harness/machine/bootstrap-ubuntu.sh
 ```
 
-The base and nothing else: Tailscale, Claude Code, Orca, Google Chrome (the
-`.deb`, which Claude in Chrome needs), the CLIs (gh, aws, gcloud, vercel, neon,
-supabase, node, pnpm, bun, uv), RDP through GNOME Remote Desktop, this
-repository's install, the hooks registered, the global skills in
-`machine/skills.txt`, the plugins, and `~/.claude/CLAUDE.md` from
-`machine/CLAUDE.global.md`. Every step checks before it installs, so it is safe to
-run again. Logins are not done for you; the script ends by listing them.
+Tailscale, Claude Code, Orca, Chrome, the CLIs (gh, aws, gcloud, vercel, neon, supabase, node,
+pnpm, bun, uv), RDP, `install.sh`, `machine/settings.mjs` (the model and the two marketplaces,
+known and not enabled) and `~/.claude/CLAUDE.md` from `machine/CLAUDE.global.md`. No skills, hooks
+or plugins are enabled globally: repositories bring them. `machine/skills.txt` is the catalog of
+external skills a repository may lock with `npx skills add <source> -a claude-code -s <skill>`.
+Every step checks before it installs; logins are listed at the end, not done for you.
 
 ## Profiles: `perfil`
 
@@ -205,13 +150,3 @@ perfil <name> git               # this clone authenticates to GitHub with the pr
 Generalized from Nomenclator's `pnpm perfil`; the directory layout is the same,
 so pointing `NOMENCLATOR_PERFILES` at `~/.perfiles` makes both read one set of
 logins.
-
-## Where the rest lives
-
-| Layer | Location | Versioned by |
-|---|---|---|
-| Method: Railly Skills | `~/.claude/plugins/` | the `railly-skills` marketplace |
-| Method: frontend and Vercel skills | `~/.agents/skills/` | the `skills` CLI |
-| Method: authored here | this repository | this repository |
-| Evidence: contracts, cases, runs of a project | `<project>/.claude/knowledge/` | the project |
-| Evidence: this harness's own evals | `foundry/runs/` | this repository |

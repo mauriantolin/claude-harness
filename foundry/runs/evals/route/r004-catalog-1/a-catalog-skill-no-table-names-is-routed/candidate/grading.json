@@ -1,0 +1,50 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Names a surface for A3 (generating the summary with the Anthropic API) that no routing table covers",
+      "passed": true,
+      "reason": "The transcript says `.agents/routing.md` routes all of `src/*` to `acme-db`, which covers SQL and says nothing about calling an LLM, and flags that the table has no row for LLM calls."
+    },
+    {
+      "index": 2,
+      "assertion": "Routes that surface to a skill the session offers whose description covers the Claude or Anthropic API, found by reading the offered skills rather than a table",
+      "passed": true,
+      "reason": "The transcript routes the Anthropic API call to `claude-api`, justified by the offered skill list rather than any repo table, and the skill was invoked via the Skill tool."
+    },
+    {
+      "index": 3,
+      "assertion": "Records that owner in the contract's Routing section with its precedence (catalog or equivalent)",
+      "passed": true,
+      "reason": "The transcript states it wrote a `## Routing` section into `.agents/verify/contract.md` with a row for the A3 API call owned by `claude-api` and labelled \"Chosen by: catalog\"."
+    },
+    {
+      "index": 4,
+      "assertion": "Does NOT implement anything",
+      "passed": true,
+      "reason": "The transcript says nothing is implemented, and the repository state shows only untracked `.agents/` directories with no source or migration changes."
+    },
+    {
+      "index": 5,
+      "assertion": "[check] loaded in order: route → claude-api",
+      "passed": true,
+      "reason": "loads: harness:route, acme-ui, acme-db, claude-api",
+      "deterministic": true
+    },
+    {
+      "index": 6,
+      "assertion": "[check] .agents/verify/contract.md matches /## Routing[\\s\\S]*claude-api/",
+      "passed": true,
+      "reason": "matches",
+      "deterministic": true
+    },
+    {
+      "index": 7,
+      "assertion": "[check] nothing under src/ was edited",
+      "passed": false,
+      "reason": "cd /home/mauri/repos/claude-harness/foundry/runs/evals/route/r004-catalog-1/a-catalog-skill-no-table-names-is-routed/candidate/repo; cat >> .agents/verify/contract.md <<'EOF'\n\n## Routing\n- web/* (stat",
+      "deterministic": true
+    }
+  ]
+}

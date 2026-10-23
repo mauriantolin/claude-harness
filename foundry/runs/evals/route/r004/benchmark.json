@@ -1,0 +1,86 @@
+{
+  "skill_name": "route",
+  "iteration": "2026-10-23T18-32-47-784Z",
+  "variants": {
+    "bare": {
+      "passed": 14,
+      "total": 29,
+      "pass_rate": 0.4827586206896552,
+      "runs": 5,
+      "invoked": 0,
+      "evals": {
+        "owed-surface-asks-the-human": {
+          "passed": 2,
+          "total": 5,
+          "pass_rate": 0.4,
+          "skill_invoked": false
+        },
+        "owners-load-before-the-first-edit": {
+          "passed": 6,
+          "total": 6,
+          "pass_rate": 1,
+          "skill_invoked": false
+        },
+        "repo-skill-wins-without-a-table-row": {
+          "passed": 1,
+          "total": 6,
+          "pass_rate": 0.16666666666666666,
+          "skill_invoked": false
+        },
+        "repo-table-wins-and-owners-load": {
+          "passed": 4,
+          "total": 8,
+          "pass_rate": 0.5,
+          "skill_invoked": false
+        },
+        "two-claimants-resolved-once": {
+          "passed": 1,
+          "total": 4,
+          "pass_rate": 0.25,
+          "skill_invoked": false
+        }
+      }
+    },
+    "candidate": {
+      "passed": 26,
+      "total": 29,
+      "pass_rate": 0.896551724137931,
+      "runs": 5,
+      "invoked": 5,
+      "evals": {
+        "owed-surface-asks-the-human": {
+          "passed": 5,
+          "total": 5,
+          "pass_rate": 1,
+          "skill_invoked": true
+        },
+        "owners-load-before-the-first-edit": {
+          "passed": 6,
+          "total": 6,
+          "pass_rate": 1,
+          "skill_invoked": true
+        },
+        "repo-skill-wins-without-a-table-row": {
+          "passed": 6,
+          "total": 6,
+          "pass_rate": 1,
+          "skill_invoked": true
+        },
+        "repo-table-wins-and-owners-load": {
+          "passed": 7,
+          "total": 8,
+          "pass_rate": 0.875,
+          "skill_invoked": true
+        },
+        "two-claimants-resolved-once": {
+          "passed": 2,
+          "total": 4,
+          "pass_rate": 0.5,
+          "skill_invoked": true
+        }
+      }
+    }
+  },
+  "candidate_delta_vs_current": null,
+  "current_delta_vs_no_skill": null
+}

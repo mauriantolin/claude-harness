@@ -1,0 +1,44 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Loads the owning skills before writing code for their surfaces",
+      "passed": true,
+      "reason": "The transcript shows the Skill tool invoked for acme-ui and acme-db, and the agent states it loaded them before editing, which precedes the code writes for the UI and database surfaces."
+    },
+    {
+      "index": 2,
+      "assertion": "The UI change uses FilterBar from @acme/ui rather than a raw select, as acme-ui requires",
+      "passed": true,
+      "reason": "The agent states it added a FilterBar.Select in web/InvoicesPage.jsx instead of a raw select, though it admits it guessed the props without inspecting @acme/ui."
+    },
+    {
+      "index": 3,
+      "assertion": "The migration adds a text status column with a check constraint and a default, as acme-db requires",
+      "passed": true,
+      "reason": "The agent describes db/migrations/002_invoice_status.sql as adding status as text not null default 'draft' with a check constraint limiting values to draft, sent or paid."
+    },
+    {
+      "index": 4,
+      "assertion": "[check] acme-ui loaded before editing web/",
+      "passed": true,
+      "reason": "load #2, first edit #7",
+      "deterministic": true
+    },
+    {
+      "index": 5,
+      "assertion": "[check] acme-db loaded before editing db/",
+      "passed": true,
+      "reason": "load #3, first edit #5",
+      "deterministic": true
+    },
+    {
+      "index": 6,
+      "assertion": "[check] not loaded: ui-design-language",
+      "passed": true,
+      "reason": "none loaded",
+      "deterministic": true
+    }
+  ]
+}

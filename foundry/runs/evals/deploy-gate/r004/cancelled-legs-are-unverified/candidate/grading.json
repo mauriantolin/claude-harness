@@ -1,0 +1,35 @@
+{
+  "skill_invoked": true,
+  "expectations": [
+    {
+      "index": 1,
+      "assertion": "Lists each check with its own conclusion rather than a summary count alone",
+      "passed": true,
+      "reason": "The report gives a per-check table with separate conclusions for the 3 jobs (success), lint (failed), and e2e (cancelled)."
+    },
+    {
+      "index": 2,
+      "assertion": "Treats the cancelled e2e job as unverified, neither pass nor fail",
+      "passed": true,
+      "reason": "The transcript explicitly states that 'cancelled' is neither a pass nor a fail and marks e2e as unverified."
+    },
+    {
+      "index": 3,
+      "assertion": "Asks for or cites the failing lint job's log excerpt that names the cause, not the summary line",
+      "passed": true,
+      "reason": "The agent states the lint cause is unknown and explicitly asks the user for the lint job's failing log lines or a session with gh run view --log-failed."
+    },
+    {
+      "index": 4,
+      "assertion": "Does NOT declare the run green or the deployment safe",
+      "passed": true,
+      "reason": "The report opens with RED and states the deployment is not verified and nothing shows the artifact carries the commit."
+    },
+    {
+      "index": 5,
+      "assertion": "States that the e2e leg still needs to be observed to a terminal state after lint is fixed",
+      "passed": true,
+      "reason": "The transcript says that after fixing lint and rerunning, e2e must run to a real result, and lists 'e2e never ran to completion' as still unverified."
+    }
+  ]
+}
