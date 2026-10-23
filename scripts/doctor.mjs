@@ -17,7 +17,8 @@ import { discoverSkills, parseFrontmatter, skillTools } from "./lib/skills.mjs";
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const CLAUDE_DIR = process.env.CLAUDE_CONFIG_DIR || join(homedir(), ".claude");
 const PLUGINS = join(CLAUDE_DIR, "plugins");
-const RAILLY_PLUGINS = ["stable@railly-skills", "candidates@railly-skills", "experimental@railly-skills"];
+// Railly folded its "candidates" channel into stable and experimental.
+const RAILLY_PLUGINS = ["stable@railly-skills", "experimental@railly-skills"];
 const IS_WINDOWS = process.platform === "win32";
 
 const errors = [];
@@ -244,7 +245,8 @@ const toCheck = [
 	...railllySkillMds.map((f) => ({ name: basename(dirname(f)), file: f })).filter((s) => !seen.has(s.name) && seen.add(s.name)),
 	...skills.map((s) => ({ name: s.name, file: join(s.root, "SKILL.md") })),
 ];
-if (!seen.has("factory-loop")) err("factory-loop SKILL.md not found in the installed railly-skills plugins");
+// Railly renamed factory-loop to loop; either name satisfies the orchestrator.
+if (!seen.has("factory-loop") && !seen.has("loop")) err("loop (formerly factory-loop) SKILL.md not found in the installed railly-skills plugins");
 for (const { name, file } of toCheck) {
 	const fm = parseFrontmatter(readFileSync(file, "utf8"));
 	for (const dep of skillTools(fm)) {

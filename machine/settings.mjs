@@ -22,7 +22,6 @@ const PLUGINS = [
 	"vercel@claude-plugins-official",
 	"plugin-dev@claude-plugins-official",
 	"stable@railly-skills",
-	"candidates@railly-skills",
 	"experimental@railly-skills",
 	"typesafe@typesafe-ai",
 ];

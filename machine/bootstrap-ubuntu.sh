@@ -156,7 +156,7 @@ for s in shaping breadboarding; do
 done
 grep -v '^#' "$REPO/machine/skills.txt" | while read -r source skill; do
 	[[ -n "$skill" && ! -e "$HOME/.claude/skills/$skill" ]] || continue
-	npx --yes skills add "$source" -g -a claude-code -s "$skill" -y >/dev/null 2>&1 ||
+	npx --yes skills add "$source" -g -a claude-code -s "$skill" -y </dev/null >/dev/null 2>&1 ||
 		echo "  could not install $skill from $source"
 done
 for m in anthropics/claude-plugins-official Railly/skills typesafe-ai/skills; do
