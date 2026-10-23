@@ -165,7 +165,10 @@ for (const script of readdirSync(join(REPO, "scripts")).filter((f) => f.endsWith
 // first; the second is a manual edit, so this is the only place that notices
 // it was never made or was later removed.
 section("hooks (hooks/*/hook.mjs registered in ~/.claude/settings.json)");
-const HOOK_EVENTS = { "factory-loop-checkpoints": { event: "PostToolUse", matcher: "Skill" } };
+const HOOK_EVENTS = {
+	"factory-loop-checkpoints": { event: "PostToolUse", matcher: "Skill" },
+	"railly-root-worktree": { event: "SessionStart", matcher: "" },
+};
 const hooksDir = join(REPO, "hooks");
 const hookNames = existsSync(hooksDir)
 	? readdirSync(hooksDir, { withFileTypes: true })
