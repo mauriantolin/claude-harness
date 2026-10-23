@@ -141,7 +141,7 @@ else
 fi
 
 step "harness"
-"$REPO/install.sh"
+bash "$REPO/install.sh"
 node "$REPO/machine/settings.mjs"
 # The global instructions: this machine's own copy if the data partition carries one (it names
 # accounts and hosts, so it is not in this public repository), else the template.
