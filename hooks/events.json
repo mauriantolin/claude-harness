@@ -1,0 +1,9 @@
+{
+	"factory-loop-checkpoints": { "event": "PostToolUse", "matcher": "Skill" },
+	"railly-root-worktree": { "event": "SessionStart", "matcher": "" },
+	"restore-repo-skills": { "event": "SessionStart", "matcher": "" },
+	"scan-secrets-pre": { "event": "PreToolUse", "matcher": "Write|Edit" },
+	"guard-immutable-docs": { "event": "PreToolUse", "matcher": "Write|Edit" },
+	"scan-secrets": { "event": "PostToolUse", "matcher": "Write|Edit" },
+	"format-touched": { "event": "PostToolUse", "matcher": "Write|Edit" }
+}
