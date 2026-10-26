@@ -83,8 +83,15 @@ export const SERVICIOS = {
 			"AWS_SHARED_CREDENTIALS_FILE",
 			"AWS_LOGIN_CACHE_DIRECTORY",
 		],
-		// Temporary console credentials through Identity Center, no long-lived keys.
+		// Temporary console credentials through Identity Center, no long-lived keys. `aws login` caps
+		// at the role's 12 h; a profile whose aws/config has an `sso-session` logs in with
+		// `aws sso login` instead, which renews for as long as the access portal session (up to 90 days).
 		login: ["aws", "login"],
+		loginDe: (dir) => {
+			const archivo = join(dir, "aws", "config");
+			const sso = existsSync(archivo) && /^\[sso-session /m.test(readFileSync(archivo, "utf8"));
+			return sso ? ["aws", "sso", "login"] : ["aws", "login"];
+		},
 		aviso: "AWS",
 		estado: ["aws", "sts", "get-caller-identity"],
 		bin: "aws",
@@ -253,6 +260,9 @@ function estado(nombre) {
 		} else if (!buscar(s.bin, path, join(dir, "bin"))) {
 			detalle = "CLI no instalada";
 			paso = `instalar: ${s.instalar}; despues: perfil ${nombre} login ${id}`;
+		} else if ((s.tokens ?? []).some((t) => cl[t])) {
+			// A key in `claves.env` does not expire or rotate, so it wins over the login's session.
+			detalle = `clave ${s.tokens.find((t) => cl[t])} cargada`;
 		} else {
 			const con = s.sesion ? s.sesion(dir) : correr(nombre, s.estado, { silencioso: true }).code === 0;
 			detalle = con ? "con sesion" : "sin sesion";
@@ -279,7 +289,14 @@ function login(nombre, servicio) {
 			`Antes de autorizar, fijate en el navegador con que cuenta de ${s.aviso} estas logueado: ` +
 				`tiene que ser la que va en el perfil ${nombre}.`,
 		);
-		return correr(nombre, s.login);
+		const comando = s.loginDe ? s.loginDe(entorno(nombre).PERFIL_DIR) : s.login;
+		if (servicio === "aws" && comando[1] === "login")
+			console.log(
+				"aws login vence a las 12 h. Si la organizacion usa IAM Identity Center, una sesion de hasta\n" +
+					`90 dias: perfil ${nombre} -- aws configure sso (sso-session llamado ${nombre}, perfil ${nombre}),\n` +
+					`y desde ahi perfil ${nombre} login aws corre aws sso login.`,
+			);
+		return correr(nombre, comando);
 	}
 	const archivo = join(entorno(nombre).PERFIL_DIR, "claves.env");
 	console.log(

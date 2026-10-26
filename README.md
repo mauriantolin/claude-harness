@@ -150,3 +150,11 @@ perfil <name> git               # this clone authenticates to GitHub with the pr
 Generalized from Nomenclator's `pnpm perfil`; the directory layout is the same,
 so pointing `NOMENCLATOR_PERFILES` at `~/.perfiles` makes both read one set of
 logins.
+
+Sessions that last: a key in `claves.env` (`NEON_API_KEY`, `VERCEL_TOKEN`) counts
+as the service's session and never expires or rotates. For AWS, `aws login` caps
+at 12 h; with IAM Identity Center, give the profile an `sso-session` named after
+it (`perfil <name> -- aws configure sso`, or Nomenclator's `pnpm perfil <name>
+login aws`, which writes it) and `perfil <name> login aws` runs `aws sso login`,
+good for the access portal session (up to 90 days). Its token lands in
+`~/.aws/sso/cache` under the session name, which is why the name is the profile's.
