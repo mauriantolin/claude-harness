@@ -168,11 +168,13 @@ function checkMarketplace(skills) {
 			if (owners.has(p)) fail(file, `${p} is listed by "${owners.get(p)}" and "${plugin.name}"`);
 			owners.set(p, plugin.name);
 		}
-		if (plugin.hooks && !existsSync(join(REPO, plugin.hooks))) fail(file, `"${plugin.name}" hooks ${plugin.hooks} does not exist`);
+		// Claude Code loads a marketplace entry's hooks only as an inline object, never as a path.
+		if (plugin.hooks !== undefined && (typeof plugin.hooks !== "object" || Array.isArray(plugin.hooks)))
+			fail(file, `"${plugin.name}" hooks must be an inline object (a path or an array does not load from a marketplace entry)`);
 	}
 	for (const [p] of paths) if (!owners.has(p)) fail(file, `no plugin lists ${p}`);
 	const built = spawnSync(process.execPath, [join(REPO, "scripts", "build-hooks.mjs"), "--check"], { encoding: "utf8" });
-	if (built.status !== 0) fail(join(REPO, "hooks", "core.json"), built.stderr.trim());
+	if (built.status !== 0) fail(join(REPO, ".claude-plugin", "marketplace.json"), built.stderr.trim());
 }
 
 function checkCases() {

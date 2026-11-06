@@ -174,9 +174,9 @@ else if (!globalHarness) ok("no global skills");
 
 // ------------------------------------------------------------------- hooks
 
-section("hooks (served by the harness plugin from hooks/core.json)");
+section("hooks (served by the harness plugin, inline in .claude-plugin/marketplace.json)");
 const built = spawnSync(process.execPath, [join(REPO, "scripts", "build-hooks.mjs"), "--check"], { encoding: "utf8" });
-if (built.status === 0) ok("hooks/core.json matches hooks/events.json");
+if (built.status === 0) ok("the inline hooks match hooks/events.json");
 else err(built.stderr.trim());
 for (const name of Object.keys(JSON.parse(readFileSync(join(REPO, "hooks", "events.json"), "utf8")))) {
 	if (["mjs", "sh"].some((ext) => existsSync(join(REPO, "hooks", name, `hook.${ext}`)))) ok(`${name}`);

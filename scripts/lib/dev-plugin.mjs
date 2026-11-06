@@ -6,16 +6,19 @@
 // the default directory, so a linked plugin looks half alive). The repository
 // root holds the marketplace manifest, so it cannot be the plugin directory.
 
-import { cpSync, mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
+import { cpSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
 export function devPluginDir(repo) {
 	const dir = mkdtempSync(join(tmpdir(), "harness-dev-plugin-"));
 	mkdirSync(join(dir, ".claude-plugin"));
+	// The same inline hooks the marketplace entry serves (scripts/build-hooks.mjs).
+	const marketplace = JSON.parse(readFileSync(join(repo, ".claude-plugin", "marketplace.json"), "utf8"));
+	const { hooks } = marketplace.plugins.find((p) => p.name === "harness");
 	writeFileSync(
 		join(dir, ".claude-plugin", "plugin.json"),
-		`${JSON.stringify({ name: "harness", version: "0.0.0-dev", skills: "./skills/", hooks: "./hooks/core.json" }, null, 2)}\n`,
+		`${JSON.stringify({ name: "harness", version: "0.0.0-dev", skills: "./skills/", hooks }, null, 2)}\n`,
 	);
 	const skip = (src) => !/[/\\](evals|node_modules)([/\\]|$)/.test(src);
 	for (const d of ["skills", "hooks", "scripts"]) cpSync(join(repo, d), join(dir, d), { recursive: true, filter: skip });
