@@ -139,8 +139,13 @@ export function loadedSkills(transcript) {
 }
 
 export function routeGuard(input, root, routes, loaded, env = process.env) {
+	return routeGuardPath(input?.tool_input?.file_path, root, routes, loaded, env);
+}
+
+// The check for one absolute path inside `root` (the git toplevel of that path, not of the hook's
+// cwd: a Workflow subagent edits in a worktree under ~/wt/ while its session sits elsewhere).
+export function routeGuardPath(file, root, routes, loaded, env = process.env) {
 	if (env[OFF.routeGuard] === "off" || !root || !routes.length) return null;
-	const file = input?.tool_input?.file_path;
 	if (typeof file !== "string" || !file.startsWith(`${root}/`)) return null;
 	const path = file.slice(root.length + 1);
 	const has = (want) => loaded.some((n) => n === want || n.endsWith(`:${want}`));
@@ -150,6 +155,41 @@ export function routeGuard(input, root, routes, loaded, env = process.env) {
 		`route-guard: ${path} is owned by ${missing.map((m) => `\`${m}\``).join(", ")} (.agents/routing.md), and this agent has not loaded ${missing.length > 1 ? "them" : "it"}.`,
 		`Load ${missing.map((m) => `Skill(${m})`).join(" and ")} first, follow ${missing.length > 1 ? "them" : "it"} for this surface, then make the edit.`,
 	].join("\n");
+}
+
+// A Bash command that can write a file. Direct writers: in-place editors, redirections, tee,
+// copies, patches. An interpreter writes too when it runs code that names the file: inline
+// (`python3 - <<EOF`, `-c`, `node -e`) or a script whose text names it (a `fix.py` that rewrites
+// a routed file is an edit). A read (`cat`, `grep`, `sed -n`, `git diff`) or an interpreter running
+// a tool over a path (`uv run pytest tests/x.py`) is not one, and is never blocked.
+const WRITER = /\bsed\s+(?:-[a-zA-Z]*i|--in-place)|\bperl\s+-[a-zA-Z]*i|(?:^|[^0-9&<>=-])>>?\s*(?!&|\/dev\/)[^\s|;&>=]|\btee\b|\b(?:cp|mv|install|rsync|patch)\s|\bgit\s+(?:apply|checkout\s+--|restore)\b/;
+const INTERP = /\b(?:python3?|node|ruby|perl|bun|deno|tsx)\b/;
+const INLINE = /\b(?:python3?|node|ruby|perl|bun|deno)\s+(?:-[ce]\b|-\s|-$)|<<-?\s*['"]?\w/;
+const SCRIPT = /\b(?:python3?|node|ruby|perl|bun|deno|tsx)\s+((?:\S+\/)?[\w.-]+\.(?:py|m?js|ts|rb|pl))\b/g;
+
+const tokensOf = (text) =>
+	text.split(/[\s'"`;|&()<>=,[\]{}]+/).filter((t) => /[/.]/.test(t) && /\w/.test(t) && !/^-/.test(t) && !/^[a-z]+:\/\//.test(t));
+
+// The files a Bash command may write, as absolute paths: every path-looking token of the command
+// (and of a script it runs), resolved against its cwd. Over-matching is the safe side: a token
+// that is only read gets the same "load the owner first" a write would.
+export function bashWrites(command, cwd, readFile = () => "") {
+	if (typeof command !== "string") return [];
+	const texts = [];
+	if (WRITER.test(command) || (INTERP.test(command) && INLINE.test(command))) texts.push(command);
+	if (INTERP.test(command))
+		for (const m of command.matchAll(SCRIPT)) {
+			const f = m[1].startsWith("/") ? m[1] : `${cwd}/${m[1]}`;
+			const body = readFile(f);
+			if (body) texts.push(body);
+		}
+	const out = new Set();
+	for (const t of texts.flatMap(tokensOf)) {
+		if (t.startsWith("~")) continue;
+		const abs = (t.startsWith("/") ? t : `${cwd}/${t}`).replace(/\/\.\//g, "/").replace(/\/+/g, "/");
+		out.add(abs);
+	}
+	return [...out];
 }
 
 // The plugin-qualified name is part of the text on purpose: Claude Code ships a built-in `loop`
