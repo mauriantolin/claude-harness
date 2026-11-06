@@ -1,7 +1,7 @@
 {
   "$schema": "https://code.claude.com/schema/marketplace.json",
   "name": "mauri-harness",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "owner": {
     "name": "Mauricio Antolín",
     "url": "https://github.com/mauriantolin"
@@ -13,40 +13,158 @@
       "displayName": "Harness",
       "description": "route, deploy-gate and the core hooks. Every harnessed repository enables this one.",
       "source": "./",
-      "version": "0.3.0",
-      "author": { "name": "Mauricio Antolín" },
+      "version": "0.3.1",
+      "author": {
+        "name": "Mauricio Antolín"
+      },
       "license": "MIT",
       "category": "engineering",
-      "keywords": ["routing", "deploy", "hooks", "railly"],
+      "keywords": [
+        "routing",
+        "deploy",
+        "hooks",
+        "railly"
+      ],
       "strict": false,
-      "skills": ["./skills/route", "./skills/deploy-gate"],
-      "hooks": "./hooks/core.json"
+      "skills": [
+        "./skills/route",
+        "./skills/deploy-gate"
+      ],
+      "hooks": {
+        "SessionStart": [
+          {
+            "hooks": [
+              {
+                "type": "command",
+                "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/knowledge-root/hook.mjs\"",
+                "timeout": 10
+              },
+              {
+                "type": "command",
+                "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/restore-repo-skills/hook.sh\"",
+                "timeout": 120
+              }
+            ]
+          }
+        ],
+        "UserPromptSubmit": [
+          {
+            "hooks": [
+              {
+                "type": "command",
+                "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/loop-entry/hook.mjs\"",
+                "timeout": 10
+              }
+            ]
+          }
+        ],
+        "PreToolUse": [
+          {
+            "matcher": "Write|Edit",
+            "hooks": [
+              {
+                "type": "command",
+                "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/scan-secrets-pre/hook.sh\"",
+                "timeout": 30
+              },
+              {
+                "type": "command",
+                "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/guard-immutable-docs/hook.sh\"",
+                "timeout": 30
+              }
+            ]
+          },
+          {
+            "matcher": "Write|Edit|MultiEdit|Bash",
+            "hooks": [
+              {
+                "type": "command",
+                "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/route-guard/hook.mjs\"",
+                "timeout": 10
+              }
+            ]
+          }
+        ],
+        "PostToolUse": [
+          {
+            "matcher": "Skill",
+            "hooks": [
+              {
+                "type": "command",
+                "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/loop-bindings/hook.mjs\"",
+                "timeout": 10
+              }
+            ]
+          },
+          {
+            "matcher": "Write|Edit",
+            "hooks": [
+              {
+                "type": "command",
+                "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/scan-secrets/hook.sh\"",
+                "timeout": 30
+              },
+              {
+                "type": "command",
+                "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/format-touched/hook.sh\"",
+                "timeout": 30
+              }
+            ]
+          }
+        ],
+        "Stop": [
+          {
+            "hooks": [
+              {
+                "type": "command",
+                "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/verify-before-done/hook.mjs\"",
+                "timeout": 90
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "name": "harness-design",
       "displayName": "Harness design language",
       "description": "ui-design-language, for repositories without a design system of their own. A repository with one does not enable it.",
       "source": "./",
-      "version": "0.3.0",
-      "author": { "name": "Mauricio Antolín" },
+      "version": "0.3.1",
+      "author": {
+        "name": "Mauricio Antolín"
+      },
       "license": "MIT",
       "category": "design",
-      "keywords": ["design", "ui"],
+      "keywords": [
+        "design",
+        "ui"
+      ],
       "strict": false,
-      "skills": ["./skills/ui-design-language"]
+      "skills": [
+        "./skills/ui-design-language"
+      ]
     },
     {
       "name": "harness-maintainer",
       "displayName": "Harness maintainer workflow",
       "description": "maintain: queue cleanup, merge, release and published-artifact verification, for repositories that publish packages.",
       "source": "./",
-      "version": "0.3.0",
-      "author": { "name": "Mauricio Antolín" },
+      "version": "0.3.1",
+      "author": {
+        "name": "Mauricio Antolín"
+      },
       "license": "MIT",
       "category": "engineering",
-      "keywords": ["release", "merge", "publish"],
+      "keywords": [
+        "release",
+        "merge",
+        "publish"
+      ],
       "strict": false,
-      "skills": ["./skills/maintain"]
+      "skills": [
+        "./skills/maintain"
+      ]
     }
   ]
 }

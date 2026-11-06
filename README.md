@@ -13,7 +13,7 @@ gets the same harness, and two repositories never compete with each other's skil
 ```text
 skills/<name>/          SKILL.md (<=120 lines) + references/ + evals/{evals.json,triggers.json,fixtures/<fx>/{base,changed}}
 hooks/<name>/           hook.mjs or hook.sh (+ what it injects + evals/); hooks/events.json says which event each runs on
-hooks/core.json         the harness plugin's hook config, generated from events.json (scripts/build-hooks.mjs)
+.claude-plugin/marketplace.json  the harness plugin's hooks, inline, generated from hooks/events.json (scripts/build-hooks.mjs)
 templates/              .agents/harness.md and .agents/routing.md for a repository's first `harness init`
 bin/                    commands on the PATH: harness, perfil
 machine/                a new machine: bootstrap, global settings (context only), the global CLAUDE.md template
@@ -79,7 +79,7 @@ surface, the repository's `routing.md` names the winner under "Supersedes".
 
 ```sh
 npm test                 # scripts/lib, hooks (end to end over the real hook files) and bin
-npm run validate         # skills, evals, maturity, marketplace (every skill in exactly one plugin), hooks/core.json fresh
+npm run validate         # skills, evals, maturity, marketplace (every skill in exactly one plugin), the inline hooks fresh
 npm run verify-fixtures  # materialize every fixture and run its declared verification command
 npm run audit            # skillkit audit, as Railly's CI runs it
 npm run doctor           # the machine: Railly at its remote HEAD, nothing of the harness global, hooks and dependencies

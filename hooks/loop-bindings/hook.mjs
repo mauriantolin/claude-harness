@@ -3,7 +3,7 @@
 // Railly's loop or contract, inject bindings.md as additional context. Railly's
 // SKILL.md is never modified; the bindings ride alongside it at load time.
 //
-// Served by the core plugin (hooks/core.json), so an edit to bindings.md is
+// Served by the core plugin (inline in marketplace.json), so an edit to bindings.md is
 // live in the next loop load of every repository that enables the plugin.
 
 import { readFileSync } from "node:fs";
