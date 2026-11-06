@@ -205,6 +205,64 @@ test("route-guard reads a subagent's own transcript, not the orchestrator's", ()
 	assert.equal(edit(dir, "src/cli.js", session, { agent_id: "a1" }).status, 0);
 });
 
+// route-guard, from Workflow subagents (the revisor's fix agents in nomenclator)
+//    23. lets through an edit in a worktree other than the hook's cwd (the cwd's repo is checked)
+//    24. misses a Workflow subagent's transcript under subagents/workflows/<run>/
+//    25. lets a Bash write of a routed file through (sed -i, a redirection, an inline interpreter,
+//        a script whose text names the file)
+//    26. blocks a Bash read of a routed file (cat, grep, sed -n) or a tool run over it (pytest)
+const bash = (cwd, command, transcript, extra = {}) =>
+	run("route-guard", { cwd, tool_name: "Bash", tool_input: { command }, transcript_path: transcript, ...extra }, { cwd });
+
+test("route-guard checks the repository of the edited file, not the hook's cwd", () => {
+	const session = repo();
+	const worktree = repo({ agents: true });
+	writeFileSync(join(worktree, ".agents", "routing.md"), ROUTING);
+	const none = transcriptWith(worktree, "none", []);
+	const blocked = run("route-guard", { cwd: session, tool_name: "Edit", tool_input: { file_path: join(worktree, "src/cli.js") }, transcript_path: none }, { cwd: session });
+	assert.equal(blocked.status, 2);
+	assert.match(blocked.stderr, /Skill\(acme-cli\)/);
+	const fresh = run("route-guard", { cwd: session, tool_name: "Write", tool_input: { file_path: join(worktree, "src/new/dir/x.js") }, transcript_path: none }, { cwd: session });
+	assert.equal(fresh.status, 2);
+});
+
+test("route-guard reads a Workflow subagent's transcript under subagents/workflows/<run>/", () => {
+	const dir = repo({ agents: true });
+	writeFileSync(join(dir, ".agents", "routing.md"), ROUTING);
+	const session = transcriptWith(dir, "session", ["acme-cli"]);
+	const run1 = join(session.replace(/\.jsonl$/, ""), "subagents", "workflows", "wf_1");
+	mkdirSync(run1, { recursive: true });
+	writeFileSync(join(run1, "agent-w1.jsonl"), "");
+	assert.equal(edit(dir, "src/cli.js", session, { agent_id: "w1" }).status, 2);
+	writeFileSync(join(run1, "agent-w1.jsonl"), readFileSync(session, "utf8"));
+	assert.equal(edit(dir, "src/cli.js", session, { agent_id: "w1" }).status, 0);
+});
+
+test("route-guard treats a Bash command that writes a routed file as an edit, and lets reads pass", () => {
+	const dir = repo({ agents: true });
+	writeFileSync(join(dir, ".agents", "routing.md"), ROUTING);
+	mkdirSync(join(dir, "src"), { recursive: true });
+	writeFileSync(join(dir, "src", "cli.js"), "x\n");
+	const none = transcriptWith(dir, "none", []);
+	for (const cmd of [
+		"sed -i 's/a/b/' src/cli.js",
+		"echo x > src/cli.js",
+		"printf x | tee -a src/cli.js",
+		"python3 - <<'EOF'\nopen('src/cli.js','w').write('y')\nEOF",
+		`node -e "require('fs').writeFileSync('${join(dir, "src/cli.js")}', '')"`,
+	]) {
+		const r = bash(dir, cmd, none);
+		assert.equal(r.status, 2, cmd);
+		assert.match(r.stderr, /Skill\(acme-cli\)/, cmd);
+	}
+	writeFileSync(join(dir, "..", "fix-script.py"), "p = 'src/cli.js'\nopen(p, 'w').write('z')\n");
+	assert.equal(bash(dir, `python3 ${join(dir, "..", "fix-script.py")}`, none).status, 2);
+	for (const cmd of ["cat src/cli.js", "grep -n x src/cli.js", "sed -n 1,5p src/cli.js", "git diff -- src/cli.js", "uv run pytest src/cli.js", "node scripts/x.mjs src/cli.js 2>/dev/null"])
+		assert.equal(bash(dir, cmd, none).status, 0, cmd);
+	assert.equal(bash(dir, "sed -i 's/a/b/' src/cli.js", transcriptWith(dir, "one", ["acme-cli"])).status, 0);
+	assert.equal(bash(dir, "echo x > README.md", none).status, 0);
+});
+
 // loop-entry
 //    19. stays silent in a repository without .agents/harness.md (every other repository)
 //    20. says nothing in a harnessed one, so a plainly worded change skips the loop
