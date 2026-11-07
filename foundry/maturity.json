@@ -28,6 +28,13 @@
       "maturity": "evaluated",
       "summary": "Maintainer merge, release and publish workflow recreated from the chore(release) pull requests. Round 001 (haiku): 25.0% → 50.0%; one trigger false positive on a factory-loop prompt. Description edit is a round 002 candidate. Renamed from software-factory-maintenance in round 004. Round 004 triggers (sonnet): 9/10, misses a pre-publish tarball check. Round 004 method (sonnet): 35.0% → 75.0%.",
       "decision": "rounds/001-align-to-railly-foundry/decision.md"
+    },
+    "untangle-codebase": {
+      "type": "content",
+      "channel": "experimental",
+      "maturity": "experimental",
+      "summary": "Copied from caldoai/skills (MIT) for the untangle program of dentito; loaded by hand, not evaluated here.",
+      "decision": "../skills/.experimental/untangle-codebase/NOTICE.md"
     }
   }
 }

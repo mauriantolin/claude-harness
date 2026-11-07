@@ -22,6 +22,16 @@ Branch names, commit format, how a PR is opened and what its body carries beyond
 
 How a delivered change is seen serving (`deploy-gate`): CI, the deployment, the URL.
 
+## Code
+
+What a comment may say here, and the patterns the `comment-guard` hook warns on when an edit adds a comment line that matches one: one regular expression per line, a label after ` :: `. Without this block the hook does nothing in this repository.
+
+```comment-guard
+\b(?:[A-Z]{2,5}-\d{2,4})\b :: an ID from the docs
+\b20\d\d-\d\d-\d\d\b :: a date
+\b(previously|no longer|used to|anymore)\b :: history
+```
+
 ## Lessons
 
 Where `correct` puts a durable lesson in this repository (the case itself stays in `.agents/knowledge/`, which is ignored).

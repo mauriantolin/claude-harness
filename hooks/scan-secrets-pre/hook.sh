@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
-# PreToolUse(Write|Edit): bloquea ANTES de que el secreto toque el disco.
-# Inspecciona el contenido que se va a escribir, no el archivo.
+# PreToolUse(Write|Edit): denies a write before a secret reaches the disk, from the content about
+# to be written.
 set -uo pipefail
 payload="$(cat)"
 
 f="$(printf '%s' "$payload" | sed -n 's/.*"file_path"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' | head -1)"
 p="${f//\\//}"
 case "$p" in *.env.example|*.env.sample|*.lock) exit 0 ;; esac
-# Destino gitignoreado = lugar legítimo para un secreto.
+# A gitignored destination is a legitimate place for a secret.
 [ -n "$p" ] && git -C "$(dirname "$p")" check-ignore -q "$p" 2>/dev/null && exit 0
 
-# El contenido entrante: content (Write) y new_string (Edit).
+# The incoming content: content (Write) and new_string (Edit).
 body="$(printf '%s' "$payload" | sed -n 's/.*"\(content\|new_string\)"[[:space:]]*:[[:space:]]*"\(.*\)/\2/p')"
 [ -n "$body" ] || exit 0
 
@@ -26,6 +26,6 @@ kind="$(printf '%s' "$body" | grep -Eo \
   2>/dev/null | head -1 | cut -c1-14)"
 
 [ -n "$kind" ] || exit 0
-printf '{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"Se iba a escribir un secreto en %s (prefijo: %s). No aterrizó. Usá una variable de entorno, o escribilo en el .env local que ya está gitignoreado. Si es un ejemplo, que el valor sea obviamente falso."}}\n' \
-  "$(basename "${p:-el archivo}")" "$kind"
+printf '{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"A secret was about to be written to %s (prefix: %s). It was not written. Use an environment variable, or put it in the local .env, which is gitignored. If it is an example, make the value obviously fake."}}\n' \
+  "$(basename "${p:-the file}")" "$kind"
 exit 0

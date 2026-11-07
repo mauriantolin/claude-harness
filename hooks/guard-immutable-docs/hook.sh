@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
-# PreToolUse(Write|Edit): bloquea escrituras sobre registros históricos.
+# PreToolUse(Write|Edit): denies writes to historical records.
 #
-# Un archivo bajo archive/ describe lo que era cierto ENTONCES; "corregirlo"
-# destruye justo lo que existe para preservar. Un ADR aceptado se supersede con
-# un ADR nuevo, nunca se edita.
+# A file under archive/ records what was true at the time; correcting it destroys what it exists
+# to keep. An accepted ADR is superseded by a new one, never edited.
 set -uo pipefail
 payload="$(cat)"
 f="$(printf '%s' "$payload" | sed -n 's/.*"file_path"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' | head -1)"
@@ -17,14 +16,14 @@ deny() {
 
 case "$p" in
   */archive/*|*/.archive/*)
-    deny "Ruta archivada: registra lo que era cierto en su momento. No se corrige — si el hecho cambió, escribí donde vive el hecho actual." ;;
+    deny "Archived path: it records what was true at the time and is not corrected. If the fact changed, write where the current fact lives." ;;
 esac
 
-# ADR aceptado: decisions/NNNN-*.md con Status: Accepted
+# An accepted ADR: decisions/NNNN-*.md with Status: Accepted
 case "$p" in
   */decisions/[0-9][0-9][0-9][0-9]-*.md)
     if [ -f "$p" ] && grep -qiE '^\*\*Status:\*\*[[:space:]]*Accepted' "$p" 2>/dev/null; then
-      deny "ADR aceptado: es inmutable. Para revertir la decisión escribí un ADR nuevo con 'Supersedes: NNNN' y cambiá SOLO la línea Status del viejo a 'Superseded by NNNN'."
+      deny "Accepted ADR: it is immutable. To reverse the decision write a new ADR with 'Supersedes: NNNN' and change ONLY the Status line of the old one to 'Superseded by NNNN'."
     fi ;;
 esac
 exit 0

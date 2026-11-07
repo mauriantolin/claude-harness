@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
-# PostToolUse(Write|Edit): formatea el archivo tocado con el formatter DEL REPO.
+# PostToolUse(Write|Edit): formats the touched file with the repository's own formatter.
 #
-# Nunca instala nada ni impone un formatter: si el proyecto no tiene uno, no
-# hace nada. Cada hallazgo de formato que muere acá es presupuesto de review
-# liberado para lo que solo un modelo puede ver.
+# It never installs or imposes a formatter: a project without one gets nothing.
 set -uo pipefail
 payload="$(cat)"
 f="$(printf '%s' "$payload" | sed -n 's/.*"file_path"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' | head -1)"
@@ -20,11 +18,9 @@ esac
 root="$(git -C "$(dirname "$f")" rev-parse --show-toplevel 2>/dev/null)" || exit 0
 [ -x "$root/node_modules/.bin/prettier" ] || exit 0
 
-# Los ignore van por ruta absoluta y no por descubrimiento: prettier los busca
-# relativos al cwd, y este hook corre con un cwd que no es el del repo. Sin esto,
-# `.prettierignore` no se encuentra y el hook formatea archivos que el repo excluye
-# a proposito -por ejemplo `docs/`-, que es como se reformatean specs enteras y se
-# destruye un diff. Verificado el 2026-09-09 sobre nomenclator-refactor.
+# The ignore files go by absolute path: prettier looks for them relative to the cwd, and this
+# hook runs with a cwd that is not the repository's, so it would format files the repository
+# excludes on purpose.
 if [ -f "$root/.prettierignore" ] && [ -f "$root/.gitignore" ]; then
   "$root/node_modules/.bin/prettier" --write --ignore-unknown --ignore-path "$root/.gitignore" --ignore-path "$root/.prettierignore" "$f" >/dev/null 2>&1 || true
 elif [ -f "$root/.prettierignore" ]; then
