@@ -112,6 +112,17 @@ function check(repo) {
 	return problems;
 }
 
+// What a harnessed repository should have but can live without: reported, never a failure.
+function warnings(repo) {
+	const root = git(repo, "rev-parse", "--show-toplevel").stdout.trim();
+	const out = [];
+	const harness = join(root, ".agents", "harness.md");
+	if (existsSync(harness) && !/^## Code\s*$/m.test(readFileSync(harness, "utf8"))) {
+		out.push('.agents/harness.md has no "Code" section: comment-guard does nothing here (templates/harness.md)');
+	}
+	return out;
+}
+
 function main() {
 	const [cmd, ...rest] = process.argv.slice(2);
 	const repo = resolve(rest.find((a) => !a.startsWith("--")) ?? ".");
@@ -128,6 +139,7 @@ function main() {
 	if (cmd === "check") {
 		const problems = check(repo);
 		for (const p of problems) console.log(`  ✖ ${p}`);
+		for (const w of warnings(repo)) console.log(`  ! ${w}`);
 		console.log(problems.length ? `\n${problems.length} problem(s)` : "  ✔ harnessed");
 		process.exit(problems.length ? 1 : 0);
 	}

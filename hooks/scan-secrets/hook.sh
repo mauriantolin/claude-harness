@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
-# PostToolUse(Write|Edit): bloquea si un secreto de alta confianza aterrizó en un
-# archivo que SE VA A COMMITEAR.
-#
-# La regla que evita falsos positivos: si el archivo está gitignoreado (.env.local
-# y compañía), un secreto ahí es normal y no se toca. Solo importa lo versionable.
+# PostToolUse(Write|Edit): blocks when a high-confidence secret landed in a file that will be
+# committed. A gitignored file (.env.local and the like) may hold secrets.
 set -uo pipefail
 payload="$(cat)"
 f="$(printf '%s' "$payload" | sed -n 's/.*"file_path"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' | head -1)"
@@ -12,7 +9,7 @@ f="${f//\\//}"
 [ -f "$f" ] || exit 0
 
 case "$f" in *.env.example|*.env.sample|*.lock|*.md.bak) exit 0 ;; esac
-# Gitignoreado = destino legítimo de secretos.
+# A gitignored file is a legitimate place for secrets.
 git -C "$(dirname "$f")" check-ignore -q "$f" 2>/dev/null && exit 0
 
 hits="$(grep -nEo \
@@ -28,9 +25,9 @@ hits="$(grep -nEo \
 
 [ -n "$hits" ] || exit 0
 
-# Reportar el patrón y la línea, NUNCA el valor.
+# Report the pattern and the line, never the value.
 lines="$(printf '%s\n' "$hits" | sed 's/:.*//' | tr '\n' ',' | sed 's/,$//')"
 kinds="$(printf '%s\n' "$hits" | sed 's/^[0-9]*://' | cut -c1-12 | sort -u | tr '\n' ' ')"
-printf '{"decision":"block","reason":"Posible secreto en %s (línea/s %s, prefijo/s: %s). No commitees esto: movelo a una variable de entorno, o al .env local que ya está gitignoreado. Si es un ejemplo, usá un valor obviamente falso."}\n' \
+printf '{"decision":"block","reason":"Possible secret in %s (line(s) %s, prefix(es): %s). Do not commit it: move it to an environment variable or to the local .env, which is gitignored. If it is an example, use an obviously fake value."}\n' \
   "$(basename "$f")" "$lines" "$kinds"
 exit 0

@@ -48,5 +48,10 @@
 		"event": "Stop",
 		"matcher": "",
 		"timeout": 90
+	},
+	"comment-guard": {
+		"event": "PostToolUse",
+		"matcher": "Edit|Write|MultiEdit",
+		"timeout": 10
 	}
 }

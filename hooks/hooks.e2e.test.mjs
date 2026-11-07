@@ -20,6 +20,13 @@
 //    12. writes a root Railly's resolver rejects (missing markers)
 //    13. does not export RAILLY_SKILLS_REPO to the session's env file
 //    14. overwrites a marker that already exists
+//   comment-guard
+//    15. warns on a repository with no "Code" section (would touch every repo of the plugin)
+//    16. misses an ID, an epic code or a migration number in an added comment
+//    17. flags a comment line that was already there (only added lines count)
+//    18. flags a marker inside a string (`"see REG-MT-02"` is not a comment)
+//    19. flags "now", which describes the present
+//    20. undoes or blocks the edit instead of warning (exit 2 after the write, never a rewrite)
 import assert from "node:assert/strict";
 import { execFileSync, spawnSync } from "node:child_process";
 import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, symlinkSync, writeFileSync } from "node:fs";
@@ -305,4 +312,61 @@ test("verify-before-done blocks a harnessed session that edited without a contra
 	assert.equal(run("verify-before-done", { cwd: dir, transcript_path: edited, stop_hook_active: true }, { cwd: dir }).status, 0);
 	const notHarnessed = repo({ kit: true });
 	assert.equal(run("verify-before-done", { cwd: notHarnessed, transcript_path: edited }, { cwd: notHarnessed }).status, 0);
+});
+
+const CODE_SECTION = [
+	"## Code",
+	"",
+	"```comment-guard",
+	"\\b(?:REG-[A-Z]+-\\d+|DEC-\\d{3}|PRB-\\d{3}|TR-\\d{3}|(?:RN|CU|AC)-[A-Z]+-\\d+)\\b :: docs ID",
+	"\\bE\\d+-\\d+[a-z]?\\b|\\bSEG-[A-Z]+\\b :: epic code",
+	"\\b202\\d{5}\\b :: migration number",
+	"\\b(previously|no longer|used to|anymore|antes|ya no)\\b :: history",
+	"```",
+	"",
+].join("\n");
+
+function guarded(section = CODE_SECTION) {
+	const dir = repo({ agents: true });
+	writeFileSync(join(dir, ".agents", "harness.md"), `# Harness\n\n${section}`);
+	return dir;
+}
+const commentEdit = (dir, oldS, newS) => ({ tool_name: "Edit", cwd: dir, tool_input: { file_path: join(dir, "a.ts"), old_string: oldS, new_string: newS } });
+
+test("comment-guard warns on an added comment with a docs ID, an epic code or a migration number", () => {
+	const dir = guarded();
+	for (const c of ["// see REG-MT-02", "// E3-05e", "// 20263500 — adds the column"]) {
+		const r = run("comment-guard", commentEdit(dir, "const a = 1;", `${c}\nconst a = 1;`), { cwd: dir });
+		assert.equal(r.status, 2, c);
+		assert.match(r.stderr, /comment-guard/);
+	}
+});
+
+test("comment-guard lets a present-tense comment, a valid comment and a string through", () => {
+	const dir = guarded();
+	for (const c of ["// now returns the cached value", "// Kapso retries for about 2.5 minutes", 'const s = "see REG-MT-02";']) {
+		const r = run("comment-guard", commentEdit(dir, "const a = 1;", `${c}\nconst a = 1;`), { cwd: dir });
+		assert.equal(r.status, 0, c);
+		assert.equal(r.stderr, "");
+	}
+});
+
+test("comment-guard counts only added lines", () => {
+	const dir = guarded();
+	const r = run("comment-guard", commentEdit(dir, "// see REG-MT-02\nconst a = 1;", "// see REG-MT-02\nconst a = 2;"), { cwd: dir });
+	assert.equal(r.status, 0);
+});
+
+test("comment-guard does nothing in a repository without the Code section", () => {
+	const dir = guarded("## Contract\n\nnothing here\n");
+	const r = run("comment-guard", commentEdit(dir, "const a = 1;", "// see REG-MT-02\nconst a = 1;"), { cwd: dir });
+	assert.equal(r.status, 0);
+	assert.equal(r.stderr, "");
+});
+
+test("comment-guard on Write compares with the file at HEAD", () => {
+	const dir = guarded();
+	writeFileSync(join(dir, "app.txt"), "v1\n");
+	const input = { tool_name: "Write", cwd: dir, tool_input: { file_path: join(dir, "b.sh"), content: "# E3-05e\necho hi\n" } };
+	assert.equal(run("comment-guard", input, { cwd: dir }).status, 2);
 });
