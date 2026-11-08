@@ -4,8 +4,7 @@
 // every later step (contract, bindings, observation, gate) depends on that entry.
 
 import { spawnSync } from "node:child_process";
-import { readFileSync } from "node:fs";
-import { resolve } from "node:path";
+import { readFileSync, realpathSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { loopEntry } from "../../scripts/lib/hooks.mjs";
 
@@ -19,4 +18,4 @@ function main() {
 	if (out) process.stdout.write(`${JSON.stringify(out)}\n`);
 }
 
-if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main();
+if (process.argv[1] && realpathSync(process.argv[1]) === fileURLToPath(import.meta.url)) main();

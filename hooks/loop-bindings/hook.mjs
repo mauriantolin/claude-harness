@@ -6,8 +6,8 @@
 // Served by the core plugin (inline in marketplace.json), so an edit to bindings.md is
 // live in the next loop load of every repository that enables the plugin.
 
-import { readFileSync } from "node:fs";
-import { dirname, join, resolve } from "node:path";
+import { readFileSync, realpathSync } from "node:fs";
+import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { loopBindings } from "../../scripts/lib/hooks.mjs";
 
@@ -25,4 +25,4 @@ function main() {
 	if (out) process.stdout.write(`${JSON.stringify(out)}\n`);
 }
 
-if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main();
+if (process.argv[1] && realpathSync(process.argv[1]) === fileURLToPath(import.meta.url)) main();

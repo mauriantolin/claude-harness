@@ -22,7 +22,7 @@
 //    14. overwrites a marker that already exists
 import assert from "node:assert/strict";
 import { execFileSync, spawnSync } from "node:child_process";
-import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, symlinkSync, writeFileSync } from "node:fs";
 import { homedir, tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
@@ -56,6 +56,17 @@ function repo({ kit = false, agents = kit } = {}) {
 }
 
 const skill = (name) => ({ tool_name: "Skill", tool_input: { skill: name } });
+
+test("a hook started through a symlink still runs (a profile's plugin cache is one)", () => {
+	const link = join(mkdtempSync(join(tmpdir(), "harness-link-")), "hooks");
+	symlinkSync(HOOKS, link);
+	const r = spawnSync(process.execPath, [join(link, "loop-bindings", "hook.mjs")], {
+		input: JSON.stringify(skill("loop")),
+		encoding: "utf8",
+	});
+	assert.equal(r.status, 0);
+	assert.match(r.stdout, /additionalContext/);
+});
 
 test("loop-bindings injects the bindings on loop and contract, with or without the plugin prefix", () => {
 	for (const name of ["loop", "experimental:loop", "contract", "experimental:contract"]) {

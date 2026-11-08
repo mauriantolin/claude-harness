@@ -9,7 +9,7 @@
 // (sed -i, a redirection, tee, an interpreter running code that names the file) is checked too.
 
 import { spawnSync } from "node:child_process";
-import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, realpathSync, statSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { bashWrites, loadedSkills, parseRoutes, routeGuardPath } from "../../scripts/lib/hooks.mjs";
@@ -78,4 +78,4 @@ function main() {
 	}
 }
 
-if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main();
+if (process.argv[1] && realpathSync(process.argv[1]) === fileURLToPath(import.meta.url)) main();

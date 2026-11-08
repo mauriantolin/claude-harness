@@ -7,8 +7,8 @@
 // stop and hands the model the reason.
 
 import { spawnSync } from "node:child_process";
-import { existsSync, readdirSync, readFileSync } from "node:fs";
-import { join, resolve } from "node:path";
+import { existsSync, readdirSync, readFileSync, realpathSync } from "node:fs";
+import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { transcriptEdited, verifyBeforeDone } from "../../scripts/lib/hooks.mjs";
 
@@ -44,4 +44,4 @@ function main() {
 	process.exit(2);
 }
 
-if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main();
+if (process.argv[1] && realpathSync(process.argv[1]) === fileURLToPath(import.meta.url)) main();
